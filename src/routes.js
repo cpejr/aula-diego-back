@@ -34,17 +34,30 @@ routes.post('/aluno/create', async (request, response) => {
 })
 
 
-routes.post('/login', (request, response) => {
+routes.post('/newuser', (request, response) => {
   let getBody = request.body;
-  firebase.auth().signInWithEmailAndPassword(getBody.email, getBody.password)
+  Auth.createNewUser(getBody.email, getBody.password)
   .then((login)=> {
-    if(login.err){
-      console.log("foi");
+    if(!login.err){
+      response.send('foi deu certo kkkkkkkkkk')
     }else{
       console.log("nao foi");
     }
   })
 })
+
+routes.post('/login', (request, response) => {
+  let getBody = request.body;
+  Auth.createSession(getBody.email, getBody.password)
+  .then((login)=> {
+    if(!login.err){
+      response.send('logou meu ')
+    }else{
+      console.log("nao foi");
+    }
+  })
+})
+
 
 
 module.exports = routes;
