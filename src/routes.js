@@ -4,6 +4,8 @@
 const express = require('express');
 const routes = express.Router();
 const knex = require('./database/connection')
+const firebase = require('firebase');
+const Auth = require('./models/firebase');
 
 routes.get('/', (request, response) => {
   response.send('eae galerinha xdxxdxdxdxd');
@@ -22,6 +24,7 @@ routes.get('/aluno/:matricula', async (request, response) => {
   response.json(alunos);
 })
 
+
 routes.post('/aluno/create', async (request, response) => {
   const { nome, matricula, curso } = request.body
 
@@ -29,5 +32,19 @@ routes.post('/aluno/create', async (request, response) => {
 
   response.json(id);
 })
+
+
+routes.post('/login', (request, response) => {
+  let getBody = request.body;
+  firebase.auth().signInWithEmailAndPassword(getBody.email, getBody.password)
+  .then((login)=> {
+    if(login.err){
+      console.log("foi");
+    }else{
+      console.log("nao foi");
+    }
+  })
+})
+
 
 module.exports = routes;
