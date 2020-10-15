@@ -5,7 +5,8 @@ const express = require('express');
 const routes = express.Router();
 const knex = require('./database/connection')
 const firebase = require('firebase');
-const Auth = require('./models/firebase');
+const AuthLogin = require('./models/login');
+const AuthCadastro = require('./models/cadastro')
 
 routes.get('/', (request, response) => {
   response.send('eae galerinha xdxxdxdxdxd');
@@ -36,7 +37,7 @@ routes.post('/aluno/create', async (request, response) => {
 
 routes.post('/newuser', (request, response) => {
   let getBody = request.body;
-  Auth.createNewUser(getBody.email, getBody.password)
+  AuthCadastro.createNewUser(getBody.email, getBody.password)
   .then((login)=> {
     if(!login.err){
       response.send('foi deu certo kkkkkkkkkk')
@@ -48,7 +49,7 @@ routes.post('/newuser', (request, response) => {
 
 routes.post('/login', (request, response) => {
   let getBody = request.body;
-  Auth.createSession(getBody.email, getBody.password)
+  AuthLogin.createSession(getBody.email, getBody.password)
   .then((login)=> {
     if(!login.err){
       response.send('logou meu ')

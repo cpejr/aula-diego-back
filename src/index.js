@@ -2,6 +2,8 @@ const express = require('express');
 const routes = require('./routes');
 const firebase = require('firebase');
 const Auth = require('../src/models/firebase.js');
+const AuthLogin = require('../src/models/login');
+const AuthCadastro = require('../src/models/cadastro');
 const cors = require('cors');
 require('dotenv').config();
 let userLogged;

@@ -11,26 +11,6 @@ const firebaseConfig = {
     appId: "1:225647618283:web:6fed421a2cfd96997ab6ae"
   };
 
-  module.exports = {
-    async createNewUser(email, password) {
-        try {
-            const result = await firebase.auth().createUserWithEmailAndPassword(email, password)
-            return result.user.uid;
-        }
-        catch (error) {
-            console.log(error);
-        }
-    },
-    async createSession(email, password) {
-        try {
-            const result = await firebase.auth().signInWithEmailAndPassword(email, password)
-            return result.user.uid;
-        }
-        catch (error) {
-            console.log(error);
-        }
-    },
-}
 
   firebase.initializeApp(firebaseConfig);
 
