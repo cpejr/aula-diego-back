@@ -1,27 +1,24 @@
 const express = require('express');
 const routes = require('./routes');
 const firebase = require('firebase');
-const Auth = require('../src/models/firebase.js');
-const AuthLogin = require('../src/models/login');
-const AuthCadastro = require('../src/models/cadastro');
 const cors = require('cors');
+const {errors} = require('celebrate')
 require('dotenv').config();
-let userLogged;
+const port = process.env.PORT || 6969;
+
 
 const app = express();
 app.use(cors());
 app.use(express.json())
 
-firebase.auth().onAuthStateChanged((user) => {
-    if(user){
-        userLogged = user;
-    } else {
-        userLogged = null;
-    }
-})
-
-
-
 app.use(routes);
 
-app.listen('6969');
+app.use(errors());
+
+app.listen(port,()=>{
+    console.log("Listening on port: " + port);
+  });
+
+
+
+

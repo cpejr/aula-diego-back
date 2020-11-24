@@ -16,7 +16,7 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 
-var serviceAccount = require("path/to/serviceAccountKey.json");
+var serviceAccount = require("../ServiceWorker.json");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),

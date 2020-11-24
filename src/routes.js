@@ -1,5 +1,6 @@
 //armazena as rotas http
 //recebe os controllers
+
 const { celebrate, Segments, Joi } = require('celebrate');
 
 const userValidator = require("./validators/userValidators")
@@ -8,8 +9,7 @@ const express = require('express');
 const routes = express.Router();
 const knex = require('./database/connection')
 const firebase = require('firebase');
-const AuthLogin = require('./models/login');
-const AuthCadastro = require('./models/cadastro');
+const {AuthLogin,AuthCadastro} = require('./models/FirebaseModel');
 const { response } = require('express');
 
 routes.get('/', (request, response) => {
@@ -45,7 +45,7 @@ routes.post('/aluno/create', async (request, response) => {
 
 // USUÁRIO --------------------------------------------------------------------------------
 
-routes.post('/newuser', celebrate(userValidator.create),
+routes.post('/newuser', //celebrate(userValidator.create),
 
 
 
@@ -79,7 +79,7 @@ routes.post('/login',
 
 
 
-routes.delete('/deleteuser/:user_id', celebrate(userValidator.deleteUser),
+routes.delete('/deleteuser/:user_id', //celebrate(userValidator.deleteUser),
 
 (request, response) => {
   console.log("Deletado")
@@ -88,7 +88,7 @@ routes.delete('/deleteuser/:user_id', celebrate(userValidator.deleteUser),
 
 
 
-routes.put("user/:user_id", celebrate(userValidator.update),
+routes.put("user/:user_id", //celebrate(userValidator.update),
 (request, response) => {
   response.send("Atualizou");
 })
@@ -99,8 +99,10 @@ routes.get("/getuser/:user_id", (request, response) => {
   response.send("Fez o get");
 })
 
-routes.delete("/deleteadmin/:user_id", celebrate(userValidator.deleteAdmin))
+routes.delete("/deleteadmin/:user_id", //celebrate(userValidator.deleteAdmin))
+(request, response) => {
+  response.send("Fez o get");}
+)
 
 
-
-module.exports = routes;
+module.exports = routes
