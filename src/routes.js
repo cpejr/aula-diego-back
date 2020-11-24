@@ -4,6 +4,9 @@
 const express = require('express');
 const routes = express.Router();
 const knex = require('./database/connection')
+const firebase = require('firebase');
+const AuthLogin = require('./models/login');
+const AuthCadastro = require('./models/cadastro')
 
 routes.get('/', (request, response) => {
   response.send('eae galerinha xdxxdxdxdxd');
@@ -22,6 +25,7 @@ routes.get('/aluno/:matricula', async (request, response) => {
   response.json(alunos);
 })
 
+
 routes.post('/aluno/create', async (request, response) => {
   const { nome, matricula, curso } = request.body
 
@@ -29,5 +33,32 @@ routes.post('/aluno/create', async (request, response) => {
 
   response.json(id);
 })
+
+
+routes.post('/newuser', (request, response) => {
+  let getBody = request.body;
+  AuthCadastro.createNewUser(getBody.email, getBody.password)
+  .then((login)=> {
+    if(!login.err){
+      response.send('foi deu certo kkkkkkkkkk')
+    }else{
+      console.log("nao foi");
+    }
+  })
+})
+
+routes.post('/login', (request, response) => {
+  let getBody = request.body;
+  AuthLogin.createSession(getBody.email, getBody.password)
+  .then((login)=> {
+    if(!login.err){
+      response.send('logou meu ')
+    }else{
+      console.log("nao foi");
+    }
+  })
+})
+
+
 
 module.exports = routes;
