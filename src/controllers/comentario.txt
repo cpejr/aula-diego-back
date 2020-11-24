@@ -1,1 +1,0 @@
-armazena os returns das requesiçoes das rotas
