@@ -1,6 +1,6 @@
 
 exports.up = (knex) =>{
-    return knex.schema.createTable('course'),(table) =>{
+    return knex.schema.createTable('course',(table) =>{
         table.increments('course_id').primary().notNullable();
         table.string('company').notNullable();
         table.string('name').notNullable();
@@ -8,7 +8,7 @@ exports.up = (knex) =>{
         table.timestamp('created_at').defaultTo(knex.fn.now());
         table.timestamp('updated_at').defaultTo(knex.fn.now());
 
-    }    
+    })    
 }
 
 exports.down = function (knex) {
