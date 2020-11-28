@@ -20,7 +20,8 @@
     "firebase-admin": "^9.4.1",
     "joi": "^17.2.1",
     "knex": "^0.21.6",
-    "sqlite3": "^5.0.0"
+    "sqlite3": "^5.0.0",
+    "uuid": "^8.3.1"
   },
   "devDependencies": {
     "nodemon": "^2.0.4"

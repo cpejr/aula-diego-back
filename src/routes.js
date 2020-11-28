@@ -12,6 +12,14 @@ const firebase = require('firebase');
 const {AuthLogin,AuthCadastro} = require('./models/FirebaseModel');
 const { response } = require('express');
 
+
+//importação dos controllers
+
+const UserController = require('./controllers/userController')
+
+
+
+
 routes.get('/', (request, response) => {
   response.send('eae galerinha xdxxdxdxdxd');
 })
@@ -47,19 +55,7 @@ routes.post('/aluno/create', async (request, response) => {
 
 routes.post('/newuser', //celebrate(userValidator.create),
 
-
-
-(request, response) => {
-  let getBody = request.body;
-  AuthCadastro.createNewUser(getBody.email, getBody.password)
-  .then((login)=> {
-    if(!login.err){
-      response.send('foi deu certo kkkkkkkkkk')
-    }else{
-      console.log("nao foi");
-    }
-  })
-})
+UserController.createUser)
 
 
 

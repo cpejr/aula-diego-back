@@ -1,7 +1,7 @@
 
 exports.up = (knex) =>{
     return knex.schema.createTable('user',(table) =>{
-        table.increments('user_id').primary().notNullable();
+        table.string('user_id').primary().notNullable();
         table.string('email').notNullable();
         table.enu('type',['student','admin','master']).notNullable().defaultTo('student');
         table.string('name').notNullable();
@@ -9,7 +9,7 @@ exports.up = (knex) =>{
         table.string('company').notNullable();
         table.date('birthdate').notNullable();
         table.string('phone').notNullable();
-        table.string('firebase_id').notNullable();
+        table.string('firebase_id');
         table.string('occupation').notNullable();
     } )   
 }
