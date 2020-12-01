@@ -26,7 +26,7 @@ module.exports = {
 
     async getAllByTypes(type){
         try {
-            const response = await connection ('user').where('user_type', type).select('*');
+            const response = await connection ('user').where('type', type).select('*');
             return response;
         } catch (error) {
             console.log(error.message);

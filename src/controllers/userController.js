@@ -18,11 +18,15 @@ module.exports = {
                 birthdate: request.body.birthdate,
                 phone: request.body.phone,
                 occupation: request.body.occupation,
+                password: request.body.password,
+                unit: request.body.unit,
+                city: request.body.city,
+                state: request.body.state,
                 matricula: request.body.matricula,
-                password: request.body.password
-
             };
-        
+            
+
+
         if (user.type ==='admin' || user.type === 'student' || user.type === 'master'){
             const loggedUser = request.session;
 
@@ -53,6 +57,46 @@ module.exports = {
         }
     },
 
+
+    async getOneUser(request,response){
+        try{
+            const {user_id} = request.params;
+           const user = await UserModel.getById(user_id);
+           return response.status(200).json(user);
+        }
+
+        catch (error){
+
+            console.log(error.message);
+            response.status(500).json("internal server error ");
+        }
+    },
+
+
+
+    async getAllStudent(request,response){
+        try{
+            const student = await UserModel.getAllByTypes('student');
+            return response.status(200).json({student});
+        }
+        catch (error){
+
+            console.log(error.message);
+            response.status(500).json("internal server error ");
+        }
+    },
+
+    async getAllAdmin(request,response){
+        try{
+            const admin = await UserModel.getAllByTypes('admin');
+            return response.status(200).json({admin});
+        }
+        catch (error){
+
+            console.log(error.message);
+            response.status(500).json("internal server error ");
+        }
+    },
 
 
 

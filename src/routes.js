@@ -53,10 +53,12 @@ routes.post('/aluno/create', async (request, response) => {
 
 // USUÁRIO --------------------------------------------------------------------------------
 
-routes.post('/newuser', /*celebrate(userValidator.create),**/ UserController.createUser)
+routes.post('/newuser', celebrate(userValidator.create),UserController.createUser)
 routes.delete('/deleteUserStudent/:user_id', UserController.deleteStudent)
 routes.put('/user/:user_id',UserController.updateStudent)
-
+routes.get('/user/:user_id',UserController.getOneUser)
+routes.get('/allstudent',UserController.getAllStudent)
+routes.get('/alladmin',UserController.getAllAdmin)
 // LIVE -----------------------------------------------------------------------------------
 
 routes.post('/newlive', LiveController.create)

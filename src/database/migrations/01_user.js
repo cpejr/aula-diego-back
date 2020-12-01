@@ -11,6 +11,9 @@ exports.up = (knex) =>{
         table.string('phone').notNullable();
         table.string('firebase_id');
         table.string('occupation').notNullable();
+        table.string('unit').notNullable();
+        table.string('city').notNullable();
+        table.string('state').notNullable();
     } )   
 }
 
