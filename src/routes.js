@@ -16,7 +16,7 @@ const { response } = require('express');
 //importação dos controllers
 
 const UserController = require('./controllers/userController')
-
+const LiveController = require('./controllers/liveController')
 
 
 
@@ -57,7 +57,10 @@ routes.post('/newuser', /*celebrate(userValidator.create),**/ UserController.cre
 routes.delete('/deleteUserStudent/:user_id', UserController.deleteStudent)
 routes.put('/user/:user_id',UserController.updateStudent)
 
+// LIVE -----------------------------------------------------------------------------------
 
+routes.post('/newlive', LiveController.create)
+routes.delete('/deleteLive/:live_id', LiveController.delete)
 routes.post('/login', 
 
 (request, response) => {
