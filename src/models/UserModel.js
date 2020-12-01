@@ -1,11 +1,11 @@
 const connection = require('../database/connection')
 
-const uuid = require('uuid')
+const uuid = require('react-uuid')
 
 module.exports = {
     async create(user){
         try {
-            user.user_id = Math.random(1000).toString();
+            user.user_id = uuid();
             const response = await connection('user').insert(user);
             return user.user_id;
         } catch (error) {
@@ -47,7 +47,7 @@ module.exports = {
 
     async getById(id){
         try {
-            const response = await connection ('user').where('user_id', id).select('*');
+            const response = await connection('user').where('user_id', id).select('*');
             return response;
         } catch (error) {
             console.log(error.message);
@@ -66,7 +66,8 @@ module.exports = {
     },
     async update(user_id, updated_user){ 
         try {
-            const response = await connection ('user').where('user_id', user_id).update(updated_user);
+            const response = await connection('user').where('user_id', user_id).update(updated_user);
+           
             return response;
         } catch (error) {
             console.log(error.message);
@@ -75,7 +76,7 @@ module.exports = {
     },
     async delete(user_id){
         try {
-            const response = await connection ('user').where('user_id', user_id).del();
+            const response = await connection('user').where('user_id', user_id).del();
             return response;
         } catch (error) {
             console.log(error.message);

@@ -55,4 +55,68 @@ module.exports = {
 
 
 
+
+    async deleteStudent(request,response){
+        try {
+            const {user_id} = request.params;
+
+            
+
+            const foundUser = await UserModel.getById(user_id)
+            console.log("🚀 ~ file: userController.js ~ line 66 ~ deleteStudent ~ foundUser", foundUser)
+
+            
+
+            if(!foundUser){
+                throw new Error('Usuário não encontrado!')
+            }
+
+            await FirebaseModel.deleteUser(foundUser[0].firebase_id);
+
+            await UserModel.delete(user_id);
+
+
+            response.status(200).json('Usuário apagado com sucesso!');
+        }
+        catch (error){
+
+            console.log(error.message);
+            response.status(500).json("internal server error ");
+        }
+    },
+
+
+    async updateStudent(request,response){
+        try{
+
+            const { user_id } = request.params;
+            
+        
+            const   updatedUser  = request.body;
+
+
+            const res = await UserModel.update(user_id,updatedUser);
+
+            console.log(res)
+            
+            if(res!==1){
+                return response.status(400).json('Usuário não encontrado!')
+            }
+
+
+            else{
+                return response.status(200).json('Usuário alterado com sucesso ')
+            }
+            
+
+        }
+        catch (error){
+
+            console.log(error.message);
+            return response.status(500).json("internal server error ");
+
+        }
+    },
+
+
 }

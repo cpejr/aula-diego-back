@@ -1,9 +1,9 @@
+require('dotenv').config();
 const express = require('express');
 const routes = require('./routes');
 const firebase = require('firebase');
 const cors = require('cors');
 const {errors} = require('celebrate')
-require('dotenv').config();
 const port = process.env.PORT || 6969;
 
 
