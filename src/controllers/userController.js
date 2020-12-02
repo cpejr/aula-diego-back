@@ -1,6 +1,6 @@
 const UserModel = require('../models/UserModel')
 const FirebaseModel = require('../models/FirebaseModel')
-const { createNewUser } = require('../models/FirebaseModel');
+
 
 
 
