@@ -13,11 +13,14 @@ const {AuthLogin,AuthCadastro} = require('./models/FirebaseModel');
 const { response } = require('express');
 
 
+
+
 //importação dos controllers
 
 const UserController = require('./controllers/userController')
 const LiveController = require('./controllers/liveController')
-const SessionController = require('./controllers/sessionController')
+const SessionController = require('./controllers/sessionController');
+const { authenticateToken,authenticateOptionalToken,isAdmin,isMaster } = require('./middlewares/authentication');
 
 
 
@@ -33,7 +36,7 @@ routes.get('/', (request, response) => {
 
 
 
-routes.post('/newuser', celebrate(userValidator.create),UserController.createUser)
+routes.post('/newuser' ,celebrate(userValidator.create),UserController.createUser)
 routes.delete('/deleteUserStudent/:user_id', UserController.deleteStudent)
 routes.put('/user/:user_id',UserController.updateStudent)
 routes.get('/user/:user_id',UserController.getOneUser)
@@ -51,6 +54,11 @@ routes.delete('/deleteLive/:live_id', LiveController.delete)
 
 
 //SESSION ---------------------------------------------------------------------------------
-routes.post('/login',SessionController.signin );
+
+routes.post('/login', SessionController.signin );
+routes.get('/verify', SessionController.verifyToken);
+
+
+
 
 module.exports = routes
