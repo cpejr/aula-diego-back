@@ -2,7 +2,7 @@
 exports.up = (knex) =>{
     return knex.schema.createTable('user',(table) =>{
         table.string('user_id').primary().notNullable();
-        table.string('email').notNullable();
+        table.string('email').unique().notNullable();
         table.enu('type',['student','admin','master']).notNullable().defaultTo('student');
         table.string('name').notNullable();
         table.string('matricula').notNullable();
@@ -14,6 +14,7 @@ exports.up = (knex) =>{
         table.string('unit').notNullable();
         table.string('city').notNullable();
         table.string('state').notNullable();
+        table.timestamps(true,true);
     } )   
 }
 

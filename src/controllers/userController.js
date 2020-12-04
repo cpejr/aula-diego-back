@@ -22,7 +22,7 @@ module.exports = {
                 unit: request.body.unit,
                 city: request.body.city,
                 state: request.body.state,
-                matricula: request.body.matricula,
+                matricula: "010101",
             };
             
 
@@ -50,7 +50,6 @@ module.exports = {
         catch(error){
             if(firebaseUid){
                 FirebaseModel.deleteUser(firebaseUid)
-                throw new Error ('Erro no firebase')
             }
             console.warn(error.message);
             response.status(500).json('internal server error')
