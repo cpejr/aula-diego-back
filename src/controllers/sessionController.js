@@ -53,4 +53,18 @@ module.exports = {
       return response.status(200).json(({ valid, user } = verify));
     return response.status(403).json({ error: "Invalid authorization token" });
   },
+
+  async forgotPassword(request, response) {
+    try {
+      const { email } = request.body;
+      await FirebaseModel.forgotPassword(email);
+      return response.status(200).json({message: "Enviado com sucesso!"});
+
+    } catch (error) {
+      console.warn(error)
+      return response.status(500).json({ error: "internal server error " })
+    }
+
+  }
+
 };

@@ -57,6 +57,7 @@ routes.delete('/deleteLive/:live_id', LiveController.delete)
 
 routes.post('/login', SessionController.signin );
 routes.get('/verify', SessionController.verifyToken);
+routes.post('/forgotpassword', SessionController.forgotPassword);
 
 
 

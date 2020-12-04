@@ -5,16 +5,16 @@ require("firebase/auth");
 
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  
 
-    apiKey: process.env.API_KEY,
-    authDomain: process.env.AUTH_DOMAIN,
-    databaseURL: process.env.DATABASEURL,
-    projectId: process.env.PROJECTID,
-    storageBucket: process.env.STORAGEBUCKET,
-    messagingSenderId: process.env.MESSAGINGSENDERID,
-    appId: process.env.APPID,
-    measurementId: process.env.MEASUREMENTID
+
+  apiKey: process.env.API_KEY,
+  authDomain: process.env.AUTH_DOMAIN,
+  databaseURL: process.env.DATABASEURL,
+  projectId: process.env.PROJECTID,
+  storageBucket: process.env.STORAGEBUCKET,
+  messagingSenderId: process.env.MESSAGINGSENDERID,
+  appId: process.env.APPID,
+  measurementId: process.env.MEASUREMENTID
 };
 
 firebase.initializeApp(firebaseConfig);
@@ -67,17 +67,23 @@ module.exports = {
 
   async changeUserPassword(uid, newPassword) {
     return new Promise((resolve, reject) => {
-        firebase.auth().updateUser(uid, {
+      firebase.auth().updateUser(uid, {
         password: newPassword
-        })
+      })
         .then((result) => {
-            resolve(result);
+          resolve(result);
         })
         .catch((error) => {
-            console.log(error);
-            const errorMessage = error.message;
-            reject(errorMessage);
+          console.log(error);
+          const errorMessage = error.message;
+          reject(errorMessage);
         })
     })
-},
+  },
+
+  async forgotPassword(email) {
+    const response = await firebase.auth().sendPasswordResetEmail(email);
+    return response;
+  }
+
 };
