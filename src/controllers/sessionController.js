@@ -2,6 +2,7 @@ const UserModel = require("../models/UserModel");
 const FirebaseModel = require("../models/FirebaseModel");
 const jwt = require("jsonwebtoken");
 
+
 module.exports = {
   async signin(request, response) {
     try {
@@ -40,7 +41,8 @@ module.exports = {
       return response.status(401).json({ error: "Token badformatted" });
 
     const verify = await new Promise((res) => {
-      jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+      jwt.verify(token, process.env.AUTH_TOKEN_SECRET, (err, user) => {
+        console.log(err)
         if (err) return res({ verified: false, user: {} });
 
         return res({ verified: true, user: user.user });
