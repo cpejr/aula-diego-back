@@ -4,6 +4,7 @@
 const { celebrate, Segments, Joi } = require('celebrate');
 
 const userValidator = require("./validators/userValidators")
+const liveValidator = require("./validators/liveValidators")
 
 const express = require('express');
 const routes = express.Router();
@@ -50,9 +51,10 @@ routes.put('/demote/:user_id', UserController.demote)
 
 // LIVE -----------------------------------------------------------------------------------
 
-routes.post('/newlive', LiveController.create)
-routes.delete('/deleteLive/:live_id', LiveController.delete)
-
+routes.post('/newlive', celebrate(liveValidator.create),LiveController.create)
+routes.delete('/deleteLive/:live_id',celebrate(liveValidator.deletelive), LiveController.delete)
+routes.get('/readlive/:live_id', LiveController.read)
+routes.put('/updatelive/:live_id',celebrate(liveValidator.uptade), LiveController.update)
 
 
 //SESSION ---------------------------------------------------------------------------------

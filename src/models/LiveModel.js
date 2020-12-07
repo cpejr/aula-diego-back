@@ -35,5 +35,9 @@ module.exports ={
             console.log(error.message);
             return error;
         }
+    },
+    async updateLive(live_id,live){
+        const response = await connection("live").where("live_id",live_id).update(live);
+        return response;
     }
 }
