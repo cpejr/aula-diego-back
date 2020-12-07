@@ -32,11 +32,14 @@ module.exports = {
 
 
 
-  async isAdmin(request, response, next) {
-    if (request.session.user_type !== "adm")
-      return response.status(403).json({ error: "Access denied!" });
+  async isAdmin(request,response,next){
+    const {type} = request.session.type
 
-    return next();
+    if (type !== 'admin')
+    return response.status(401).json({error:'Access denied!'})
+    else{
+      next();
+    }
   },
 
 

@@ -63,5 +63,19 @@ module.exports = {
             const response = await connection('user').where('user_id', user_id).del();
             return response;
     
-    }
+    },
+
+    async promoteUser(user_id){
+
+        const response = await connection('user').where('user_id',user_id).update('type','admin')
+        return response;
+    },
+
+    async demoteUser(user_id){
+
+        const response = await connection('user').where('user_id',user_id).update('type','student')
+        return response;
+    },
+
+
 }

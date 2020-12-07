@@ -42,6 +42,8 @@ routes.put('/user/:user_id',UserController.updateStudent)
 routes.get('/user/:user_id',UserController.getOneUser)
 routes.get('/allstudent',UserController.getAllStudent)
 routes.get('/alladmin',UserController.getAllAdmin)
+routes.put('/promote/:user_id' ,UserController.promote)
+routes.put('/demote/:user_id', UserController.demote)
 
 
 
