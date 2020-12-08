@@ -38,23 +38,23 @@ routes.get('/', (request, response) => {
 
 
 routes.post('/newuser' ,celebrate(userValidator.create),UserController.createUser)
-routes.delete('/deleteUserStudent/:user_id', UserController.deleteStudent)
-routes.put('/user/:user_id',UserController.updateStudent)
-routes.get('/user/:user_id',UserController.getOneUser)
-routes.get('/allstudent',UserController.getAllStudent)
-routes.get('/alladmin',UserController.getAllAdmin)
-routes.put('/promote/:user_id' ,UserController.promote)
-routes.put('/demote/:user_id', UserController.demote)
+routes.delete('/deleteUserStudent/:user_id',authenticateToken, isMaster, UserController.deleteStudent)
+routes.put('/user/:user_id',authenticateToken,UserController.updateStudent)
+routes.get('/user/:user_id',authenticateToken, isAdmin,UserController.getOneUser)
+routes.get('/allstudent',authenticateToken, isAdmin,UserController.getAllStudent)
+routes.get('/alladmin',authenticateToken, isMaster,UserController.getAllAdmin)
+routes.put('/promote/:user_id',authenticateToken,isMaster,UserController.promote)
+routes.put('/demote/:user_id', authenticateToken,isMaster ,UserController.demote)
 
 
 
 
 // LIVE -----------------------------------------------------------------------------------
 
-routes.post('/newlive', celebrate(liveValidator.create),LiveController.create)
-routes.delete('/deleteLive/:live_id',celebrate(liveValidator.deletelive), LiveController.delete)
-routes.get('/readlive/:live_id', LiveController.read)
-routes.put('/updatelive/:live_id',celebrate(liveValidator.uptade), LiveController.update)
+routes.post('/newlive',authenticateToken, isAdmin, celebrate(liveValidator.create),LiveController.create)
+routes.delete('/deleteLive/:live_id',authenticateToken, isAdmin,celebrate(liveValidator.deletelive), LiveController.delete)
+routes.get('/readlive/:live_id',authenticateToken, isAdmin, LiveController.read)
+routes.put('/updatelive/:live_id',authenticateToken, isAdmin,celebrate(liveValidator.uptade), LiveController.update)
 
 
 //SESSION ---------------------------------------------------------------------------------

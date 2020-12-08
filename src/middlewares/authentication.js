@@ -16,9 +16,9 @@ module.exports = {
       return response.status(401).json({ error: "Token badformatted" });
 
     const validToken = await new Promise((res) => {
-      jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+      jwt.verify(token, process.env.AUTH_TOKEN_SECRET, (err, user) => {
         if (err) return res(false);
-        request.session = user.user[0];
+        request.session = user;
 
         return res(true);
       });
@@ -33,22 +33,19 @@ module.exports = {
 
 
   async isAdmin(request,response,next){
-    const {type} = request.session.type
+    
+    const type = request.session.user[0].type
 
-    if (type !== 'admin')
+    if (type !== 'admin' || type!=='master')
     return response.status(401).json({error:'Access denied!'})
     else{
       next();
     }
   },
 
-
-
-  
-
-
   async isMaster(request,response,next){
-    const {type} = request.session.user
+    
+    const type = request.session.user[0].type
 
     if (type !== 'master')
     return response.status(401).json({error:'Access denied!'})
@@ -59,6 +56,7 @@ module.exports = {
 
 
 
+  
 
 
   async authenticateOptionalToken(request, response, next) {
