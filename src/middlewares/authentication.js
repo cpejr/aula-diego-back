@@ -33,22 +33,23 @@ module.exports = {
 
 
   async isAdmin(request,response,next){
-    
-    const type = request.session.user[0].type
 
-    if (type !== 'admin' || type!=='master')
-    return response.status(401).json({error:'Access denied!'})
+    const type = request.session.user[0].type
+    if (type !== 'admin' && type !=='master'){
+      return response.status(401).json({error:'Access denied!'})
+    }
     else{
       next();
     }
   },
 
   async isMaster(request,response,next){
-    
+
     const type = request.session.user[0].type
 
-    if (type !== 'master')
-    return response.status(401).json({error:'Access denied!'})
+    if (type !== 'master'){
+      return response.status(401).json({error:'Access denied!'})
+    }
     else{
       next();
     }
