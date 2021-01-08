@@ -2,7 +2,6 @@ const UserModel = require("../models/UserModel");
 const FirebaseModel = require("../models/FirebaseModel");
 const jwt = require("jsonwebtoken");
 
-
 module.exports = {
   async signin(request, response) {
     try {
@@ -42,7 +41,7 @@ module.exports = {
 
     const verify = await new Promise((res) => {
       jwt.verify(token, process.env.AUTH_TOKEN_SECRET, (err, user) => {
-        console.log(err)
+        console.log(err);
         if (err) return res({ verified: false, user: {} });
 
         return res({ verified: true, user: user.user });
@@ -58,13 +57,10 @@ module.exports = {
     try {
       const { email } = request.body;
       await FirebaseModel.forgotPassword(email);
-      return response.status(200).json({message: "Enviado com sucesso!"});
-
+      return response.status(200).json({ message: "Enviado com sucesso!" });
     } catch (error) {
-      console.warn(error)
-      return response.status(500).json({ error: "internal server error " })
+      console.warn(error);
+      return response.status(500).json({ error: "internal server error " });
     }
-
-  }
-
+  },
 };

@@ -57,9 +57,9 @@ module.exports = {
       } else {
         return response.status(200).json("Live alterada com sucesso ");
       }
-    }catch (error) {
-        console.log(error.message);
-        response.status(500).json("Internal server error.");
+    } catch (error) {
+      console.log(error.message);
+      response.status(500).json("Internal server error.");
     }
   },
 };

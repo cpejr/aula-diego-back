@@ -88,7 +88,6 @@ module.exports = {
       const { user_id } = request.params;
 
       const foundUser = await UserModel.getById(user_id);
-      
 
       if (!foundUser) {
         throw new Error("Usuário não encontrado!");
@@ -137,7 +136,6 @@ module.exports = {
       if (res !== 1) {
         return response.status(400).json("Usuário não encontrado");
       } else {
-
         return response
           .status(200)
           .json("Usuário Promovido para administrador");
@@ -148,27 +146,22 @@ module.exports = {
     }
   },
 
-  async demote(request,response){
+  async demote(request, response) {
     try {
-        const { user_id } = request.params;
-  
-        const res = await UserModel.demoteUser(user_id);
-  
-        console.log(res);
-  
-        if (res !== 1) {
-          return response.status(400).json("Usuário não encontrado");
-        } else {
-  
-          return response
-            .status(200)
-            .json("Usuário demovido para aluno!");
-        }
-      } catch (error) {
-        console.log(error.message);
-        return response.status(500).json("internal server error ");
+      const { user_id } = request.params;
+
+      const res = await UserModel.demoteUser(user_id);
+
+      console.log(res);
+
+      if (res !== 1) {
+        return response.status(400).json("Usuário não encontrado");
+      } else {
+        return response.status(200).json("Usuário demovido para aluno!");
       }
-
-  }
-
+    } catch (error) {
+      console.log(error.message);
+      return response.status(500).json("internal server error ");
+    }
+  },
 };
