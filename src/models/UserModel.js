@@ -37,7 +37,10 @@ module.exports = {
   },
 
   async getById(id) {
-    const response = await connection("user").where("user_id", id).select("*");
+    const response = await connection("user")
+      .where("user_id", id)
+      .select("*")
+      .first();
     return response;
   },
 
