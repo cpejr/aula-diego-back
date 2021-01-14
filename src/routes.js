@@ -5,6 +5,7 @@ const { celebrate, Segments, Joi } = require("celebrate");
 
 const userValidator = require("./validators/userValidators");
 const liveValidator = require("./validators/liveValidators");
+const sessionValidator = require("./validators/sessionValidators");
 
 const express = require("express");
 const routes = express.Router();
@@ -106,8 +107,20 @@ routes.put(
 
 //SESSION ---------------------------------------------------------------------------------
 
-routes.post("/login", SessionController.signin);
-routes.get("/verify", SessionController.verifyToken);
-routes.post("/forgotpassword", SessionController.forgotPassword);
+routes.post(
+  "/login",
+  celebrate(sessionValidator.login),
+  SessionController.signin
+);
+routes.get(
+  "/verify",
+  celebrate(sessionValidator.verifyToken),
+  SessionController.verifyToken
+);
+routes.post(
+  "/forgotpassword",
+  celebrate(sessionValidator.forgotPassword),
+  SessionController.forgotPassword
+);
 
 module.exports = routes;
