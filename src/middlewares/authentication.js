@@ -1,8 +1,6 @@
 const jwt = require("jsonwebtoken");
 
 module.exports = {
-
-
   async authenticateToken(request, response, next) {
     const authHeader = request.headers.authorization;
     const [scheme, token] = authHeader
@@ -28,37 +26,24 @@ module.exports = {
     return response.status(403).json({ error: "Invalid authorization token" });
   },
 
-
-
-
-
-  async isAdmin(request,response,next){
-
-    const type = request.session.user[0].type
-    if (type !== 'admin' && type !=='master'){
-      return response.status(401).json({error:'Access denied!'})
-    }
-    else{
+  async isAdmin(request, response, next) {
+    const type = request.session.user[0].type;
+    if (type !== "admin" && type !== "master") {
+      return response.status(401).json({ error: "Access denied!" });
+    } else {
       next();
     }
   },
 
-  async isMaster(request,response,next){
+  async isMaster(request, response, next) {
+    const type = request.session.user[0].type;
 
-    const type = request.session.user[0].type
-
-    if (type !== 'master'){
-      return response.status(401).json({error:'Access denied!'})
-    }
-    else{
+    if (type !== "master") {
+      return response.status(401).json({ error: "Access denied!" });
+    } else {
       next();
     }
   },
-
-
-
-  
-
 
   async authenticateOptionalToken(request, response, next) {
     const authHeader = request.headers.authorization;
@@ -87,5 +72,4 @@ module.exports = {
     if (validToken) return next();
     return response.status(403).json({ error: "Invalid authorization token" });
   },
-
 };

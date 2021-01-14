@@ -46,7 +46,7 @@ routes.put("/user/:user_id", authenticateToken, UserController.updateStudent);
 routes.get(
   "/user/:user_id",
   authenticateToken,
-  isAdmin,
+  // isAdmin, // isso terá que ser alterado depois. o user deve ser capaz de pegar sua própria informação
   UserController.getOneUser
 );
 routes.get(
