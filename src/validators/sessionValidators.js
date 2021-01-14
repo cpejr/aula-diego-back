@@ -10,9 +10,11 @@ sessionValidator.login = {
 };
 
 sessionValidator.verifyToken = {
-  [Segments.HEADERS]: Joi.object().keys({
-    authorization: Joi.string().required(),
-  }),
+  [Segments.HEADERS]: Joi.object()
+    .keys({
+      authorization: Joi.string().required(),
+    })
+    .unknown(),
 };
 
 sessionValidator.forgotPassword = {
