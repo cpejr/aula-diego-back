@@ -1,26 +1,35 @@
 const UserModel = require("../models/UserModel");
 const FirebaseModel = require("../models/FirebaseModel");
+const admin = require("firebase-admin");
 const jwt = require("jsonwebtoken");
 
 module.exports = {
   async signin(request, response) {
     try {
+      const loggedWithGoogle = request.body.google ? true : false;
       const { email, password } = request.body;
       let firebaseUid;
 
-      try {
-        firebaseUid = await FirebaseModel.createSession(email, password);
-      } catch (error) {
-        return response.status(403).json({ message: "Invalid Credentials" });
+      if (!loggedWithGoogle) {
+        try {
+          firebaseUid = await FirebaseModel.createSession(email, password);
+        } catch (error) {
+          return response.status(403).json({ message: "Invalid Credentials" });
+        }
+        var user = await UserModel.getUserByUid(firebaseUid);
       }
-      const user = await UserModel.getUserByUid(firebaseUid);
-      console.log(user);
-
+      if (loggedWithGoogle) {
+        var user = await UserModel.getUserByEmail(email);
+      }
+      );
       const accessToken = jwt.sign({ user }, process.env.AUTH_TOKEN_SECRET, {
         expiresIn: "30d",
       });
-      return response.status(200).json({ accessToken, user });
+      return user
+        ? response.status(200).json({ accessToken, user })
+        : response.status(400).json({ message: "User was not found" });
     } catch (error) {
+      console.log(error);
       return response
         .status(500)
         .json({ message: "Error while trying to validate credentials" });
@@ -41,7 +50,7 @@ module.exports = {
 
     const verify = await new Promise((res) => {
       jwt.verify(token, process.env.AUTH_TOKEN_SECRET, (err, user) => {
-        console.log(err);
+        if (err) console.log(err);
         if (err) return res({ verified: false, user: {} });
 
         return res({ verified: true, user: user.user });
