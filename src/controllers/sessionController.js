@@ -21,7 +21,7 @@ module.exports = {
       if (loggedWithGoogle) {
         var user = await UserModel.getUserByEmail(email);
       }
-      );
+
       const accessToken = jwt.sign({ user }, process.env.AUTH_TOKEN_SECRET, {
         expiresIn: "30d",
       });
