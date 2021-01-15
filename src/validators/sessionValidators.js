@@ -5,7 +5,8 @@ const sessionValidator = {};
 sessionValidator.login = {
   [Segments.BODY]: Joi.object().keys({
     email: Joi.string().email().required(),
-    password: Joi.string().required(),
+    password: Joi.string(),
+    google: Joi.boolean(),
   }),
 };
 
