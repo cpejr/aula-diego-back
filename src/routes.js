@@ -6,6 +6,7 @@ const { celebrate, Segments, Joi } = require("celebrate");
 const userValidator = require("./validators/userValidators");
 const liveValidator = require("./validators/liveValidators");
 const sessionValidator = require("./validators/sessionValidators");
+const classAdminValidator = require("./validators/classAdminValidator");
 
 const express = require("express");
 const routes = express.Router();
@@ -19,12 +20,14 @@ const { response } = require("express");
 const UserController = require("./controllers/userController");
 const LiveController = require("./controllers/liveController");
 const SessionController = require("./controllers/sessionController");
+const ClassAdminController = require("./controllers/classAdminController");
 const {
   authenticateToken,
   authenticateOptionalToken,
   isAdmin,
   isMaster,
 } = require("./middlewares/authentication");
+const classAdminController = require("./controllers/classAdminController");
 
 routes.get("/", (request, response) => {
   response.send("eae galerinha xdxxdxdxdxd");
@@ -121,6 +124,25 @@ routes.post(
   "/forgotpassword",
   celebrate(sessionValidator.forgotPassword),
   SessionController.forgotPassword
+);
+
+// CLASS ----------------------------------------------------------------------------------
+routes.post(
+  "/linkadmin",
+  celebrate(classAdminValidator.create),
+  classAdminController.create
+);
+
+routes.get(
+  "/class",
+  celebrate(classAdminValidator.read),
+  classAdminController.read
+);
+
+routes.delete(
+  "/class/:id",
+  celebrate(classAdminValidator.delete),
+  classAdminController.delete
 );
 
 module.exports = routes;
