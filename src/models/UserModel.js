@@ -44,6 +44,14 @@ module.exports = {
     return response;
   },
 
+  async getUserByEmail(email) {
+    const response = await connection("user")
+      .where("email", email)
+      .select("*")
+      .first();
+    return response;
+  },
+
   async getUserByUid(firebase_id) {
     const response = await connection("user")
       .where("firebase_id", firebase_id)

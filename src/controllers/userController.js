@@ -17,16 +17,12 @@ module.exports = {
         unit: request.body.unit,
         city: request.body.city,
         state: request.body.state,
+        type: request.body.type,
       };
 
-      if (
-        user.type === "admin" ||
-        user.type === "student" ||
-        user.type === "master"
-      ) {
-        const loggedUser = request.session;
-
-        if (loggedUser && loggedUser.type !== "admin") {
+      if (user.type === "admin" || user.type === "master") {
+        const loggedUser = request.session.user;
+        if (!loggedUser || (loggedUser && loggedUser.type !== "master")) {
           return response.status(403).json("Operção não permitida");
         }
       }
@@ -83,7 +79,7 @@ module.exports = {
     }
   },
 
-  async deleteStudent(request, response) {
+  async delete(request, response) {
     try {
       const { user_id } = request.params;
 

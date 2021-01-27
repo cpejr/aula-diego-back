@@ -34,14 +34,15 @@ routes.get("/", (request, response) => {
 
 routes.post(
   "/newuser",
+  authenticateOptionalToken,
   celebrate(userValidator.create),
   UserController.createUser
 );
 routes.delete(
-  "/deleteUserStudent/:user_id",
+  "/deleteUser/:user_id",
   authenticateToken,
   isMaster,
-  UserController.deleteStudent
+  UserController.delete
 );
 routes.put("/user/:user_id", authenticateToken, UserController.updateStudent);
 routes.get(
