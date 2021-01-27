@@ -34,6 +34,7 @@ routes.get("/", (request, response) => {
 
 routes.post(
   "/newuser",
+  authenticateOptionalToken,
   celebrate(userValidator.create),
   UserController.createUser
 );
