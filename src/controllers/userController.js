@@ -83,7 +83,7 @@ module.exports = {
     }
   },
 
-  async deleteStudent(request, response) {
+  async delete(request, response) {
     try {
       const { user_id } = request.params;
 
