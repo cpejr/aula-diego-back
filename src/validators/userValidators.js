@@ -15,6 +15,7 @@ userValidator.create = {
     unit: Joi.string().required(),
     occupation: Joi.string().required(),
     phone: Joi.string().length(11).required(),
+    type: Joi.string().default("student"),
   }),
 };
 
