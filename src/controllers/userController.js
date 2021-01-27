@@ -22,7 +22,7 @@ module.exports = {
 
       if (user.type === "admin" || user.type === "master") {
         const loggedUser = request.session.user;
-        if (!loggedUser || (loggedUser && loggedUser.type !== "admin")) {
+        if (!loggedUser || (loggedUser && loggedUser.type !== "master")) {
           return response.status(403).json("Operção não permitida");
         }
       }
