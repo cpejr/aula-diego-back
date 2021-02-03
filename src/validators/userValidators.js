@@ -16,6 +16,7 @@ userValidator.create = {
     occupation: Joi.string().required(),
     phone: Joi.string().length(11).required(),
     type: Joi.string().default("student"),
+    status: Joi.string().default("pending"),
   }),
 };
 
@@ -34,6 +35,7 @@ userValidator.uptade = {
       phone: Joi.string().length(11),
       unit: Joi.string().required(),
       occupation: Joi.string().required(),
+      status: Joi.string(),
     }),
   }),
 };

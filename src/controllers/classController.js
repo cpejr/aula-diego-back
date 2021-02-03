@@ -1,10 +1,11 @@
+const { update } = require("../database/connection");
 const ClassModel = require("../models/ClassModel");
 
 module.exports = {
   async create(request, response) {
     try {
       const turma = {
-        comapny: request.body.company,
+        company: request.body.company,
         name: request.body.name,
         description: request.body.description,
         code: request.body.code,

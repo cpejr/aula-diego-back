@@ -29,6 +29,13 @@ module.exports = {
     return response;
   },
 
+  async getAllByStatus(status) {
+    const response = await connection("user")
+      .where("status", status)
+      .select("*");
+    return response;
+  },
+
   async getAllByCompany(type) {
     const response = await connection("user")
       .where("company", type)

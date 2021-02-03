@@ -1,5 +1,4 @@
 const { Segments, Joi } = require("celebrate");
-
 const classValidator = {};
 
 classValidator.create = {

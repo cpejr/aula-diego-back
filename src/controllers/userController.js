@@ -18,6 +18,7 @@ module.exports = {
         city: request.body.city,
         state: request.body.state,
         type: request.body.type,
+        status: request.body.status,
       };
 
       if (user.type === "admin" || user.type === "master") {
@@ -52,6 +53,7 @@ module.exports = {
     try {
       const { user_id } = request.params;
       const user = await UserModel.getById(user_id);
+
       return response.status(200).json(user);
     } catch (error) {
       console.log(error.message);
@@ -73,6 +75,36 @@ module.exports = {
     try {
       const admin = await UserModel.getAllByTypes("admin");
       return response.status(200).json({ admin });
+    } catch (error) {
+      console.log(error.message);
+      response.status(500).json("internal server error ");
+    }
+  },
+
+  async getAllPending(request, response) {
+    try {
+      const pending = await UserModel.getAllByStatus("pending");
+      return response.status(200).json({ pending });
+    } catch (error) {
+      console.log(error.message);
+      response.status(500).json("internal server error ");
+    }
+  },
+
+  async getAllApproved(request, response) {
+    try {
+      const approved = await UserModel.getAllByStatus("approved");
+      return response.status(200).json({ approved });
+    } catch (error) {
+      console.log(error.message);
+      response.status(500).json("internal server error ");
+    }
+  },
+
+  async getAllRefused(request, response) {
+    try {
+      const refused = await UserModel.getAllByStatus("refused");
+      return response.status(200).json({ refused });
     } catch (error) {
       console.log(error.message);
       response.status(500).json("internal server error ");
