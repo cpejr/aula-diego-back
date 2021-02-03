@@ -11,17 +11,6 @@ classValidator.create = {
   }),
 };
 
-/*classValidator.getById = {
-    [Segments.HEADERS]: Joi.object().keys({
-        class_id: Joi.string().required(),
-    }),
-    
-    [Segments.BODY]: Joi.object().keys({
-        id: Joi.number().integer(),
-        class_id: Joi.number().integer(),
-      }),
-};*/
-
 classValidator.update = {
   [Segments.PARAMS]: Joi.object().keys({
     class_id: Joi.string().required(),

@@ -7,6 +7,7 @@ const userValidator = require("./validators/userValidators");
 const liveValidator = require("./validators/liveValidators");
 const sessionValidator = require("./validators/sessionValidators");
 const classValidator = require("./validators/classValidators");
+const occupationValidator = require("./validators/occupationValidators");
 
 const express = require("express");
 const routes = express.Router();
@@ -21,6 +22,7 @@ const UserController = require("./controllers/userController");
 const LiveController = require("./controllers/liveController");
 const SessionController = require("./controllers/sessionController");
 const ClassController = require("./controllers/classController");
+const OccupationController = require("./controllers/occupationController");
 
 const {
   authenticateToken,
@@ -144,10 +146,16 @@ routes.delete(
   ClassController.delete
 );
 routes.get(
-  "/readclass/:class_id",
+  "/class/:class_id",
   authenticateToken,
   isAdmin,
   ClassController.getById
+);
+routes.get(
+  "/allcompany",
+  authenticateToken,
+  isAdmin,
+  ClassController.getAllByCompany
 );
 routes.put(
   "/updateclass/:class_id",
@@ -155,6 +163,42 @@ routes.put(
   isAdmin,
   celebrate(classValidator.update),
   ClassController.update
+);
+
+// OCCUPATION -------------------------------------------------------------------------------
+
+routes.post(
+  "/newoccupation",
+  authenticateToken,
+  isAdmin,
+  celebrate(occupationValidator.create),
+  OccupationController.create
+);
+routes.delete(
+  "/deleteOccupation/:id",
+  authenticateToken,
+  isAdmin,
+  celebrate(occupationValidator.delete),
+  OccupationController.delete
+);
+routes.get(
+  "/occupation/:id",
+  authenticateToken,
+  isAdmin,
+  OccupationController.getById
+);
+routes.get(
+  "/allorganization",
+  authenticateToken,
+  isAdmin,
+  OccupationController.getAllByOrganization
+);
+routes.put(
+  "/updateoccupation/:id",
+  authenticateToken,
+  isAdmin,
+  celebrate(occupationValidator.update),
+  OccupationController.update
 );
 
 module.exports = routes;
