@@ -1,5 +1,7 @@
 const UserModel = require("../models/UserModel");
 const FirebaseModel = require("../models/FirebaseModel");
+const { v4: uuidv4 } = require('uuid');
+var datetime = require('node-datetime');
 
 module.exports = {
   async createUser(request, response) {
@@ -7,25 +9,33 @@ module.exports = {
 
     try {
       const user = {
+        id = uuidv4(),
         name: request.body.name,
         email: request.body.email,
-        company: request.body.company,
         birthdate: request.body.birthdate,
         phone: request.body.phone,
-        occupation: request.body.occupation,
+        company: null,
+        occupation: null,
         password: request.body.password,
-        unit: request.body.unit,
-        city: request.body.city,
-        state: request.body.state,
-        type: request.body.type,
       };
 
-      if (user.type === "admin" || user.type === "master") {
+      const year = new Date().getFullYear();
+      const firstday = `${year}-01-01`;
+      const lastday = `${year}-12-31`;
+      const { count } = await connection("user")
+        .whereBetween("created_at", [firstday, lastday])
+        .count("id AS count")
+        .first();
+      const matricula = year * 10000 + count;
+      matricula.toString();
+      user.matricula = matricula;
+
+      /* if (user.type === "admin" || user.type === "master") {
         const loggedUser = request.session.user;
         if (!loggedUser || (loggedUser && loggedUser.type !== "master")) {
           return response.status(403).json("Operção não permitida");
         }
-      }
+      } */
 
       firebaseUid = await FirebaseModel.createNewUser(
         user.email,
@@ -36,9 +46,9 @@ module.exports = {
 
       user.firebase_id = firebaseUid;
 
-      const resposta = await UserModel.create(user);
-
+      const response = await UserModel.create(user);
       return response.status(200).json("Usuário Criado com succeso!!!!!");
+      
     } catch (error) {
       if (firebaseUid) {
         FirebaseModel.deleteUser(firebaseUid);
@@ -50,8 +60,8 @@ module.exports = {
 
   async getOneUser(request, response) {
     try {
-      const { user_id } = request.params;
-      const user = await UserModel.getById(user_id);
+      const { id } = request.params;
+      const user = await UserModel.getById(id);
       return response.status(200).json(user);
     } catch (error) {
       console.log(error.message);
@@ -81,9 +91,9 @@ module.exports = {
 
   async delete(request, response) {
     try {
-      const { user_id } = request.params;
+      const { id } = request.params;
 
-      const foundUser = await UserModel.getById(user_id);
+      const foundUser = await UserModel.getById(id);
 
       if (!foundUser) {
         throw new Error("Usuário não encontrado!");
@@ -91,7 +101,7 @@ module.exports = {
 
       await FirebaseModel.deleteUser(foundUser[0].firebase_id);
 
-      await UserModel.delete(user_id);
+      await UserModel.delete(id);
 
       response.status(200).json("Usuário apagado com sucesso!");
     } catch (error) {
@@ -102,11 +112,11 @@ module.exports = {
 
   async updateStudent(request, response) {
     try {
-      const { user_id } = request.params;
+      const { id } = request.params;
 
       const updatedUser = request.body;
 
-      const res = await UserModel.update(user_id, updatedUser);
+      const res = await UserModel.update(id, updatedUser);
 
       console.log(res);
 
@@ -123,9 +133,9 @@ module.exports = {
 
   async promote(request, response) {
     try {
-      const { user_id } = request.params;
+      const { id } = request.params;
 
-      const res = await UserModel.promoteUser(user_id);
+      const res = await UserModel.promoteUser(id);
 
       console.log(res);
 
@@ -144,9 +154,9 @@ module.exports = {
 
   async demote(request, response) {
     try {
-      const { user_id } = request.params;
+      const { id } = request.params;
 
-      const res = await UserModel.demoteUser(user_id);
+      const res = await UserModel.demoteUser(id);
 
       console.log(res);
 
