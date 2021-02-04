@@ -1,43 +1,36 @@
-const connection = require("../database/connection");
+const { Segments, Joi } = require("celebrate");
 
-module.exports ={
-    async createNewLive(live){
-    try{
+const liveValidator = {};
 
-        const response = await connection("live").insert(live);
-        
-        return response;
-    }
-    catch(error){
-        throw new Error("Erro")
+liveValidator.create = {
+  [Segments.BODY]: Joi.object().keys({
+    title: Joi.string().required(),
+    start_date: Joi.date().required(),
+    description: Joi.string().required(),
+    live_link: Joi.string().required(),
+    duration: Joi.string().required(),
+    confirmation_code: Joi.string().required(),
+  }),
+};
 
-    }
+liveValidator.uptade = {
+  [Segments.PARAMS]: Joi.object().keys({
+    live_id: Joi.string().required(),
+  }),
+  [Segments.BODY]: Joi.object().keys({
+      title: Joi.string().optional(),
+      start_date: Joi.date().optional(),
+      description: Joi.string().optional(),
+      live_link: Joi.string().optional(),
+      duration: Joi.string().optional(),
+      confirmation_code: Joi.string().optional(),
+    }),
+};
 
-    },
-    
-    async getById(id){
-        try {
-            const response = await connection('live').where('live_id', id).select('*');
-            return response;
-        } catch (error) {
-            console.log(error.message);
-            return error;
-        }
-    },
+liveValidator.deletelive = {
+  [Segments.PARAMS]: Joi.object().keys({
+    live_id: Joi.string().required(),
+  }),
+};
 
-    async deleteLive(live_id){
-        try{
-            const response = await connection("live").where("live_id",live_id).del();
-            return response;
-
-        }
-        catch(error){
-            console.log(error.message);
-            return error;
-        }
-    },
-    async updateLive(live_id,live){
-        const response = await connection("live").where("live_id",live_id).update(live);
-        return response;
-    }
-}
+module.exports = liveValidator;
