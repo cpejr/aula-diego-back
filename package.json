@@ -21,6 +21,7 @@
     "joi": "^17.2.1",
     "jsonwebtoken": "^8.5.1",
     "knex": "^0.21.6",
+    "node-pre-gyp": "^0.17.0",
     "react-uuid": "^1.0.2",
     "sqlite3": "^5.0.0",
     "uuid": "^8.3.1"

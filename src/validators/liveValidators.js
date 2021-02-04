@@ -5,9 +5,10 @@ const liveValidator = {};
 liveValidator.create = {
   [Segments.BODY]: Joi.object().keys({
     title: Joi.string().required(),
-    start_date: Joi.date().required(),
     description: Joi.string().required(),
     live_link: Joi.string().required(),
+    date: Joi.date().required(),
+    /* time: Joi.string().required(), */
     duration: Joi.string().required(),
     confirmation_code: Joi.string().required(),
   }),
