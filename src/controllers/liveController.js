@@ -1,4 +1,5 @@
 const { update } = require("../database/connection");
+const ClassModel = require("../models/ClassModel");
 const LiveModel = require("../models/LiveModel");
 
 module.exports = {
@@ -6,10 +7,12 @@ module.exports = {
     try {
       const live = {
         title: request.body.title,
-        start_date: request.body.start_date,
         description: request.body.description,
         live_link: request.body.live_link,
+        start_date: request.body.date,
+        /* time: request.body.time, */
         duration: request.body.duration,
+        course: request.body.course,
         confirmation_code: request.body.confirmation_code,
       };
       await LiveModel.createNewLive(live);
@@ -37,11 +40,20 @@ module.exports = {
       response.status(500).json("Internal server error.");
     }
   },
+  
   async read(request, response) {
     try {
       const { live_id } = request.params;
       const live = await LiveModel.getById(live_id);
-      return response.status(200).json(live);
+      const allowed = await ClassModel.getUsersInClass(live_id);
+      const user = request.session.user;
+
+      for (let i in allowed) {
+        if (user.user_id === allowed[i].user_id)
+          return response.status(200).json(live);
+      }
+
+      return response.status(500).json("Unauthorized");
     } catch (error) {
       console.log(error.message);
       response.status(500).json("Internal server error.");

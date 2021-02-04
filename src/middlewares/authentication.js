@@ -27,7 +27,7 @@ module.exports = {
   },
 
   async isAdmin(request, response, next) {
-    const type = request.session.user[0].type;
+    const type = request.session.user.type;
     if (type !== "admin" && type !== "master") {
       return response.status(401).json({ error: "Access denied!" });
     } else {
