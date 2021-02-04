@@ -1,15 +1,16 @@
 const { update } = require("../database/connection");
+const ClassModel = require("../models/ClassModel");
 const LiveModel = require("../models/LiveModel");
 
 module.exports = {
   async create(request, response) {
     try {
       const live = {
-        title: request.body.title,
-        start_date: request.body.start_date,
+        name: request.body.name,
         description: request.body.description,
-        live_link: request.body.live_link,
-        duration: request.body.duration,
+        datetime: request.body.datetime,
+        link: request.body.link,
+        course_id: request.body.course_id,
         confirmation_code: request.body.confirmation_code,
       };
       await LiveModel.createNewLive(live);
@@ -22,14 +23,13 @@ module.exports = {
 
   async delete(request, response) {
     try {
-      const { live_id } = request.params;
-      console.log(live_id);
-      const foundLive = await LiveModel.getById(live_id);
-      console.log(foundLive);
+      const { id } = request.params;
+      const foundLive = await LiveModel.getById(id);
+
       if (!foundLive) {
         throw new Error("Live não encontrada.");
       } else {
-        await LiveModel.deleteLive(live_id);
+        await LiveModel.deleteLive(id);
         response.status(200).json("Live deletada com sucesso.");
       }
     } catch (error) {
@@ -37,11 +37,20 @@ module.exports = {
       response.status(500).json("Internal server error.");
     }
   },
+
   async read(request, response) {
     try {
-      const { live_id } = request.params;
-      const live = await LiveModel.getById(live_id);
-      return response.status(200).json(live);
+      const { id } = request.params;
+      const live = await LiveModel.getById(id);
+      const allowed = await ClassModel.getUsersInClass(id);
+      const user = request.session.user;
+
+      for (let student in allowed) {
+        if (user.user_id === student.user_id)
+          return response.status(200).json(live);
+      }
+
+      return response.status(500).json("Unauthorized");
     } catch (error) {
       console.log(error.message);
       response.status(500).json("Internal server error.");
