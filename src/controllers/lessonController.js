@@ -8,6 +8,8 @@ module.exports = {
         name: request.body.name,
         description: request.body.description,
         course_id: request.body.course_id,
+        created_at: datetime.getTime(),
+        is_deleted: false
       };
       await lessonModel.createNewlesson(lesson);
       response.status(200).json("Aula criada com sucesso.");
@@ -54,9 +56,12 @@ module.exports = {
   },
   async update(request, response) {
     try {
-      const { lesson_id } = request.params;
-      const newlesson = request.body;
-      const res = await lessonModel.updatelesson(lesson_id, newlesson);
+      const { id } = request.params;
+      const newLesson = request.body;
+
+      newLesson.updated_at = datetime.getTime();
+
+      const res = await lessonModel.updatelesson(lesson_id, newLesson);
       if (res !== 1) {
         return response.status(400).json("Aula não encontrada!");
       } else {

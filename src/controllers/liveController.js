@@ -1,17 +1,22 @@
 const { update } = require("../database/connection");
 const ClassModel = require("../models/ClassModel");
 const LiveModel = require("../models/LiveModel");
+const { v4: uuidv4 } = require('uuid');
+var datetime = require('node-datetime');
 
 module.exports = {
   async create(request, response) {
     try {
       const live = {
+        id: uuidv4(),
         name: request.body.name,
         description: request.body.description,
         datetime: request.body.datetime,
         link: request.body.link,
         course_id: request.body.course_id,
         confirmation_code: request.body.confirmation_code,
+        created_at: datetime.getTime(),
+        is_deleted: false
       };
       await LiveModel.createNewLive(live);
       response.status(200).json("Live criada com sucesso.");
@@ -58,9 +63,12 @@ module.exports = {
   },
   async update(request, response) {
     try {
-      const { live_id } = request.params;
+      const { id } = request.params;
       const newlive = request.body;
-      const res = await LiveModel.updateLive(live_id, newlive);
+
+      newLive.updated_at = datetime.getTime();
+
+      const res = await LiveModel.updateLive(id, newlive);
       if (res !== 1) {
         return response.status(400).json("Live não encontrada!");
       } else {
