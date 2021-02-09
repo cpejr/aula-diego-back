@@ -1,8 +1,9 @@
 exports.up = (knex) =>{
     return knex.schema.createTable('organization', (table) => {
-        table.string('id').primary().notNullable();
+        table.uuid('id').primary().notNullable();
         table.string('name').notNullable();
         table.string('description').notNullable();
+        table.foreign('organization').references('organization.id').onDelete()
         table.timestamp('created_at').defaultTo(knex.fn.now());
         table.timestamp('updated_at').defaultTo(knex.fn.now());
         table.bool('is_deleted').defaultTo(false);

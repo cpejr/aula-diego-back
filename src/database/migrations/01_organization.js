@@ -1,6 +1,6 @@
 exports.up = (knex) =>{
     return knex.schema.createTable('organization', (table) => {
-        table.string('id').primary().notNullable();
+        table.uuid('id').primary().notNullable();
         table.string('name').notNullable();
         table.string('description').notNullable();
         table.timestamp('created_at').defaultTo(knex.fn.now());
