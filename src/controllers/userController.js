@@ -1,23 +1,19 @@
 const UserModel = require("../models/UserModel");
 const FirebaseModel = require("../models/FirebaseModel");
-const { v4: uuidv4 } = require('uuid');
-var datetime = require('node-datetime');
+const { v4: uuidv4 } = require("uuid");
+var datetime = require("node-datetime");
 
 module.exports = {
   async createUser(request, response) {
     let firebaseUid;
 
     try {
-      const user = {
-        id: uuidv4(),
-        name: request.body.name,
-        email: request.body.email,
-        birthdate: request.body.birthdate,
-        phone: request.body.phone,
-        company: null,
-        occupation: null,
-        password: request.body.password,
-      };
+      const user = request.body;
+      user.id = uuidv4();
+      user.created_at = new Date().getTime(); //Preciso fazer?
+      user.updated_at = new Date().getTime(); //Preciso fazer?
+      user.status = "pending";
+      user.is_deleted = false;
 
       const year = new Date().getFullYear();
       const firstday = `${year}-01-01`;
@@ -26,16 +22,9 @@ module.exports = {
         .whereBetween("created_at", [firstday, lastday])
         .count("id AS count")
         .first();
-      const matricula = year * 10000 + count;
-      matricula.toString();
-      user.matricula = matricula;
-
-      /* if (user.type === "admin" || user.type === "master") {
-        const loggedUser = request.session.user;
-        if (!loggedUser || (loggedUser && loggedUser.type !== "master")) {
-          return response.status(403).json("Operção não permitida");
-        }
-      } */
+      const registration = year * 10000 + count;
+      registration.toString();
+      user.registrarion = registration;
 
       firebaseUid = await FirebaseModel.createNewUser(
         user.email,
@@ -47,8 +36,7 @@ module.exports = {
       user.firebase_id = firebaseUid;
 
       const response = await UserModel.create(user);
-      return response.status(200).json("Usuário Criado com succeso!!!!!");
-      
+      return response.status(200).json("Usuário Criado com succeso!");
     } catch (error) {
       if (firebaseUid) {
         FirebaseModel.deleteUser(firebaseUid);
@@ -58,34 +46,47 @@ module.exports = {
     }
   },
 
-  async getOneUser(request, response) {
+  async read(request, response) {
+    try {
+      const filters = request.query;
+      const result = UserModel.read(filters);
+      return response.status(200).json(result);
+    } catch (error) {
+      console.warn(error);
+      response.status(500).json("internal server error");
+    }
+  },
+
+  async getById(request, response) {
     try {
       const { id } = request.params;
       const user = await UserModel.getById(id);
       return response.status(200).json(user);
     } catch (error) {
-      console.log(error.message);
-      response.status(500).json("internal server error ");
+      console.warn(error.message);
+      response.status(500).json("internal server error");
     }
   },
-
-  async getAllStudent(request, response) {
+  async update(request, response) {
     try {
-      const student = await UserModel.getAllByTypes("student");
-      return response.status(200).json({ student });
+      const user = request.body;
+      const loggedUser = request.session;
+
+      if (loggedUser.id != user.id && loggedUser.type != "master")
+        return response
+          .status(403)
+          .json("Você não tem permissão para realizar esta operação");
+
+      const res = await UserModel.update(user);
+
+      if (res !== 1) {
+        return response.status(404).json("Usuário não encontrado!");
+      } else {
+        return response.status(200).json("Usuário alterado com sucesso ");
+      }
     } catch (error) {
       console.log(error.message);
-      response.status(500).json("internal server error ");
-    }
-  },
-
-  async getAllAdmin(request, response) {
-    try {
-      const admin = await UserModel.getAllByTypes("admin");
-      return response.status(200).json({ admin });
-    } catch (error) {
-      console.log(error.message);
-      response.status(500).json("internal server error ");
+      return response.status(500).json("internal server error ");
     }
   },
 
@@ -96,78 +97,17 @@ module.exports = {
       const foundUser = await UserModel.getById(id);
 
       if (!foundUser) {
-        throw new Error("Usuário não encontrado!");
+        return response.status(404).json("Usuário não encontrado");
       }
 
-      await FirebaseModel.deleteUser(foundUser[0].firebase_id);
+      await FirebaseModel.deleteUser(foundUser.firebase_id);
 
       await UserModel.delete(id);
 
       response.status(200).json("Usuário apagado com sucesso!");
     } catch (error) {
-      console.log(error.message);
+      console.warn(error);
       response.status(500).json("internal server error ");
-    }
-  },
-
-  async updateStudent(request, response) {
-    try {
-      const { id } = request.params;
-
-      const updatedUser = request.body;
-
-      const res = await UserModel.update(id, updatedUser);
-
-      console.log(res);
-
-      if (res !== 1) {
-        return response.status(400).json("Usuário não encontrado!");
-      } else {
-        return response.status(200).json("Usuário alterado com sucesso ");
-      }
-    } catch (error) {
-      console.log(error.message);
-      return response.status(500).json("internal server error ");
-    }
-  },
-
-  async promote(request, response) {
-    try {
-      const { id } = request.params;
-
-      const res = await UserModel.promoteUser(id);
-
-      console.log(res);
-
-      if (res !== 1) {
-        return response.status(400).json("Usuário não encontrado");
-      } else {
-        return response
-          .status(200)
-          .json("Usuário Promovido para administrador");
-      }
-    } catch (error) {
-      console.log(error.message);
-      return response.status(500).json("internal server error ");
-    }
-  },
-
-  async demote(request, response) {
-    try {
-      const { id } = request.params;
-
-      const res = await UserModel.demoteUser(id);
-
-      console.log(res);
-
-      if (res !== 1) {
-        return response.status(400).json("Usuário não encontrado");
-      } else {
-        return response.status(200).json("Usuário demovido para aluno!");
-      }
-    } catch (error) {
-      console.log(error.message);
-      return response.status(500).json("internal server error ");
     }
   },
 };
