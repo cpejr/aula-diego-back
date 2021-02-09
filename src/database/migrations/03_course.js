@@ -1,9 +1,8 @@
 exports.up = (knex) =>{
-    return knex.schema.createTable('occupation', (table) => {
+    return knex.schema.createTable('couse', (table) => {
         table.uuid('id').primary().notNullable();
         table.string('name').notNullable();
         table.string('description');
-        table.foreign('organization').references('id').inTable('organization').onDelete('NO ACTION');
         table.timestamp('created_at').defaultTo(knex.fn.now());
         table.timestamp('updated_at').defaultTo(knex.fn.now());
         table.bool('is_deleted').defaultTo(false);
@@ -11,5 +10,5 @@ exports.up = (knex) =>{
 }
 
 exports.down = function (knex) {
-    return knex.schema.dropTable('occupation');
+    return knex.schema.dropTable('couse');
 };

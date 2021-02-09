@@ -2,7 +2,7 @@ exports.up = (knex) =>{
     return knex.schema.createTable('organization', (table) => {
         table.uuid('id').primary().notNullable();
         table.string('name').notNullable();
-        table.string('description').notNullable();
+        table.string('description');
         table.timestamp('created_at').defaultTo(knex.fn.now());
         table.timestamp('updated_at').defaultTo(knex.fn.now());
         table.bool('is_deleted').defaultTo(false);

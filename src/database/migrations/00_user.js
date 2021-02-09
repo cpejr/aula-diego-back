@@ -4,7 +4,7 @@ exports.up = (knex) =>{
         table.string('name').notNullable();
         table.string('email').notNullable();
         table.integer('registration').notNullable();
-        table.timestamp('birthdate').notNullable();
+        table.date('birthdate').notNullable();
         table.string('phone').notNullable();
         table.string('organization').notNullable();
         table.string('occupation').notNullable();
