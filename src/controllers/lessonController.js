@@ -9,7 +9,7 @@ module.exports = {
         description: request.body.description,
         course_id: request.body.course_id,
         created_at: datetime.getTime(),
-        is_deleted: false
+        is_deleted: false,
       };
       await lessonModel.createNewlesson(lesson);
       response.status(200).json("Aula criada com sucesso.");
