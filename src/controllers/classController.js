@@ -1,75 +1,82 @@
 const ClassModel = require("../models/ClassModel");
-
+const { v4: uuidv4 } = require("uuid");
+//como classe é uma palavra reservada, usaremos turma
 module.exports = {
-  async create(request, response) {
+  async createUser(request, response) {
     try {
-      const turma = {
-        comapny: request.body.company,
-        name: request.body.name,
-        description: request.body.description,
-        code: request.body.code,
-        occupation: request.body.occupation,
-      };
-      await ClassModel.create(turma);
-      response.status(200).json("Turma criada com sucesso.");
+      const turma = request.body;
+      turma.id = uuidv4();
+      turma.created_at = new Date().getTime(); //Preciso fazer?
+      turma.updated_at = new Date().getTime(); //Preciso fazer?
+      turma.is_deleted = false;
+
+      const response = await ClassModel.create(turma);
+      return response.status(200).json("Turma criada com succeso!");
     } catch (error) {
-      console.log(error.message);
-      response.status(500).json("Internal server error.");
+      console.warn(error.message);
+      response.status(500).json("internal server error");
+    }
+  },
+
+  async read(request, response) {
+    try {
+      const filters = request.query;
+      const result = ClassModel.read(filters);
+      return response.status(200).json(result);
+    } catch (error) {
+      console.warn(error);
+      response.status(500).json("internal server error");
     }
   },
 
   async getById(request, response) {
     try {
-      const { class_id } = request.params;
-      const result = await ClassModel.getById(class_id);
-      return response.status(200).json(result);
+      const { id } = request.params;
+      const turma = await ClassModel.getById(id);
+      return response.status(200).json(turma);
     } catch (error) {
-      console.log(error.message);
-      response.status(500).json("Internal server error.");
+      console.warn(error.message);
+      response.status(500).json("internal server error");
     }
   },
-
-  async getAllByCompany(request, response) {
-    try {
-      const { company } = request.params;
-      const result = await ClassModel.getAllByCompany(company);
-      return response.status(200).json(result);
-    } catch (error) {
-      console.log(error.message);
-      response.status(500).json("Internal server error.");
-    }
-  },
-
   async update(request, response) {
     try {
-      const { class_id } = request.params;
-      const newClass = request.body;
-      const res = await ClassModel.update(class_id, newClass);
+      const turma = request.body;
+      const loggedUser = request.session;
+
+      if (
+        !(
+          (loggedUser.organization == turma.organization &&
+            loggedUser.type != "student") ||
+          loggedUser.type == "master"
+        )
+      )
+        return response
+          .status(403)
+          .json("Você não tem permissão para realizar esta operação");
+
+      const res = await ClassModel.update(turma);
 
       if (res !== 1) {
-        return response.status(400).json("Turma não encontrada!");
+        return response.status(404).json("Turma não encontrada!");
       } else {
         return response.status(200).json("Turma alterada com sucesso ");
       }
     } catch (error) {
       console.log(error.message);
-      response.status(500).json("Internal server error.");
+      return response.status(500).json("internal server error ");
     }
   },
 
   async delete(request, response) {
     try {
-      const { class_id } = request.params;
-      const foundClass = await ClassModel.getById(class_id);
-      if (!foundClass) {
-        throw new Error("Turma não encontrada.");
-      } else {
-        await ClassModel.delete(class_id);
-        response.status(200).json("Turma deletada com sucesso.");
-      }
+      const { id } = request.params;
+
+      const result = await ClassModel.delete(id);
+      response.status(200).json("Turma apagada com sucesso!");
     } catch (error) {
-      console.log(error.message);
-      response.status(500).json("Internal server error.");
+      console.warn(error.message);
+      response.status(500).json("internal server error ");
     }
   },
 };
