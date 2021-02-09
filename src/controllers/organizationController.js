@@ -1,19 +1,14 @@
 const OrganizationModel = require("../models/OrganizationModel");
-const FirebaseModel = require("../models/FirebaseModel");
 const { v4: uuidv4 } = require("uuid");
 
 module.exports = {
-  async createUser(request, response) {
-    let firebaseUid;
-
+  async create(request, response) {
     try {
       const organization = request.body;
       organization.id = uuidv4();
       organization.created_at = new Date().getTime(); //Preciso fazer?
       organization.updated_at = new Date().getTime(); //Preciso fazer?
       organization.is_deleted = false;
-
-      organization.firebase_id = firebaseUid;
 
       const response = await OrganizationModel.create(organization);
       return response.status(200).json("Usuário Criado com succeso!");
@@ -77,7 +72,7 @@ module.exports = {
     try {
       const { id } = request.params;
 
-      const result = await organization.delete(id);
+      const result = await OrganizationModel.delete(id);
       response.status(200).json("Organização apagada com sucesso!");
     } catch (error) {
       console.warn(error.message);
