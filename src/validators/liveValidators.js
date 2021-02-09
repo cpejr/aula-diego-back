@@ -6,7 +6,7 @@ liveValidator.create = {
   [Segments.BODY]: Joi.object().keys({
     name: Joi.string().required(),
     description: Joi.string(),
-    datetime: Joi.datetime().required(),
+    datetime: Joi.string().required(),
     link: Joi.string().required(),
     course_id: Joi.string().required(),
     confirmation_code: Joi.string().required(),
@@ -20,7 +20,7 @@ liveValidator.uptade = {
   [Segments.BODY]: Joi.object().keys({
     name: Joi.string().required(),
     description: Joi.string(),
-    datetime: Joi.datetime().required(),
+    datetime: Joi.string().required(),
     link: Joi.string().required(),
     course_id: Joi.string().required(),
     confirmation_code: Joi.string().required(),

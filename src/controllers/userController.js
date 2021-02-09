@@ -9,7 +9,7 @@ module.exports = {
 
     try {
       const user = {
-        id = uuidv4(),
+        id: uuidv4(),
         name: request.body.name,
         email: request.body.email,
         birthdate: request.body.birthdate,

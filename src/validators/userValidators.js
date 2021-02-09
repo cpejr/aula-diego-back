@@ -11,7 +11,7 @@ userValidator.create = {
     password: Joi.string().required(),
     confirmPassword: Joi.ref("password"),
     birthdate: Joi.string().required(),
-    phone: phoneJoi().string().phoneNumber({ defaultCountry: 'BR', format: 'national'}).required(),
+    phone: phoneJoi.string().phoneNumber({ defaultCountry: 'BR', format: 'national'}).required(),
   }),
 };
 
