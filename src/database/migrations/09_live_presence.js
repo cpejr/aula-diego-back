@@ -4,7 +4,7 @@ exports.up = (knex) =>{
         table.foreign('live_id').references('id').inTable('live').onDelete('NO ACTION');
         table.uuid('user_id').notNullable();
         table.foreign('user_id').references('id').inTable('user').onDelete('NO ACTION');
-        table.primary(['lesson_id', 'user_id']);
+        table.primary(['live_id', 'user_id']);
         table.bool('confirmarion').defaultTo(false);
         table.integer('watch_time').defaultTo(0);
     })    

@@ -4,7 +4,7 @@ exports.up = (knex) =>{
         table.string('name').notNullable();
         table.string('description');
         table.uuid('organization_id').notNullable();
-        table.foreign('organization_id').references('organization.id').inTable('organization').onDelete('NO ACTION');
+        table.foreign('organization_id').references('id').inTable('organization').onDelete('NO ACTION');
         table.timestamp('created_at').defaultTo(knex.fn.now());
         table.timestamp('updated_at').defaultTo(knex.fn.now());
         table.bool('is_deleted').defaultTo(false);
