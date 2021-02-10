@@ -3,7 +3,9 @@ exports.up = (knex) =>{
         table.uuid('id').primary().notNullable();
         table.string('name').notNullable();
         table.string('description');
+        table.uuid('organization_id').notNullable();
         table.foreign('organization_id').references('id').inTable('organization').onDelete('NO ACTION');
+        table.uuid('course_id').notNullable();
         table.foreign('course_id').references('id').inTable('course').onDelete('NO ACTION');
         table.timestamp('created_at').defaultTo(knex.fn.now());
         table.timestamp('updated_at').defaultTo(knex.fn.now());

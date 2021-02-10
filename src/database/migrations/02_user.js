@@ -6,7 +6,9 @@ exports.up = (knex) =>{
         table.integer('registration').notNullable();
         table.date('birthdate').notNullable();
         table.string('phone').notNullable();
+        table.uuid('organization_id').notNullable();
         table.foreign('organization_id').references('id').inTable('organization').onDelete('NO ACTION');
+        table.uuid('occupation_id').notNullable();
         table.foreign('occupation_id').references('id').inTable('occupation').onDelete('NO ACTION');
         table.string('type').notNullable();
         table.timestamp('created_at').defaultTo(knex.fn.now());

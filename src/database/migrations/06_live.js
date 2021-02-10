@@ -6,6 +6,7 @@ exports.up = (knex) =>{
         table.timestamp('date').notNullable();
         table.string('confirmation_code').notNullable();
         table.string('link').notNullable();
+        table.uuid('course_id').notNullable();
         table.foreign('course_id').references('id').inTable('course').onDelete('NO ACTION');
         table.timestamp('created_at').defaultTo(knex.fn.now());
         table.timestamp('updated_at').defaultTo(knex.fn.now());
