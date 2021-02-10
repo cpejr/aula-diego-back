@@ -19,11 +19,11 @@ module.exports = {
     client: 'pg',
     dialect: "postgres",
     connection: {
-      port: 5432,
-      database: 'd4jprps36s7o0o',
-      user:     'whrvkyvkrteybf',
-      host: 'ec2-3-222-11-129.compute-1.amazonaws.com',
-      password: '24bcaba6b41214493cdbd6ad54d61a8d17935d49763ecd6a7011f4f531fc1779',
+      host: process.env.DB_HOST,
+      port: process.env.DB_PORT,
+      database: process.env.DB_NAME,
+      user:     process.env.DB_USER,
+      password: process.env.DB_PASS,
       ssl: true,
     },
     dialectOptions: {
