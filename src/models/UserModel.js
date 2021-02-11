@@ -5,12 +5,12 @@ module.exports = {
     const response = await connection("user").insert(user);
     return response;
   },
-  async read(filters) {
-    const response = await connection("user").where(filters).select("*");
-    return response;
-  },
   async getById(id) {
     const response = await connection("user").where({ id }).select("*").first();
+    return response;
+  },
+  async read(filters) {
+    const response = await connection("user").where(filters).select("*");
     return response;
   },
   async update(user) {
