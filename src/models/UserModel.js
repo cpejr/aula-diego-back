@@ -1,4 +1,3 @@
-const { update } = require("../database/connection");
 const connection = require("../database/connection");
 
 module.exports = {
