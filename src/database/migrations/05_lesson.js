@@ -1,9 +1,10 @@
 exports.up = (knex) =>{
-    return knex.schema.createTable('occupation', (table) => {
-        table.uuid('id').primary().notNullable();
+    return knex.schema.createTable('lesson', (table) => {
+        table.uuid('id').defaultTo(knex.raw('uuid_generate_v4()')).primary().notNullable();
         table.string('name').notNullable();
-        table.string('description');
-        table.foreign('course').references('id').inTable('course').onDelete('NO ACTION');
+        table.text('description', 'longtext');
+        table.uuid('course_id').notNullable();
+        table.foreign('course_id').references('id').inTable('course').onDelete('NO ACTION');
         table.timestamp('created_at').defaultTo(knex.fn.now());
         table.timestamp('updated_at').defaultTo(knex.fn.now());
         table.bool('is_deleted').defaultTo(false);
@@ -11,5 +12,5 @@ exports.up = (knex) =>{
 }
 
 exports.down = function (knex) {
-    return knex.schema.dropTable('occupation');
+    return knex.schema.dropTable('lesson');
 };

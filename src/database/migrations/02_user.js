@@ -1,17 +1,19 @@
 exports.up = (knex) =>{
     return knex.schema.createTable('user', (table) => {
-        table.uuid('id').primary().notNullable();
+        table.uuid('id').defaultTo(knex.raw('uuid_generate_v4()')).primary().notNullable();
         table.string('name').notNullable();
         table.string('email').notNullable();
         table.integer('registration').notNullable();
         table.date('birthdate').notNullable();
         table.string('phone').notNullable();
-        table.string('organization').notNullable();
-        table.string('occupation').notNullable();
-        table.string('type').notNullable();
+        table.uuid('organization_id').notNullable();
+        table.foreign('organization_id').references('id').inTable('organization').onDelete('NO ACTION');
+        table.uuid('occupation_id').notNullable();
+        table.foreign('occupation_id').references('id').inTable('occupation').onDelete('NO ACTION');
+        table.enu('type', ['master','admin','student']).notNullable();
         table.timestamp('created_at').defaultTo(knex.fn.now());
         table.timestamp('updated_at').defaultTo(knex.fn.now());
-        table.string('status').notNullable();
+        table.enu('status', ['pending','approved','refused']).defaultTo('pending').notNullable();
         table.bool('is_deleted').defaultTo(false);
     })    
 }
