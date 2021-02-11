@@ -7,10 +7,7 @@ module.exports = {
   },
 
   async getById(id) {
-    const response = await connection("live")
-      .where("id", id)
-      .select("*")
-      .first();
+    const response = await connection("live").where({ id }).select("*").first();
     return response;
   },
 
@@ -19,13 +16,15 @@ module.exports = {
     return response;
   },
 
-  async update(id, live) {
-    const response = await connection("live").where("id", id).update(live);
+  async update(live) {
+    const response = await connection("live")
+      .where({ id: live.id })
+      .update(live);
     return response;
   },
 
   async delete(id) {
-    const response = await connection("live").where("id", id).del();
+    const response = await connection("live").where({ id }).delete();
     return response;
   },
 };
