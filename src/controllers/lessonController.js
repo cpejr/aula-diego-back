@@ -1,25 +1,18 @@
 const { update } = require("../database/connection");
-const ClassModel = require("../models/ClassModel");
-const LiveModel = require("../models/LiveModel");
-const { v4: uuidv4 } = require('uuid');
-var datetime = require('node-datetime');
+const lessonModel = require("../models/lessonModel");
 
 module.exports = {
   async create(request, response) {
     try {
-      const live = {
-        id: uuidv4(),
+      const lesson = {
         name: request.body.name,
         description: request.body.description,
-        datetime: request.body.datetime,
-        link: request.body.link,
         course_id: request.body.course_id,
-        confirmation_code: request.body.confirmation_code,
         created_at: datetime.getTime(),
-        is_deleted: false
+        is_deleted: false,
       };
-      await LiveModel.createNewLive(live);
-      response.status(200).json("Live criada com sucesso.");
+      await lessonModel.createNewlesson(lesson);
+      response.status(200).json("Aula criada com sucesso.");
     } catch (error) {
       console.log(error.message);
       response.status(500).json("Internal server error.");
@@ -29,13 +22,13 @@ module.exports = {
   async delete(request, response) {
     try {
       const { id } = request.params;
-      const foundLive = await LiveModel.getById(id);
+      const foundlesson = await lessonModel.getById(id);
 
-      if (!foundLive) {
-        throw new Error("Live não encontrada.");
+      if (!foundlesson) {
+        throw new Error("Aula não encontrada.");
       } else {
-        await LiveModel.deleteLive(id);
-        response.status(200).json("Live deletada com sucesso.");
+        await lessonModel.deletelesson(id);
+        response.status(200).json("Aula deletada com sucesso.");
       }
     } catch (error) {
       console.log(error.message);
@@ -46,13 +39,13 @@ module.exports = {
   async read(request, response) {
     try {
       const { id } = request.params;
-      const live = await LiveModel.getById(id);
+      const lesson = await lessonModel.getById(id);
       const allowed = await ClassModel.getUsersInClass(id);
       const user = request.session.user;
 
       for (let student in allowed) {
         if (user.user_id === student.user_id)
-          return response.status(200).json(live);
+          return response.status(200).json(lesson);
       }
 
       return response.status(500).json("Unauthorized");
@@ -64,15 +57,15 @@ module.exports = {
   async update(request, response) {
     try {
       const { id } = request.params;
-      const newlive = request.body;
+      const newLesson = request.body;
 
-      newLive.updated_at = datetime.getTime();
+      newLesson.updated_at = datetime.getTime();
 
-      const res = await LiveModel.updateLive(id, newlive);
+      const res = await lessonModel.updatelesson(lesson_id, newLesson);
       if (res !== 1) {
-        return response.status(400).json("Live não encontrada!");
+        return response.status(400).json("Aula não encontrada!");
       } else {
-        return response.status(200).json("Live alterada com sucesso ");
+        return response.status(200).json("Aula alterada com sucesso ");
       }
     } catch (error) {
       console.log(error.message);

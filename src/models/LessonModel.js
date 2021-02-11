@@ -1,9 +1,9 @@
 const connection = require("../database/connection");
 
 module.exports = {
-    async createNewLive(live) {
+    async createNewlesson(lesson) {
         try {
-            const response = await connection("live").insert(live);
+            const response = await connection("lesson").insert(lesson);
             return response;
         }
         catch (error) {throw new Error("Erro");}
@@ -11,7 +11,7 @@ module.exports = {
 
     async getById(id) {
         try {
-            const response = await connection('live').where('id', id).select('*');
+            const response = await connection('lesson').where('id', id).select('*');
             return response;
         } catch (error) {
             console.log(error.message);
@@ -19,9 +19,9 @@ module.exports = {
         }
     },
 
-    async deleteLive(id) {
+    async deletelesson(id) {
         try {
-            const response = await connection("live").where("id", id).del();
+            const response = await connection("lesson").where("id", id).del();
             return response;
         }
         catch (error) {
@@ -29,8 +29,8 @@ module.exports = {
             return error;
         }
     },
-    async updateLive(id, live) {
-        const response = await connection("live").where("id", id).update(live);
+    async updatelesson(id, lesson) {
+        const response = await connection("lesson").where("id", id).update(lesson);
         return response;
     }
 }

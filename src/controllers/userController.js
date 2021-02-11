@@ -1,31 +1,30 @@
 const UserModel = require("../models/UserModel");
 const FirebaseModel = require("../models/FirebaseModel");
+const { v4: uuidv4 } = require("uuid");
+var datetime = require("node-datetime");
 
 module.exports = {
   async createUser(request, response) {
     let firebaseUid;
 
     try {
-      const user = {
-        name: request.body.name,
-        email: request.body.email,
-        company: request.body.company,
-        birthdate: request.body.birthdate,
-        phone: request.body.phone,
-        occupation: request.body.occupation,
-        password: request.body.password,
-        unit: request.body.unit,
-        city: request.body.city,
-        state: request.body.state,
-        type: request.body.type,
-      };
+      const user = request.body;
+      user.id = uuidv4();
+      user.created_at = new Date().getTime(); //Preciso fazer?
+      user.updated_at = new Date().getTime(); //Preciso fazer?
+      user.status = "pending";
+      user.is_deleted = false;
 
-      if (user.type === "admin" || user.type === "master") {
-        const loggedUser = request.session.user;
-        if (!loggedUser || (loggedUser && loggedUser.type !== "master")) {
-          return response.status(403).json("Operção não permitida");
-        }
-      }
+      const year = new Date().getFullYear();
+      const firstday = `${year}-01-01`;
+      const lastday = `${year}-12-31`;
+      const { count } = await connection("user")
+        .whereBetween("created_at", [firstday, lastday])
+        .count("id AS count")
+        .first();
+      const registration = year * 10000 + count;
+      registration.toString();
+      user.registrarion = registration;
 
       firebaseUid = await FirebaseModel.createNewUser(
         user.email,
@@ -36,9 +35,8 @@ module.exports = {
 
       user.firebase_id = firebaseUid;
 
-      const resposta = await UserModel.create(user);
-
-      return response.status(200).json("Usuário Criado com succeso!!!!!");
+      const response = await UserModel.create(user);
+      return response.status(200).json("Usuário Criado com succeso!");
     } catch (error) {
       if (firebaseUid) {
         FirebaseModel.deleteUser(firebaseUid);
@@ -48,70 +46,41 @@ module.exports = {
     }
   },
 
-  async getOneUser(request, response) {
+  async read(request, response) {
     try {
-      const { user_id } = request.params;
-      const user = await UserModel.getById(user_id);
+      const filters = request.query;
+      const result = UserModel.read(filters);
+      return response.status(200).json(result);
+    } catch (error) {
+      console.warn(error);
+      response.status(500).json("internal server error");
+    }
+  },
+
+  async getById(request, response) {
+    try {
+      const { id } = request.params;
+      const user = await UserModel.getById(id);
       return response.status(200).json(user);
     } catch (error) {
-      console.log(error.message);
-      response.status(500).json("internal server error ");
+      console.warn(error.message);
+      response.status(500).json("internal server error");
     }
   },
-
-  async getAllStudent(request, response) {
+  async update(request, response) {
     try {
-      const student = await UserModel.getAllByTypes("student");
-      return response.status(200).json({ student });
-    } catch (error) {
-      console.log(error.message);
-      response.status(500).json("internal server error ");
-    }
-  },
+      const user = request.body;
+      const loggedUser = request.session;
 
-  async getAllAdmin(request, response) {
-    try {
-      const admin = await UserModel.getAllByTypes("admin");
-      return response.status(200).json({ admin });
-    } catch (error) {
-      console.log(error.message);
-      response.status(500).json("internal server error ");
-    }
-  },
+      if (loggedUser.id != user.id && loggedUser.type != "master")
+        return response
+          .status(403)
+          .json("Você não tem permissão para realizar esta operação");
 
-  async delete(request, response) {
-    try {
-      const { user_id } = request.params;
-
-      const foundUser = await UserModel.getById(user_id);
-
-      if (!foundUser) {
-        throw new Error("Usuário não encontrado!");
-      }
-
-      await FirebaseModel.deleteUser(foundUser[0].firebase_id);
-
-      await UserModel.delete(user_id);
-
-      response.status(200).json("Usuário apagado com sucesso!");
-    } catch (error) {
-      console.log(error.message);
-      response.status(500).json("internal server error ");
-    }
-  },
-
-  async updateStudent(request, response) {
-    try {
-      const { user_id } = request.params;
-
-      const updatedUser = request.body;
-
-      const res = await UserModel.update(user_id, updatedUser);
-
-      console.log(res);
+      const res = await UserModel.update(user);
 
       if (res !== 1) {
-        return response.status(400).json("Usuário não encontrado!");
+        return response.status(404).json("Usuário não encontrado!");
       } else {
         return response.status(200).json("Usuário alterado com sucesso ");
       }
@@ -121,43 +90,24 @@ module.exports = {
     }
   },
 
-  async promote(request, response) {
+  async delete(request, response) {
     try {
-      const { user_id } = request.params;
+      const { id } = request.params;
 
-      const res = await UserModel.promoteUser(user_id);
+      const foundUser = await UserModel.getById(id);
 
-      console.log(res);
-
-      if (res !== 1) {
-        return response.status(400).json("Usuário não encontrado");
-      } else {
-        return response
-          .status(200)
-          .json("Usuário Promovido para administrador");
+      if (!foundUser) {
+        return response.status(404).json("Usuário não encontrado");
       }
+
+      await FirebaseModel.deleteUser(foundUser.firebase_id);
+
+      await UserModel.delete(id);
+
+      response.status(200).json("Usuário apagado com sucesso!");
     } catch (error) {
-      console.log(error.message);
-      return response.status(500).json("internal server error ");
-    }
-  },
-
-  async demote(request, response) {
-    try {
-      const { user_id } = request.params;
-
-      const res = await UserModel.demoteUser(user_id);
-
-      console.log(res);
-
-      if (res !== 1) {
-        return response.status(400).json("Usuário não encontrado");
-      } else {
-        return response.status(200).json("Usuário demovido para aluno!");
-      }
-    } catch (error) {
-      console.log(error.message);
-      return response.status(500).json("internal server error ");
+      console.warn(error);
+      response.status(500).json("internal server error ");
     }
   },
 };

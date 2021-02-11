@@ -1,36 +1,30 @@
 const { Segments, Joi } = require("celebrate");
 
-const liveValidator = {};
+const lessonValidator = {};
 
-liveValidator.create = {
+lessonValidator.create = {
   [Segments.BODY]: Joi.object().keys({
     name: Joi.string().required(),
     description: Joi.string(),
-    datetime: Joi.string().required(),
-    link: Joi.string().required(),
     course_id: Joi.string().required(),
-    confirmation_code: Joi.string().required(),
   }),
 };
 
-liveValidator.uptade = {
+lessonValidator.uptade = {
   [Segments.PARAMS]: Joi.object().keys({
     id: Joi.string().required(),
   }),
   [Segments.BODY]: Joi.object().keys({
     name: Joi.string().required(),
     description: Joi.string(),
-    datetime: Joi.string().required(),
-    link: Joi.string().required(),
     course_id: Joi.string().required(),
-    confirmation_code: Joi.string().required(),
     }),
 };
 
-liveValidator.deletelive = {
+lessonValidator.deletelive = {
   [Segments.PARAMS]: Joi.object().keys({
     id: Joi.string().required(),
   }),
 };
 
-module.exports = liveValidator;
+module.exports = lessonValidator;

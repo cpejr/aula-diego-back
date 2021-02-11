@@ -1,17 +1,17 @@
-const ClassModel = require("../models/ClassModel");
+const OrganizationModel = require("../models/OrganizationModel");
 const { v4: uuidv4 } = require("uuid");
-//como classe é uma palavra reservada, usaremos turma
-module.exports = {
-  async createUser(request, response) {
-    try {
-      const turma = request.body;
-      turma.id = uuidv4();
-      turma.created_at = new Date().getTime(); //Preciso fazer?
-      turma.updated_at = new Date().getTime(); //Preciso fazer?
-      turma.is_deleted = false;
 
-      const response = await ClassModel.create(turma);
-      return response.status(200).json("Turma criada com succeso!");
+module.exports = {
+  async create(request, response) {
+    try {
+      const organization = request.body;
+      organization.id = uuidv4();
+      organization.created_at = new Date().getTime(); //Preciso fazer?
+      organization.updated_at = new Date().getTime(); //Preciso fazer?
+      organization.is_deleted = false;
+
+      const response = await OrganizationModel.create(organization);
+      return response.status(200).json("Usuário Criado com succeso!");
     } catch (error) {
       console.warn(error.message);
       response.status(500).json("internal server error");
@@ -21,7 +21,7 @@ module.exports = {
   async read(request, response) {
     try {
       const filters = request.query;
-      const result = ClassModel.read(filters);
+      const result = OrganizationModel.read(filters);
       return response.status(200).json(result);
     } catch (error) {
       console.warn(error);
@@ -32,8 +32,8 @@ module.exports = {
   async getById(request, response) {
     try {
       const { id } = request.params;
-      const turma = await ClassModel.getById(id);
-      return response.status(200).json(turma);
+      const organization = await OrganizationModel.getById(id);
+      return response.status(200).json(organization);
     } catch (error) {
       console.warn(error.message);
       response.status(500).json("internal server error");
@@ -41,12 +41,12 @@ module.exports = {
   },
   async update(request, response) {
     try {
-      const turma = request.body;
+      const organization = request.body;
       const loggedUser = request.session;
 
       if (
         !(
-          (loggedUser.organization == turma.organization &&
+          (loggedUser.organization == organization.id &&
             loggedUser.type != "student") ||
           loggedUser.type == "master"
         )
@@ -55,12 +55,12 @@ module.exports = {
           .status(403)
           .json("Você não tem permissão para realizar esta operação");
 
-      const res = await ClassModel.update(turma);
+      const res = await OrganizationModel.update(organization);
 
       if (res !== 1) {
-        return response.status(404).json("Turma não encontrada!");
+        return response.status(404).json("Organização não encontrada!");
       } else {
-        return response.status(200).json("Turma alterada com sucesso ");
+        return response.status(200).json("Organização alterada com sucesso ");
       }
     } catch (error) {
       console.log(error.message);
@@ -72,8 +72,8 @@ module.exports = {
     try {
       const { id } = request.params;
 
-      const result = await ClassModel.delete(id);
-      response.status(200).json("Turma apagada com sucesso!");
+      const result = await OrganizationModel.delete(id);
+      response.status(200).json("Organização apagada com sucesso!");
     } catch (error) {
       console.warn(error.message);
       response.status(500).json("internal server error ");

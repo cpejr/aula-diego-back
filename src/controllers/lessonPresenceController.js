@@ -1,17 +1,12 @@
-const ClassModel = require("../models/ClassModel");
-const { v4: uuidv4 } = require("uuid");
-//como classe é uma palavra reservada, usaremos turma
+const LessonPresenceModel = require("../models/LessonPresenceModel");
+
 module.exports = {
   async createUser(request, response) {
     try {
-      const turma = request.body;
-      turma.id = uuidv4();
-      turma.created_at = new Date().getTime(); //Preciso fazer?
-      turma.updated_at = new Date().getTime(); //Preciso fazer?
-      turma.is_deleted = false;
+      const lessonPresence = request.body;
 
-      const response = await ClassModel.create(turma);
-      return response.status(200).json("Turma criada com succeso!");
+      const response = await LessonPresenceModel.create(lessonPresence);
+      return response.status(200).json("Presença em lição criada com succeso!");
     } catch (error) {
       console.warn(error.message);
       response.status(500).json("internal server error");
@@ -21,7 +16,7 @@ module.exports = {
   async read(request, response) {
     try {
       const filters = request.query;
-      const result = ClassModel.read(filters);
+      const result = LessonPresenceModel.read(filters);
       return response.status(200).json(result);
     } catch (error) {
       console.warn(error);
@@ -32,8 +27,8 @@ module.exports = {
   async getById(request, response) {
     try {
       const { id } = request.params;
-      const turma = await ClassModel.getById(id);
-      return response.status(200).json(turma);
+      const lessonPresence = await LessonPresenceModel.getById(id);
+      return response.status(200).json(lessonPresence);
     } catch (error) {
       console.warn(error.message);
       response.status(500).json("internal server error");
@@ -41,26 +36,22 @@ module.exports = {
   },
   async update(request, response) {
     try {
-      const turma = request.body;
+      const lessonPresence = request.body;
       const loggedUser = request.session;
 
-      if (
-        !(
-          (loggedUser.organization == turma.organization &&
-            loggedUser.type != "student") ||
-          loggedUser.type == "master"
-        )
-      )
+      if (loggedUser.id != lessonPresence.user && loggedUser.type != "master")
         return response
           .status(403)
           .json("Você não tem permissão para realizar esta operação");
 
-      const res = await ClassModel.update(turma);
+      const res = await LessonPresenceModel.update(lessonPresence);
 
       if (res !== 1) {
-        return response.status(404).json("Turma não encontrada!");
+        return response.status(404).json("Presença em lição não encontrada!");
       } else {
-        return response.status(200).json("Turma alterada com sucesso ");
+        return response
+          .status(200)
+          .json("Presença em lição alterada com sucesso ");
       }
     } catch (error) {
       console.log(error.message);
@@ -70,10 +61,10 @@ module.exports = {
 
   async delete(request, response) {
     try {
-      const { id } = request.params;
+      const { filters } = request.query;
 
-      const result = await ClassModel.delete(id);
-      response.status(200).json("Turma apagada com sucesso!");
+      const result = await LessonPresenceModel.delete(filters);
+      response.status(200).json("Presença em lição apagada com sucesso!");
     } catch (error) {
       console.warn(error.message);
       response.status(500).json("internal server error ");
