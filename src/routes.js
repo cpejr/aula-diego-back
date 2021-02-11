@@ -2,6 +2,10 @@
 //recebe os controllers
 
 const { celebrate, Segments, Joi } = require("celebrate");
+const nodemailer = require("nodemailer");
+
+const email = "";
+const pass = "";
 
 const userValidator = require("./validators/userValidators");
 const liveValidator = require("./validators/liveValidators");
@@ -200,5 +204,32 @@ routes.put(
   celebrate(occupationValidator.update),
   OccupationController.update
 );
+
+//ENVIAR EMAIL ----------------------------------------------------------------------
+routes.get(
+  "/sendemail", (request, response) => {
+  var sender = nodemailer.createTransport({
+    host: 'SMTP.office365.com',
+    port: '587',
+    auth:{
+      user: email,
+      pass: pass
+    }
+  });
+    
+  var emailSend = {
+    from: email,
+    to: email,
+    replyTo: "marconefaria@cpejr.com.br",
+    subject: "Enviando Email com Node.js",
+    text: "Estou te enviando este email com node.js",
+  };
+    
+  sender.sendMail(emailSend).then(info => {
+    response.send(info)
+  }).catch(error => {
+    response.send(error)
+  });
+});
 
 module.exports = routes;
