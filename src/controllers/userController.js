@@ -141,6 +141,20 @@ module.exports = {
       return response.status(500).json("internal server error ");
     }
   },
+  
+  async forgottenPassword(request, response) {
+    try {
+      const { email } = request.body;
+
+      const resp = await FirebaseModel.sendPasswordChangeEmail(email);
+
+      response.status(200).json({ message:"Sucesso!"});
+    }
+    catch (err) {
+      console.error(err);
+      return response.status(500).json({ notification: err.message });
+    }
+  },
 
   async demote(request, response) {
     try {

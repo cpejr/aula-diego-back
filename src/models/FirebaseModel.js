@@ -59,24 +59,51 @@ module.exports = {
     });
   },
 
+  // async changeUserPassword(uid, newPassword) {
+  //   return new Promise((resolve, reject) => {
+  //     firebase
+  //       .auth()
+  //       .updateUser(uid, {
+  //         password: newPassword,
+  //       })
+  //       .then((result) => {
+  //         resolve(result);
+  //       })
+  //       .catch((error) => {
+  //         console.log(error);
+  //         const errorMessage = error.message;
+  //         reject(errorMessage);
+  //       });
+  //   });
+  // },
   async changeUserPassword(uid, newPassword) {
     return new Promise((resolve, reject) => {
-      firebase
-        .auth()
-        .updateUser(uid, {
-          password: newPassword,
-        })
+      admin.auth().updateUser(uid, {
+        password: newPassword
+      })
         .then((result) => {
           resolve(result);
         })
         .catch((error) => {
-          console.log(error);
+          console.error(error);
           const errorMessage = error.message;
           reject(errorMessage);
-        });
-    });
+        })
+    })
   },
-
+  async sendPasswordChangeEmail(emailAddress) {
+    return new Promise((resolve, reject) => {
+      firebase.auth().sendPasswordResetEmail(emailAddress)
+      .then((result) => {
+        resolve(result);
+      })
+      .catch((error) => {
+        console.error(error);
+        const errorMessage = error;
+        reject(error);
+      });
+    })
+  },
   async forgotPassword(email) {
     const response = await firebase.auth().sendPasswordResetEmail(email);
     return response;

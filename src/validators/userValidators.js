@@ -18,7 +18,11 @@ userValidator.create = {
     type: Joi.string().default("student"),
   }),
 };
-
+userValidator.forgottenPassword = {
+  [Segments.BODY]: Joi.object().keys({
+      email: Joi.string().required(),
+  })
+}
 userValidator.uptade = {
   [Segments.PARAMS]: Joi.object().keys({
     user_id: Joi.string().required(),

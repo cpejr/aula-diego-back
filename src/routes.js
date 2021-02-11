@@ -41,6 +41,11 @@ routes.post(
   celebrate(userValidator.create),
   UserController.createUser
 );
+routes.post(
+  "/forgottenPassword", 
+  celebrate(userValidator.forgottenPassword), 
+  UserController.forgottenPassword
+);
 routes.delete(
   "/deleteUser/:user_id",
   authenticateToken,
