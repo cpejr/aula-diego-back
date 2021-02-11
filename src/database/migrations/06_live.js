@@ -1,8 +1,8 @@
 exports.up = (knex) =>{
     return knex.schema.createTable('live', (table) => {
-        table.uuid('id').primary().notNullable();
+        table.uuid('id').defaultTo(knex.raw('uuid_generate_v4()')).primary().notNullable();
         table.string('name').notNullable();
-        table.string('description').notNullable();
+        table.text('description', 'longtext').notNullable();
         table.timestamp('date').notNullable();
         table.string('confirmation_code').notNullable();
         table.string('link').notNullable();

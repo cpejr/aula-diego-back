@@ -1,8 +1,8 @@
 exports.up = (knex) =>{
     return knex.schema.createTable('class', (table) => {
-        table.uuid('id').primary().notNullable();
+        table.uuid('id').defaultTo(knex.raw('uuid_generate_v4()')).primary().notNullable();
         table.string('name').notNullable();
-        table.string('description');
+        table.text('description', 'longtext');
         table.uuid('organization_id').notNullable();
         table.foreign('organization_id').references('id').inTable('organization').onDelete('NO ACTION');
         table.uuid('course_id').notNullable();
