@@ -5,12 +5,8 @@ module.exports = {
   async create(request, response) {
     try {
       const course = request.body;
-      course.id = uuidv4();
-      course.created_at = new Date().getTime(); //Preciso fazer?
-      course.updated_at = new Date().getTime(); //Preciso fazer?
-      course.is_deleted = false;
 
-      const response = await CourseModel.create(course);
+      const result = await CourseModel.create(course);
       return response.status(200).json("Curso criado com succeso!");
     } catch (error) {
       console.warn(error.message);
@@ -73,10 +69,11 @@ module.exports = {
       const { id } = request.params;
 
       const result = await CourseModel.delete(id);
+      console.log(result);
       response.status(200).json("Curso apagado com sucesso!");
     } catch (error) {
       console.warn(error.message);
-      response.status(500).json("internal server error ");
+      response.status(500).json("internal server error");
     }
   },
 };

@@ -6,17 +6,8 @@ var datetime = require("node-datetime");
 module.exports = {
   async create(request, response) {
     try {
-      const live = {
-        id: uuidv4(),
-        name: request.body.name,
-        description: request.body.description,
-        datetime: request.body.datetime,
-        link: request.body.link,
-        course_id: request.body.course_id,
-        confirmation_code: request.body.confirmation_code,
-        created_at: datetime.getTime(),
-        is_deleted: false,
-      };
+      const live = request.body;
+
       await LiveModel.createNewLive(live);
       response.status(200).json("Live criada com sucesso.");
     } catch (error) {

@@ -5,13 +5,9 @@ module.exports = {
   async create(request, response) {
     try {
       const organization = request.body;
-      organization.id = uuidv4();
-      organization.created_at = new Date().getTime(); //Preciso fazer?
-      organization.updated_at = new Date().getTime(); //Preciso fazer?
-      organization.is_deleted = false;
 
-      const response = await OrganizationModel.create(organization);
-      return response.status(200).json("Usuário Criado com succeso!");
+      const result = await OrganizationModel.create(organization);
+      return response.status(200).json("Organização criada com succeso!");
     } catch (error) {
       console.warn(error.message);
       response.status(500).json("internal server error");
@@ -42,18 +38,18 @@ module.exports = {
   async update(request, response) {
     try {
       const organization = request.body;
-      const loggedUser = request.session;
+      const { user } = request.session;
 
       if (
         !(
-          (loggedUser.organization == organization.id &&
-            loggedUser.type != "student") ||
-          loggedUser.type == "master"
+          (user.organization_id == organization.id && user.type != "student") ||
+          user.type == "master"
         )
-      )
+      ) {
         return response
           .status(403)
           .json("Você não tem permissão para realizar esta operação");
+      }
 
       const res = await OrganizationModel.update(organization);
 

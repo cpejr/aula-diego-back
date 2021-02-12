@@ -4,13 +4,8 @@ const lessonModel = require("../models/lessonModel");
 module.exports = {
   async create(request, response) {
     try {
-      const lesson = {
-        name: request.body.name,
-        description: request.body.description,
-        course_id: request.body.course_id,
-        created_at: datetime.getTime(),
-        is_deleted: false,
-      };
+      const lesson = request.body;
+
       await lessonModel.createNewlesson(lesson);
       response.status(200).json("Aula criada com sucesso.");
     } catch (error) {
