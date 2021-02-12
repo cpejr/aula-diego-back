@@ -15,7 +15,10 @@ module.exports = {
   },
 
   async read(filters) {
-    const response = await connection("lesson").where(filters).select("*");
+    const response = await connection("lesson")
+      .where(filters)
+      .andWhere({ is_deleted: false })
+      .select("*");
     return response;
   },
 
@@ -26,7 +29,9 @@ module.exports = {
     return response;
   },
   async delete(id) {
-    const response = await connection("lesson").where({ id }).delete();
+    const response = await connection("lesson")
+      .where({ id })
+      .update({ is_deleted: true });
     return response;
   },
 };

@@ -13,7 +13,10 @@ module.exports = {
     return response;
   },
   async read(filters) {
-    const response = await connection("occupation").where(filters).select("*");
+    const response = await connection("occupation")
+      .where(filters)
+      .andWhere({ is_deleted: false })
+      .select("*");
     return response;
   },
   async update(occupation) {
@@ -23,7 +26,9 @@ module.exports = {
     return response;
   },
   async delete(id) {
-    const response = await connection("occupation").where({ id }).select("*");
+    const response = await connection("occupation")
+      .where({ id })
+      .update({ is_deleted: true });
     return response;
   },
 };

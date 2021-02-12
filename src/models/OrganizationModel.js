@@ -15,6 +15,7 @@ module.exports = {
   async read(filters) {
     const response = await connection("organization")
       .where(filters)
+      .andWhere({ is_deleted: false })
       .select("*");
     return response;
   },
@@ -25,7 +26,9 @@ module.exports = {
     return response;
   },
   async delete(id) {
-    const response = await connection("organization").where({ id }).select("*");
+    const response = await connection("organization")
+      .where({ id })
+      .update({ is_deleted: true });
     return response;
   },
 };

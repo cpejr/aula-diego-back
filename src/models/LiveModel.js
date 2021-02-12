@@ -12,7 +12,10 @@ module.exports = {
   },
 
   async read(filters) {
-    const response = await connection("live").where(filters).select("*");
+    const response = await connection("live")
+      .where(filters)
+      .andWhere({ is_deleted: false })
+      .select("*");
     return response;
   },
 
@@ -24,7 +27,9 @@ module.exports = {
   },
 
   async delete(id) {
-    const response = await connection("live").where({ id }).delete();
+    const response = await connection("live")
+      .where({ id })
+      .update({ is_deleted: true });
     return response;
   },
 };
