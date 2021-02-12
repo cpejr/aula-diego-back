@@ -1,5 +1,4 @@
-const { update } = require("../database/connection");
-const lessonModel = require("../models/lessonModel");
+const lessonModel = require("../models/LessonModel");
 
 module.exports = {
   async create(request, response) {
