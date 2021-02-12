@@ -1,30 +1,28 @@
 const { Segments, Joi } = require("celebrate");
 
-const lesson_presenceValidator = {};
+const user_classValidator = {};
 
-lesson_presenceValidator.create = {
+user_classValidator.create = {
   [Segments.BODY]: Joi.object().keys({
-    lesson_id: Joi.string().uuid().required(),
     user_id: Joi.string().uuid().required(),
-    confirmarion: Joi.bool().default(false),
+    class_id: Joi.string().uuid().required(),
   }),
 };
 
-lesson_presenceValidator.update = {
+user_classValidator.update = {
   [Segments.PARAMS]: Joi.object().keys({
     id: Joi.string().required(),
   }),
   [Segments.BODY]: Joi.object().keys({
-    lesson_id: Joi.string().uuid(),
     user_id: Joi.string().uuid(),
-    confirmarion: Joi.bool(),
+    class_id: Joi.string().uuid(),
   }),
 };
 
-lesson_presenceValidator.delete = {
+user_classValidator.delete = {
   [Segments.PARAMS]: Joi.object().keys({
     id: Joi.string().required(),
   }),
 };
 
-module.exports = lesson_presenceValidator;
+module.exports = user_classValidator;
