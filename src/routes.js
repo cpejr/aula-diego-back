@@ -2,34 +2,36 @@
 //recebe os controllers
 
 const { celebrate, Segments, Joi } = require("celebrate");
+const express = require("express");
+const routes = express.Router();
+const knex = require("./database/connection"); //acho que não precisa disso
+const firebase = require("firebase"); //acho que não precisa disso
+const { AuthLogin, AuthCadastro } = require("./models/FirebaseModel"); //precisa disso?
+const { response } = require("express"); //acho que não precisa disso
 
+// IMOPORT VALIDATORS ------------------------------------------------------------------
 const userValidator = require("./validators/userValidators");
 const liveValidator = require("./validators/liveValidators");
 const sessionValidator = require("./validators/sessionValidators");
 const classValidator = require("./validators/classValidators");
 
-const express = require("express");
-const routes = express.Router();
-const knex = require("./database/connection");
-const firebase = require("firebase");
-const { AuthLogin, AuthCadastro } = require("./models/FirebaseModel");
-const { response } = require("express");
-
-//importação dos controllers
+//  IMPORT CONTROLLERS -----------------------------------------------------------------
 
 const userController = require("./controllers/userController");
+const userClassController = require("./controllers/userClassController");
 const liveController = require("./controllers/liveController");
 const sessionController = require("./controllers/sessionController");
 const classController = require("./controllers/classController");
 const courseController = require("./controllers/courseController");
 const organizationController = require("./controllers/organizationController");
 const occupationController = require("./controllers/occupationController");
-// const lessonController = require("./controllers/lessonController");
-// const fileController = require("./controllers/fileController");
-// const fileLessonController = require("./controllers/fileLessonController");
+const lessonController = require("./controllers/lessonController");
 const lessonPresenceController = require("./controllers/lessonPresenceController");
-// const livePresenceController = require("./controllers/livePresenceController");
+const fileLessonController = require("./controllers/fileLessonController");
+const livePresenceController = require("./controllers/livePresenceController");
+// const fileController = require("./controllers/fileController");
 
+// IMPORT AUTHENTICATION METHODS --------------------------------------------------------
 const {
   authenticateToken,
   authenticateOptionalToken,
@@ -37,6 +39,7 @@ const {
   isMaster,
 } = require("./middlewares/authentication");
 
+// TEST ROUTE ---------------------------------------------------------------------------
 routes.get("/", (request, response) => {
   response.send("eae galerinha xdxxdxdxdxd");
 });
@@ -85,11 +88,10 @@ routes.put("/class/:id", authenticateToken, classController.delete);
 // routes.put("/file/:id", authenticateToken, fileController.delete);
 
 // LESSON -------------------------------------------------------------------------------
-// routes.post("/lesson", authenticateToken, lessonController.create);
-// routes.get("/lesson", authenticateToken, lessonController.read);
-// routes.get("/lesson", authenticateToken, lessonController.getById);
-// routes.put("/lesson", authenticateToken, lessonController.update);
-// routes.put("/lesson", authenticateToken, lessonController.delete);
+routes.post("/lesson", authenticateToken, lessonController.create);
+routes.get("/lesson", authenticateToken, lessonController.read);
+routes.put("/lesson", authenticateToken, lessonController.update);
+routes.put("/lesson", authenticateToken, lessonController.delete);
 
 // USER -------------------------------------------------------------------------------
 routes.post("/user", authenticateOptionalToken, userController.create);
@@ -139,13 +141,24 @@ routes.delete(
   lessonPresenceController.delete
 );
 // live
-// routes.post("/live/presence", authenticateToken, livePresenceController.create);
-// routes.get("/live/presence", authenticateToken, livePresenceController.read);
-// routes.put("/live/presence", authenticateToken, livePresenceController.update);
-// routes.delete(
-//   "/live/presence",
-//   authenticateToken,
-//   livePresenceController.delete
-// );
+routes.post("/live/presence", authenticateToken, livePresenceController.create);
+routes.get("/live/presence", authenticateToken, livePresenceController.read);
+routes.put("/live/presence", authenticateToken, livePresenceController.update);
+routes.delete(
+  "/live/presence",
+  authenticateToken,
+  livePresenceController.delete
+);
+
+// LINKING TABLES ------------------------------------------------------------------------------------------------------
+// fileLesson
+routes.post("/lesson/file", authenticateToken, fileLessonController.create);
+routes.get("/lesson/file", authenticateToken, fileLessonController.read);
+routes.delete("/lesson/file", authenticateToken, fileLessonController.delete);
+
+// userClass
+routes.post("/class/user", authenticateToken, userClassController.create);
+routes.get("/class/user", authenticateToken, userClassController.read);
+routes.delete("/class/user", authenticateToken, userClassController.delete);
 
 module.exports = routes;
