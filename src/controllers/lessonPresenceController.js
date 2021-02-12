@@ -24,16 +24,6 @@ module.exports = {
     }
   },
 
-  async getById(request, response) {
-    try {
-      const { id } = request.params;
-      const lessonPresence = await LessonPresenceModel.getById(id);
-      return response.status(200).json(lessonPresence);
-    } catch (error) {
-      console.warn(error.message);
-      response.status(500).json("internal server error");
-    }
-  },
   async update(request, response) {
     try {
       const lessonPresence = request.body;
