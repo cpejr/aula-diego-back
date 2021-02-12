@@ -5,9 +5,9 @@ const classValidator = {};
 classValidator.create = {
   [Segments.BODY]: Joi.object().keys({
     name: Joi.string().required(),
-    description: Joi.string().uuid().required(),
+    description: Joi.string().required(),
     organization_id: Joi.string().uuid().required(),
-    course_id: Joi.string().required(),
+    course_id: Joi.string().uuid().required(),
   }),
 };
 

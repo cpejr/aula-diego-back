@@ -16,12 +16,6 @@ module.exports = {
       .select("*");
     return response;
   },
-  async getAllByStatus(status) {
-    const response = await connection("user")
-      .where("status", status)
-      .select("*");
-    return response;
-  },
   async update(user) {
     const response = await connection("user")
       .where({ id: user.id })
