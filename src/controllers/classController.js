@@ -5,12 +5,8 @@ module.exports = {
   async create(request, response) {
     try {
       const turma = request.body;
-      turma.id = uuidv4();
-      turma.created_at = new Date().getTime(); //Preciso fazer?
-      turma.updated_at = new Date().getTime(); //Preciso fazer?
-      turma.is_deleted = false;
 
-      const response = await ClassModel.create(turma);
+      const result = await ClassModel.create(turma);
       return response.status(200).json("Turma criada com succeso!");
     } catch (error) {
       console.warn(error.message);
@@ -21,7 +17,8 @@ module.exports = {
   async read(request, response) {
     try {
       const filters = request.query;
-      const result = ClassModel.read(filters);
+
+      const result = await ClassModel.read({ ...filters });
       return response.status(200).json(result);
     } catch (error) {
       console.warn(error);
@@ -32,6 +29,7 @@ module.exports = {
   async getById(request, response) {
     try {
       const { id } = request.params;
+
       const turma = await ClassModel.getById(id);
       return response.status(200).json(turma);
     } catch (error) {
