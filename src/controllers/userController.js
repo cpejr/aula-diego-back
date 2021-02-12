@@ -64,6 +64,37 @@ module.exports = {
       response.status(500).json("internal server error");
     }
   },
+
+  async getAllPending(request, response) {
+    try {
+      const pending = await UserModel.getAllByStatus("pending");
+      return response.status(200).json({ pending });
+    } catch (error) {
+      console.log(error.message);
+      response.status(500).json("internal server error ");
+    }
+  },
+
+  async getAllApproved(request, response) {
+    try {
+      const approved = await UserModel.getAllByStatus("approved");
+      return response.status(200).json({ approved });
+    } catch (error) {
+      console.log(error.message);
+      response.status(500).json("internal server error ");
+    }
+  },
+
+  async getAllRefused(request, response) {
+    try {
+      const refused = await UserModel.getAllByStatus("refused");
+      return response.status(200).json({ refused });
+    } catch (error) {
+      console.log(error.message);
+      response.status(500).json("internal server error ");
+    }
+  },
+
   async update(request, response) {
     try {
       const user = request.body;
