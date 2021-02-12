@@ -21,7 +21,7 @@ lessonValidator.update = {
     }),
 };
 
-lessonValidator.deletelive = {
+lessonValidator.delete = {
   [Segments.PARAMS]: Joi.object().keys({
     id: Joi.string().required(),
   }),

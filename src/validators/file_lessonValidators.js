@@ -1,15 +1,15 @@
 const { Segments, Joi } = require("celebrate");
 
-const file_lesson_Validators = {};
+const file_lessonValidator = {};
 
-file_lesson_Validators.create = {
+file_lessonValidator.create = {
   [Segments.BODY]: Joi.object().keys({
     file_id: Joi.string().uuid().required(),
     lesson_id: Joi.string().uuid().required(),
   }),
 };
 
-file_lesson_Validators.update = {
+file_lessonValidator.update = {
   [Segments.PARAMS]: Joi.object().keys({
     id: Joi.string().required(),
   }),
@@ -19,10 +19,10 @@ file_lesson_Validators.update = {
   }),
 };
 
-file_lesson_Validators.delete = {
+file_lessonValidator.delete = {
   [Segments.PARAMS]: Joi.object().keys({
     id: Joi.string().required(),
   }),
 };
 
-module.exports = file_lesson_Validators;
+module.exports = file_lessonValidator;

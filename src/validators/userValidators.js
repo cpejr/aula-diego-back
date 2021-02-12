@@ -37,13 +37,7 @@ userValidator.update = {
   }),
 };
 
-userValidator.deleteAdmin = {
-  [Segments.PARAMS]: Joi.object().keys({
-    id: Joi.string().required(),
-  }),
-};
-
-userValidator.deleteUser = {
+userValidator.delete = {
   [Segments.PARAMS]: Joi.object().keys({
     id: Joi.string().required(),
   }),

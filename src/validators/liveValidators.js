@@ -27,7 +27,7 @@ liveValidator.uptade = {
     }),
 };
 
-liveValidator.deletelive = {
+liveValidator.delete = {
   [Segments.PARAMS]: Joi.object().keys({
     id: Joi.string().required(),
   }),
