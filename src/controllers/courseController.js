@@ -2,7 +2,7 @@ const CourseModel = require("../models/CourseModel");
 const { v4: uuidv4 } = require("uuid");
 
 module.exports = {
-  async createUser(request, response) {
+  async create(request, response) {
     try {
       const course = request.body;
       course.id = uuidv4();

@@ -1,7 +1,7 @@
 const LessonPresenceModel = require("../models/LessonPresenceModel");
 
 module.exports = {
-  async createUser(request, response) {
+  async create(request, response) {
     try {
       const lessonPresence = request.body;
 

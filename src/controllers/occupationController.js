@@ -2,7 +2,7 @@ const OccupationModel = require("../models/OccupationModel");
 const { v4: uuidv4 } = require("uuid");
 
 module.exports = {
-  async createUser(request, response) {
+  async create(request, response) {
     try {
       const occupation = request.body;
       occupation.id = uuidv4();

@@ -2,7 +2,7 @@ const ClassModel = require("../models/ClassModel");
 const { v4: uuidv4 } = require("uuid");
 //como classe é uma palavra reservada, usaremos turma
 module.exports = {
-  async createUser(request, response) {
+  async create(request, response) {
     try {
       const turma = request.body;
       turma.id = uuidv4();

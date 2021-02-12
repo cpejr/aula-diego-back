@@ -4,7 +4,7 @@ const { v4: uuidv4 } = require("uuid");
 var datetime = require("node-datetime");
 
 module.exports = {
-  async createUser(request, response) {
+  async create(request, response) {
     let firebaseUid;
 
     try {

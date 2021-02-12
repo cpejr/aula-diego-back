@@ -1,8 +1,7 @@
-const { update } = require("../database/connection");
 const ClassModel = require("../models/ClassModel");
 const LiveModel = require("../models/LiveModel");
-const { v4: uuidv4 } = require('uuid');
-var datetime = require('node-datetime');
+const { v4: uuidv4 } = require("uuid");
+var datetime = require("node-datetime");
 
 module.exports = {
   async create(request, response) {
@@ -16,7 +15,7 @@ module.exports = {
         course_id: request.body.course_id,
         confirmation_code: request.body.confirmation_code,
         created_at: datetime.getTime(),
-        is_deleted: false
+        is_deleted: false,
       };
       await LiveModel.createNewLive(live);
       response.status(200).json("Live criada com sucesso.");
@@ -43,7 +42,7 @@ module.exports = {
     }
   },
 
-  async read(request, response) {
+  async getById(request, response) {
     try {
       const { id } = request.params;
       const live = await LiveModel.getById(id);
