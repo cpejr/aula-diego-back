@@ -1,11 +1,35 @@
 const LivePresenceModel = require("../models/LivePresenceModel");
+const LiveModel = require("../models/LiveModel");
 
 module.exports = {
   async create(request, response) {
     try {
-      const livePresence = request.body; //user_id + live_id
+      const livePresence = request.body; //user_id + live_id + confirmation_code + entry_time
+      const loggedUser = request.session.user;
 
-      const response = await LivePresenceModel.create(livePresence);
+      if (loggedUser.id != livePresence.user_id) {
+        return response
+          .status(403)
+          .json("Você não tem permissão para realizar esta operação");
+      }
+
+      const alreadyExists = await LivePresenceModel.read({
+        user_id: livePresence.user_id,
+        live_id: livePresence.live_id,
+      });
+      if (alreadyExists.length >= 1)
+        return response.status(200).json("Presença já cadastrada");
+
+      const live = await LiveModel.getById(livePresence.live_id);
+      if (live.confirmation_code != livePresence.confirmation_code)
+        return response.status("400").json("Código de verificação inválido");
+
+      delete livePresence.confirmation_code;
+
+      const result = await LivePresenceModel.create({
+        ...livePresence,
+        confirmation: true,
+      });
       return response.status(200).json("Presença em live criada com succeso!");
     } catch (error) {
       console.warn(error.message);
@@ -15,26 +39,27 @@ module.exports = {
 
   async read(request, response) {
     try {
+      console.log("filters");
       const filters = request.query;
-      const result = LivePresenceModel.read(filters);
+      const result = await LivePresenceModel.read(filters);
       return response.status(200).json(result);
     } catch (error) {
       console.warn(error);
-      response.status(500).json("internal server error");
+      return response.status(500).json("internal server error");
     }
   },
 
   async update(request, response) {
     try {
-      const lessonPresence = request.body;
+      const livePresence = request.body;
       const loggedUser = request.session;
 
-      if (loggedUser.id != lessonPresence.user && loggedUser.type != "master")
+      if (loggedUser.id != livePresence.user_id && loggedUser.type != "master")
         return response
           .status(403)
           .json("Você não tem permissão para realizar esta operação");
 
-      const res = await LivePresenceModel.update(lessonPresence);
+      const res = await LivePresenceModel.update(livePresence);
 
       if (res !== 1) {
         return response.status(404).json("Presença em live não encontrada!");
@@ -44,7 +69,7 @@ module.exports = {
           .json("Presença em live alterada com sucesso ");
       }
     } catch (error) {
-      console.log(error.message);
+      console.warn(error.message);
       return response.status(500).json("internal server error ");
     }
   },
