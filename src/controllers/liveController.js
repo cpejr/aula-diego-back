@@ -8,11 +8,23 @@ module.exports = {
     try {
       const live = request.body;
 
-      await LiveModel.createNewLive(live);
+      await LiveModel.create(live);
       response.status(200).json("Live criada com sucesso.");
     } catch (error) {
       console.log(error.message);
       response.status(500).json("Internal server error.");
+    }
+  },
+
+  async read(request, response) {
+    try {
+      const filters = request.query;
+      const result = await LiveModel.read(filters);
+      console.log(result);
+      return response.status(200).json(result);
+    } catch (error) {
+      console.warn(error);
+      response.status(500).json("internal server error");
     }
   },
 
@@ -24,7 +36,7 @@ module.exports = {
       if (!foundLive) {
         throw new Error("Live não encontrada.");
       } else {
-        await LiveModel.deleteLive(id);
+        await LiveModel.delete(id);
         response.status(200).json("Live deletada com sucesso.");
       }
     } catch (error) {
@@ -37,15 +49,8 @@ module.exports = {
     try {
       const { id } = request.params;
       const live = await LiveModel.getById(id);
-      const allowed = await ClassModel.getUsersInClass(id);
-      const user = request.session.user;
 
-      for (let student in allowed) {
-        if (user.user_id === student.user_id)
-          return response.status(200).json(live);
-      }
-
-      return response.status(500).json("Unauthorized");
+      return response.status(200).json(live);
     } catch (error) {
       console.log(error.message);
       response.status(500).json("Internal server error.");
@@ -54,11 +59,9 @@ module.exports = {
   async update(request, response) {
     try {
       const { id } = request.params;
-      const newlive = request.body;
+      const live = request.body;
 
-      newLive.updated_at = datetime.getTime();
-
-      const res = await LiveModel.updateLive(id, newlive);
+      const res = await LiveModel.update(live);
       if (res !== 1) {
         return response.status(400).json("Live não encontrada!");
       } else {
