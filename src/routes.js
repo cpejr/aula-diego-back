@@ -108,9 +108,10 @@ routes.put(
 // LIVE -----------------------------------------------------------------------------------
 
 routes.post("/live", authenticateToken, liveController.create);
-routes.delete("/live/:live_id", authenticateToken, liveController.delete);
-routes.get("/live/:live_id", authenticateToken, liveController.getById);
-routes.put("/live/:live_id", authenticateToken, liveController.update);
+routes.get("/live", authenticateToken, liveController.read);
+routes.get("/live/:id", authenticateToken, liveController.getById);
+routes.put("/live", authenticateToken, liveController.update);
+routes.delete("/live/:id", authenticateToken, liveController.delete);
 
 //SESSION ---------------------------------------------------------------------------------
 
@@ -141,11 +142,11 @@ routes.delete(
   lessonPresenceController.delete
 );
 // live
-routes.post("/live/presence", authenticateToken, livePresenceController.create);
-routes.get("/live/presence", authenticateToken, livePresenceController.read);
-routes.put("/live/presence", authenticateToken, livePresenceController.update);
+routes.post("/presence/live", authenticateToken, livePresenceController.create);
+routes.get("/presence/live", authenticateToken, livePresenceController.read);
+routes.put("/presence/live", authenticateToken, livePresenceController.update);
 routes.delete(
-  "/live/presence",
+  "/presence/live",
   authenticateToken,
   livePresenceController.delete
 );
@@ -154,7 +155,11 @@ routes.delete(
 // fileLesson
 routes.post("/lesson/file", authenticateToken, fileLessonController.create);
 routes.get("/lesson/file", authenticateToken, fileLessonController.read);
-routes.delete("/lesson/file", authenticateToken, fileLessonController.delete);
+routes.delete(
+  "/lesson/file/:id",
+  authenticateToken,
+  fileLessonController.delete
+);
 
 // userClass
 routes.post("/class/user", authenticateToken, userClassController.create);
