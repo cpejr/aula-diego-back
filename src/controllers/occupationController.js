@@ -2,13 +2,9 @@ const OccupationModel = require("../models/OccupationModel");
 const { v4: uuidv4 } = require("uuid");
 
 module.exports = {
-  async createUser(request, response) {
+  async create(request, response) {
     try {
       const occupation = request.body;
-      occupation.id = uuidv4();
-      occupation.created_at = new Date().getTime(); //Preciso fazer?
-      occupation.updated_at = new Date().getTime(); //Preciso fazer?
-      occupation.is_deleted = false;
 
       const response = await OccupationModel.create(occupation);
       return response.status(200).json("Ocupação criada com succeso!");
