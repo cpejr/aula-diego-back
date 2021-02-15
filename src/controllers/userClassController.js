@@ -5,7 +5,7 @@ module.exports = {
     try {
       const userClass = request.body; //user_id + class_id
 
-      const response = await UserClassModel.create(userClass);
+      const result = await UserClassModel.create(userClass);
       return response
         .status(200)
         .json("Alunno adicionado à turma com succeso!");
