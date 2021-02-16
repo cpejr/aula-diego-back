@@ -64,6 +64,7 @@ module.exports = {
       response.status(500).json("internal server error");
     }
   },
+
   async update(request, response) {
     try {
       const user = request.body;

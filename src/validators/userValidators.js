@@ -8,39 +8,36 @@ userValidator.create = {
   [Segments.BODY]: Joi.object().keys({
     name: Joi.string().required(),
     email: Joi.string().email().required(),
-    password: Joi.string().required(),
-    confirmPassword: Joi.ref("password"),
+    registration: Joi.integer().required(),
     birthdate: Joi.string().required(),
-    phone: phoneJoi.string().phoneNumber({ defaultCountry: 'BR', format: 'national'}).required(),
+    phone: Joi.string().phoneNumber({ defaultCountry: 'BR', format: 'national'}).required(),
+    organization_id: Joi.string().uuid().required(),
+    occupation_id: Joi.string().uuid().required(),
+    type: Joi.string().default('student'),
+    status: Joi.string().default('pending'),
   }),
 };
 
-/* userValidator.update = {
+userValidator.update = {
   [Segments.PARAMS]: Joi.object().keys({
     id: Joi.string().required(),
   }),
   [Segments.BODY]: Joi.object().keys({
     updatedFields: Joi.object({
       name: Joi.string(),
-      email: Joi.string(),
-      company: Joi.string(),
-      birthdate: Joi.date(),
-      address: Joi.string(),
-      state: Joi.valid(),
+      email: Joi.string().email(),
+      registration: Joi.integer(),
+      birthdate: Joi.string(),
       phone: Joi.string().length(11),
-      unit: Joi.string().required(),
-      occupation: Joi.string().required(),
+      organization_id: Joi.string().uuid(),
+      occupation_id: Joi.string().uuid(),
+      type: Joi.string(),
+      status: Joi.string(),
     }),
-  }),
-}; */
-
-userValidator.deleteAdmin = {
-  [Segments.PARAMS]: Joi.object().keys({
-    id: Joi.string().required(),
   }),
 };
 
-userValidator.deleteUser = {
+userValidator.delete = {
   [Segments.PARAMS]: Joi.object().keys({
     id: Joi.string().required(),
   }),
