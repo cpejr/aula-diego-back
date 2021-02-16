@@ -37,9 +37,16 @@ module.exports = {
   async read(filters) {
     const response = await connection("course")
       .where(filters)
-      .andWhere("course.is_deleted", "false")
-      .innerJoin("organization", "course.organization_id", "organization.id")
-      .select("course.*", "organization.name as organization");
+      .andWhereNot("course.is_deleted", "true")
+      .join("organization", "organization.id", "course.organization_id")
+      .join("class", "class.course_id", "course.id")
+      .select(
+        "class.name as class_name",
+        "course.id as course_id",
+        "course.description as course_description",
+        "organization.name as organization_name",
+        "course.name as course_name"
+      );
     return response;
   },
   async update(course) {
