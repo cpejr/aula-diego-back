@@ -8,6 +8,11 @@ const knex = require("./database/connection"); //acho que não precisa disso
 const firebase = require("firebase"); //acho que não precisa disso
 const { AuthLogin, AuthCadastro } = require("./models/FirebaseModel"); //precisa disso?
 const { response } = require("express"); //acho que não precisa disso
+const nodemailer = require("nodemailer");
+
+const email = "";
+const pass = "";
+//pensar em uma forma de criptografar email e senha
 
 // IMOPORT VALIDATORS ------------------------------------------------------------------
 const userValidator = require("./validators/userValidators");
@@ -54,11 +59,7 @@ routes.get("/", (request, response) => {
   response.send("eae galerinha xdxxdxdxdxd");
 });
 
-// ORGANIZATION -------------------------------------------------------------------------
-routes.post("/organization", authenticateToken, organizationController.create);
-routes.get("/organization", authenticateToken, organizationController.read);
 // USUÁRIO -------------------------------------------------------------------------------
-
 routes.post(
   "/newuser",
   authenticateOptionalToken,
@@ -76,15 +77,29 @@ routes.delete(
   isMaster,
   userController.delete
 );
-routes.put("/user/:id", authenticateToken, userController.update);
+routes.put("/user/:id", 
+  authenticateToken, 
+  userController.update
+);
 
-// ORGANIZATION -------------------------------------------------------------------------------
+// ORGANIZATION -------------------------------------------------------------------------
+routes.post("/organization", 
+  authenticateToken, 
+  organizationController.create
+);
+routes.get("/organization", 
+  authenticateToken, 
+  organizationController.read
+);
 routes.get(
   "/organization/:id",
   authenticateToken,
   organizationController.getById
 );
-routes.put("/organization", authenticateToken, organizationController.update);
+routes.put("/organization", 
+  authenticateToken, 
+  organizationController.update
+);
 routes.put(
   "/organization/:id",
   authenticateToken,
@@ -139,8 +154,15 @@ routes.put(
 
 // LIVE -----------------------------------------------------------------------------------
 
-routes.post("/live", authenticateToken, liveController.create);
-routes.get("/live", authenticateToken, liveController.read);
+routes.post("/live", 
+  authenticateToken,
+  celebrate(liveValidator.create),
+  liveController.create
+);
+routes.get("/live", 
+  authenticateToken, 
+  liveController.read
+);
 routes.get("/live/:id", authenticateToken, liveController.getById);
 routes.put("/live", authenticateToken, liveController.update);
 routes.delete("/live/:id", authenticateToken, liveController.delete);
@@ -197,5 +219,38 @@ routes.delete(
 routes.post("/class/user", authenticateToken, userClassController.create);
 routes.get("/class/user", authenticateToken, userClassController.read);
 routes.delete("/class/user", authenticateToken, userClassController.delete);
+
+//ENVIAR EMAIL ----------------------------------------------------------------------
+routes.get(
+  "/sendemail", (response, replyTo, text) => {
+  var sender = nodemailer.createTransport({
+    host: 'SMTP.office365.com',
+    //varia com o servidor de emails, testei com o outlook, o gmail é 
+    //mais chato de mexer por conta da segurança
+    port: '587',
+    //a porta também varia com o servidor
+    auth:{
+      user: email,
+      pass: pass
+      //precisa do email e senha de uma conta de emails
+    }
+  });
+    
+  var emailSend = {
+    from: email,
+    to: email,
+    replyTo: replyTo,
+    //o resplyTo permite que seja possível a pessoa responder o email para o email da pessoa que
+    //mandou sem pegar a senha da mesma
+    subject: subject,
+    text: text,
+  };
+    
+  sender.sendMail(emailSend).then(info => {
+    response.send(info)
+  }).catch(error => {
+    response.send(error)
+  });
+});
 
 module.exports = routes;
