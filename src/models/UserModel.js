@@ -1,4 +1,3 @@
-const { update } = require("../database/connection");
 const connection = require("../database/connection");
 
 module.exports = {
@@ -6,12 +5,15 @@ module.exports = {
     const response = await connection("user").insert(user);
     return response;
   },
-  async read(filters) {
-    const response = await connection("user").where(filters).select("*");
-    return response;
-  },
   async getById(id) {
     const response = await connection("user").where({ id }).select("*").first();
+    return response;
+  },
+  async read(filters) {
+    const response = await connection("user")
+      .where(filters)
+      .andWhere({ is_deleted: false })
+      .select("*");
     return response;
   },
   async update(user) {
@@ -21,7 +23,9 @@ module.exports = {
     return response;
   },
   async delete(id) {
-    const response = await connection("user").where({ id }).select("*");
+    const response = await connection("user")
+      .where({ id })
+      .update({ is_deleted: true });
     return response;
   },
 };

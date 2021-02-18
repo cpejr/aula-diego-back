@@ -2,18 +2,15 @@ const UserModel = require("../models/UserModel");
 const FirebaseModel = require("../models/FirebaseModel");
 const { v4: uuidv4 } = require("uuid");
 var datetime = require("node-datetime");
+const connection = require("../database/connection");
 
 module.exports = {
-  async createUser(request, response) {
+  async create(request, response) {
     let firebaseUid;
 
     try {
       const user = request.body;
-      user.id = uuidv4();
-      user.created_at = new Date().getTime(); //Preciso fazer?
-      user.updated_at = new Date().getTime(); //Preciso fazer?
       user.status = "pending";
-      user.is_deleted = false;
 
       const year = new Date().getFullYear();
       const firstday = `${year}-01-01`;
@@ -67,6 +64,7 @@ module.exports = {
       response.status(500).json("internal server error");
     }
   },
+
   async update(request, response) {
     try {
       const user = request.body;
@@ -93,16 +91,16 @@ module.exports = {
   async delete(request, response) {
     try {
       const { id } = request.params;
+      const result = await UserModel.delete(id);
+      // const foundUser = await UserModel.getById(id);
 
-      const foundUser = await UserModel.getById(id);
+      // if (!foundUser) {
+      //   return response.status(404).json("Usuário não encontrado");
+      // }
 
-      if (!foundUser) {
-        return response.status(404).json("Usuário não encontrado");
-      }
+      // await FirebaseModel.deleteUser(foundUser.firebase_id);
 
-      await FirebaseModel.deleteUser(foundUser.firebase_id);
-
-      await UserModel.delete(id);
+      // await UserModel.delete(id);
 
       response.status(200).json("Usuário apagado com sucesso!");
     } catch (error) {

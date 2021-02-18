@@ -8,18 +8,19 @@ module.exports = {
     try {
       const loggedWithGoogle = request.body.google ? true : false;
       const { email, password } = request.body;
-      let firebaseUid;
+      let firebase_id;
 
       if (!loggedWithGoogle) {
         try {
-          firebaseUid = await FirebaseModel.createSession(email, password);
+          firebase_id = await FirebaseModel.createSession(email, password);
         } catch (error) {
           return response.status(403).json({ message: "Invalid Credentials" });
         }
-        var user = await UserModel.getUserByUid(firebaseUid);
+        var user = await UserModel.read({ firebase_id });
+        user = user[0];
       }
       if (loggedWithGoogle) {
-        var user = await UserModel.getUserByEmail(email);
+        var user = await UserModel.read({ email });
       }
 
       const accessToken = jwt.sign({ user }, process.env.AUTH_TOKEN_SECRET, {

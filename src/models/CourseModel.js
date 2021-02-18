@@ -1,38 +1,33 @@
 const connection = require("../database/connection");
 
 module.exports = {
-  //foi colocado turma porque class é um nome reservado
-  async create(turma) {
-    const response = await connection("class").insert(turma);
+  async create(course) {
+    const response = await connection("course").insert(course);
     return response;
   },
-
   async getById(id) {
-    const response = await connection("class")
+    const response = await connection("course")
       .where({ id })
       .select("*")
       .first();
     return response;
   },
-
   async read(filters) {
-    console.log({ ...filters });
-    const response = await connection("class")
+    const response = await connection("course")
       .where(filters)
       .andWhere({ is_deleted: false })
       .select("*");
     return response;
   },
-
-  async update(turma) {
-    const response = await connection("class")
-      .where({ id: turma.id })
-      .update(turma);
+  async update(course) {
+    const response = await connection("course")
+      .where({ id: course.id })
+      .andWhere({ is_deleted: false })
+      .update(course);
     return response;
   },
-
   async delete(id) {
-    const response = await connection("class")
+    const response = await connection("course")
       .where({ id })
       .update({ is_deleted: true });
     return response;
