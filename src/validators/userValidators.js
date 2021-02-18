@@ -18,8 +18,12 @@ userValidator.create = {
     status: Joi.string().default('pending'),
   }),
 };
-
-userValidator.update = {
+userValidator.forgottenPassword = {
+  [Segments.BODY]: Joi.object().keys({
+      email: Joi.string().required(),
+  })
+}
+userValidator.uptade = {
   [Segments.PARAMS]: Joi.object().keys({
     id: Joi.string().required(),
   }),

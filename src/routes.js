@@ -47,6 +47,26 @@ routes.get("/", (request, response) => {
 // ORGANIZATION -------------------------------------------------------------------------
 routes.post("/organization", authenticateToken, organizationController.create);
 routes.get("/organization", authenticateToken, organizationController.read);
+// USUÁRIO -------------------------------------------------------------------------------
+
+routes.post(
+  "/newuser",
+  authenticateOptionalToken,
+  celebrate(userValidator.create),
+  UserController.createUser
+);
+routes.post(
+  "/forgottenPassword", 
+  celebrate(userValidator.forgottenPassword), 
+  UserController.forgottenPassword
+);
+routes.delete(
+  "/deleteUser/:user_id",
+  authenticateToken,
+  isMaster,
+  UserController.delete
+);
+routes.put("/user/:user_id", authenticateToken, UserController.updateStudent);
 routes.get(
   "/organization/:id",
   authenticateToken,
