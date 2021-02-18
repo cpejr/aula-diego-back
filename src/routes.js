@@ -11,9 +11,19 @@ const { response } = require("express"); //acho que não precisa disso
 
 // IMOPORT VALIDATORS ------------------------------------------------------------------
 const userValidator = require("./validators/userValidators");
+const userClassValidator = require("./validators/user_classValidators");
 const liveValidator = require("./validators/liveValidators");
 const sessionValidator = require("./validators/sessionValidators");
 const classValidator = require("./validators/classValidators");
+const courseValidator = require("./validators/courseValidators");
+const organizationValidator = require("./validators/organizationValidators");
+const occupationValidator = require("./validators/occupationValidators");
+const lessonValidator = require("./validators/lessonValidators");
+const lessonPresenceValidator = require("./validators/lesson_presenceValidators");
+const fileLessonValidator = require("./validators/file_lessonValidators");
+const fileValidator = require("./validators/fileValidators");
+const livePresenceValidator = require("./validators/live_presenceValidators");
+
 
 //  IMPORT CONTROLLERS -----------------------------------------------------------------
 
@@ -29,7 +39,7 @@ const lessonController = require("./controllers/lessonController");
 const lessonPresenceController = require("./controllers/lessonPresenceController");
 const fileLessonController = require("./controllers/fileLessonController");
 const livePresenceController = require("./controllers/livePresenceController");
-// const fileController = require("./controllers/fileController");
+//const fileController = require("./controllers/fileController");
 
 // IMPORT AUTHENTICATION METHODS --------------------------------------------------------
 const {
@@ -53,20 +63,22 @@ routes.post(
   "/newuser",
   authenticateOptionalToken,
   celebrate(userValidator.create),
-  UserController.createUser
+  userController.create
 );
 routes.post(
   "/forgottenPassword", 
   celebrate(userValidator.forgottenPassword), 
-  UserController.forgottenPassword
+  userController.forgottenPassword
 );
 routes.delete(
   "/deleteUser/:user_id",
   authenticateToken,
   isMaster,
-  UserController.delete
+  userController.delete
 );
-routes.put("/user/:user_id", authenticateToken, UserController.updateStudent);
+routes.put("/user/:id", authenticateToken, userController.update);
+
+// ORGANIZATION -------------------------------------------------------------------------------
 routes.get(
   "/organization/:id",
   authenticateToken,

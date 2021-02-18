@@ -7,7 +7,7 @@ live_presenceValidator.create = {
     live_id: Joi.string().uuid().required(),
     user_id: Joi.string().uuid().required(),
     confirmarion: Joi.bool().default(false),
-    watch_time: Joi.integer().default(0),
+    watch_time: Joi.number().integer().default(0),
   }),
 };
 
@@ -19,7 +19,7 @@ live_presenceValidator.update = {
     live_id: Joi.string().uuid(),
     user_id: Joi.string().uuid(),
     confirmarion: Joi.bool(),
-    watch_time: Joi.integer(),
+    watch_time: Joi.number().integer(),
   }),
 };
 

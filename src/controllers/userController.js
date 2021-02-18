@@ -119,7 +119,7 @@ module.exports = {
       const { email } = request.body;
 
       response.status(200).json("Usuário apagado com sucesso!");
-      const resp = await FirebaseModel.sendPasswordChangeEmail(email);
+      const response = await FirebaseModel.sendPasswordChangeEmail(email);
 
       response.status(200).json({ message:"Sucesso!"});
     }
