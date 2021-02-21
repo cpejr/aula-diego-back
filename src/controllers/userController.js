@@ -46,7 +46,7 @@ module.exports = {
   async read(request, response) {
     try {
       const filters = request.query;
-      const result = UserModel.read(filters);
+      const result = await UserModel.read(filters);
       return response.status(200).json(result);
     } catch (error) {
       console.warn(error);

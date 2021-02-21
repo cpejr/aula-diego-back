@@ -101,14 +101,9 @@ routes.put("/lesson", authenticateToken, lessonController.delete);
 // USER -------------------------------------------------------------------------------
 routes.post("/user", authenticateOptionalToken, userController.create);
 routes.get("/user", authenticateToken, userController.read);
-routes.get("/user/:user_id", authenticateToken, userController.getById);
-routes.put("/user/:user_id", authenticateToken, userController.update);
-routes.put(
-  "/user/:user_id",
-  authenticateToken,
-  isMaster,
-  userController.delete
-);
+routes.get("/user/:id", authenticateToken, userController.getById);
+routes.put("/user/:id", authenticateToken, userController.update);
+routes.put("/user/:id", authenticateToken, userController.delete);
 
 // LIVE -----------------------------------------------------------------------------------
 

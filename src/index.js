@@ -15,5 +15,5 @@ app.use(routes);
 app.use(errors());
 
 app.listen(port, () => {
-  console.log("Listening on port: " + port);
+  console.log("🔥 Listening on port: " + port);
 });
