@@ -2,6 +2,7 @@ const UserModel = require("../models/UserModel");
 const FirebaseModel = require("../models/FirebaseModel");
 const admin = require("firebase-admin");
 const jwt = require("jsonwebtoken");
+const firebase = require("firebase");
 
 module.exports = {
   async signin(request, response) {
@@ -14,13 +15,20 @@ module.exports = {
         try {
           firebase_id = await FirebaseModel.createSession(email, password);
         } catch (error) {
-          return response.status(403).json({ message: "Invalid Credentials" });
+          return response.status(403).json({ message: error.message });
         }
         var user = await UserModel.read({ firebase_id });
         user = user[0];
       }
       if (loggedWithGoogle) {
-        var user = await UserModel.read({ email });
+        const { tokenId } = request.body;
+        const credential = await firebase.auth.GoogleAuthProvider.credential(
+          tokenId
+        );
+        const response = await firebase.auth().signInWithCredential(credential);
+        const user_email = response.user.email;
+        var user = await UserModel.read({ email: user_email });
+        user = user[0];
       }
 
       const accessToken = jwt.sign({ user }, process.env.AUTH_TOKEN_SECRET, {
