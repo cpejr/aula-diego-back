@@ -12,8 +12,14 @@ module.exports = {
   async read(filters) {
     const response = await connection("user")
       .where(filters)
-      .andWhere({ is_deleted: false })
-      .select("*");
+      .andWhere("user.is_deleted", "false")
+      .join("organization", "user.organization_id", "organization.id")
+      .join("occupation", "user.occupation_id", "occupation.id")
+      .select(
+        "user.*",
+        "organization.name as organization_name",
+        "occupation.name as occupation_name"
+      );
     return response;
   },
   async update(user) {
