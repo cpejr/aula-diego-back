@@ -17,7 +17,7 @@ module.exports = {
   async read(request, response) {
     try {
       const filters = request.query;
-      const result = CourseModel.read(filters);
+      const result = await CourseModel.read(filters);
       return response.status(200).json(result);
     } catch (error) {
       console.warn(error);
@@ -30,6 +30,16 @@ module.exports = {
       const { id } = request.params;
       const course = await CourseModel.getById(id);
       return response.status(200).json(course);
+    } catch (error) {
+      console.warn(error.message);
+      response.status(500).json("internal server error");
+    }
+  },
+  async getByUserId(request, response) {
+    try {
+      const { user_id } = request.params;
+      const courses = await CourseModel.getByUserId(user_id);
+      return response.status(200).json(courses);
     } catch (error) {
       console.warn(error.message);
       response.status(500).json("internal server error");

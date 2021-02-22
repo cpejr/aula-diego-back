@@ -120,10 +120,15 @@ routes.get("/occupation/:id", authenticateToken, occupationController.delete);
 
 // COURSE -------------------------------------------------------------------------------
 routes.post("/course", authenticateToken, isAdmin, courseController.create);
-routes.get("/course/", authenticateToken, isAdmin, courseController.read);
-routes.get("/course/:id", authenticateToken, isAdmin, courseController.getById);
-routes.delete("/course/:id", authenticateToken, courseController.delete);
-routes.put("/course/:id", authenticateToken, isAdmin, courseController.update);
+routes.get("/course", authenticateToken, courseController.read);
+routes.get("/course/:id", authenticateToken, courseController.getById);
+routes.get(
+  "/course/user/:user_id",
+  authenticateToken,
+  courseController.getByUserId
+);
+routes.put("/course", authenticateToken, courseController.update);
+routes.put("/course/:id", authenticateToken, courseController.delete);
 
 // CLASS ------------------------------------------------------------------------------
 routes.post("/class", authenticateToken, classController.create);
