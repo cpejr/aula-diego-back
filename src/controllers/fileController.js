@@ -1,14 +1,11 @@
-const lessonModel = require("../models/LessonModel");
+const fileModel = require("../models/FileModel");
 
 module.exports = {
   async create(request, response) {
     try {
-      const lesson = request.body;
-      const id = await lessonModel.create(lesson);
-
-      response.status(200).json("Aula criada com sucesso.");
-      return id;
-    
+      const file = request.body;
+      await fileModel.create(file);
+      response.status(200).json("Arquivo criado com sucesso.");
     } catch (error) {
       console.log(error.message);
       response.status(500).json("Internal server error.");
