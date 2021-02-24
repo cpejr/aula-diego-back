@@ -29,7 +29,6 @@ const fileLessonValidator = require("./validators/file_lessonValidators");
 const fileValidator = require("./validators/fileValidators");
 const livePresenceValidator = require("./validators/live_presenceValidators");
 
-
 //  IMPORT CONTROLLERS -----------------------------------------------------------------
 
 const userController = require("./controllers/userController");
@@ -47,7 +46,7 @@ const livePresenceController = require("./controllers/livePresenceController");
 //const fileController = require("./controllers/fileController");
 
 // IMPORT VIEWS -------------------------------------------------------------------------
-const createClass = require("./views/createClass")
+const createClass = require("./views/createClass");
 
 // IMPORT MIDDLEWARES --------------------------------------------------------
 const {
@@ -57,7 +56,7 @@ const {
   isMaster,
 } = require("./middlewares/authentication");
 
-const multer = require("./middlewares/multer")
+const multer = require("./middlewares/multer");
 
 // TEST ROUTE ---------------------------------------------------------------------------
 routes.get("/", (request, response) => {
@@ -82,29 +81,17 @@ routes.delete(
   isMaster,
   userController.delete
 );
-routes.put("/user/:id",
-  authenticateToken,
-  userController.update
-);
+routes.put("/user/:id", authenticateToken, userController.update);
 
 // ORGANIZATION -------------------------------------------------------------------------
-routes.post("/organization",
-  authenticateToken,
-  organizationController.create
-);
-routes.get("/organization",
-  authenticateToken,
-  organizationController.read
-);
+routes.post("/organization", authenticateToken, organizationController.create);
+routes.get("/organization", authenticateToken, organizationController.read);
 routes.get(
   "/organization/:id",
   authenticateToken,
   organizationController.getById
 );
-routes.put("/organization",
-  authenticateToken,
-  organizationController.update
-);
+routes.put("/organization", authenticateToken, organizationController.update);
 routes.put(
   "/organization/:id",
   authenticateToken,
@@ -146,9 +133,9 @@ routes.put("/class/:id", authenticateToken, classController.delete);
 
 // LESSON -------------------------------------------------------------------------------
 routes.post("/lesson", authenticateToken, lessonController.create);
-routes.get("/lesson/:id", authenticateToken, lessonController.read);
+routes.get("/lesson", authenticateToken, lessonController.read);
 routes.put("/lesson", authenticateToken, lessonController.update);
-routes.put("/lesson", authenticateToken, lessonController.delete);
+routes.put("/lesson/:id", authenticateToken, lessonController.delete);
 
 // USER -------------------------------------------------------------------------------
 routes.post("/user", authenticateOptionalToken, userController.create);
@@ -159,15 +146,13 @@ routes.put("/user/:id", authenticateToken, userController.delete);
 
 // LIVE -----------------------------------------------------------------------------------
 
-routes.post("/live",
+routes.post(
+  "/live",
   authenticateToken,
   celebrate(liveValidator.create),
   liveController.create
 );
-routes.get("/live",
-  authenticateToken,
-  liveController.read
-);
+routes.get("/live", authenticateToken, liveController.read);
 routes.get("/live/:id", authenticateToken, liveController.getById);
 routes.put("/live", authenticateToken, liveController.update);
 routes.delete("/live/:id", authenticateToken, liveController.delete);
@@ -226,40 +211,42 @@ routes.get("/class/user", authenticateToken, userClassController.read);
 routes.delete("/class/user", authenticateToken, userClassController.delete);
 
 //ENVIAR EMAIL ----------------------------------------------------------------------
-routes.get(
-  "/sendemail", (response, replyTo, text) => {
-    var sender = nodemailer.createTransport({
-      host: 'SMTP.office365.com',
-      //varia com o servidor de emails, testei com o outlook, o gmail é 
-      //mais chato de mexer por conta da segurança
-      port: '587',
-      //a porta também varia com o servidor
-      auth: {
-        user: email,
-        pass: pass
-        //precisa do email e senha de uma conta de emails
-      }
-    });
-
-    var emailSend = {
-      from: email,
-      to: email,
-      replyTo: replyTo,
-      //o resplyTo permite que seja possível a pessoa responder o email para o email da pessoa que
-      //mandou sem pegar a senha da mesma
-      subject: subject,
-      text: text,
-    };
-
-    sender.sendMail(emailSend).then(info => {
-      response.send(info)
-    }).catch(error => {
-      response.send(error)
-    });
+routes.get("/sendemail", (response, replyTo, text) => {
+  var sender = nodemailer.createTransport({
+    host: "SMTP.office365.com",
+    //varia com o servidor de emails, testei com o outlook, o gmail é
+    //mais chato de mexer por conta da segurança
+    port: "587",
+    //a porta também varia com o servidor
+    auth: {
+      user: email,
+      pass: pass,
+      //precisa do email e senha de uma conta de emails
+    },
   });
 
+  var emailSend = {
+    from: email,
+    to: email,
+    replyTo: replyTo,
+    //o resplyTo permite que seja possível a pessoa responder o email para o email da pessoa que
+    //mandou sem pegar a senha da mesma
+    subject: subject,
+    text: text,
+  };
+
+  sender
+    .sendMail(emailSend)
+    .then((info) => {
+      response.send(info);
+    })
+    .catch((error) => {
+      response.send(error);
+    });
+});
+
 //COMPLEX ROUTES ------------------------------------------------------------
-routes.post("/lesson/create", authenticateToken, createClass.createClass)
-routes.post("/lesson/upload", authenticateToken, createClass.uploadFile)
+routes.post("/lesson/create", authenticateToken, createClass.createClass);
+routes.post("/lesson/upload", authenticateToken, createClass.uploadFile);
 
 module.exports = routes;
