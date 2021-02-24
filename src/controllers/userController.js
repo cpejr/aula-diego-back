@@ -64,6 +64,7 @@ module.exports = {
       response.status(500).json("internal server error");
     }
   },
+
   async update(request, response) {
     try {
       const user = request.body;
@@ -100,8 +101,47 @@ module.exports = {
       // await FirebaseModel.deleteUser(foundUser.firebase_id);
 
       // await UserModel.delete(id);
+      if (res !== 1) {
+        return response.status(400).json("Usuário não encontrado");
+      } else {
+        return response
+          .status(200)
+          .json("Usuário Promovido para administrador");
+      }
+    } catch (error) {
+      console.log(error.message);
+      return response.status(500).json("internal server error ");
+    }
+  },
+  
+  async forgottenPassword(request, response) {
+    try {
+      const { email } = request.body;
 
       response.status(200).json("Usuário apagado com sucesso!");
+      const response = await FirebaseModel.sendPasswordChangeEmail(email);
+
+      response.status(200).json({ message:"Sucesso!"});
+    }
+    catch (err) {
+      console.error(err);
+      return response.status(500).json({ notification: err.message });
+    }
+  },
+
+  async demote(request, response) {
+    try {
+      const { user_id } = request.params;
+
+      const res = await UserModel.demoteUser(user_id);
+
+      console.log(res);
+
+      if (res !== 1) {
+        return response.status(400).json("Usuário não encontrado");
+      } else {
+        return response.status(200).json("Usuário demovido para aluno!");
+      }
     } catch (error) {
       console.warn(error);
       response.status(500).json("internal server error ");

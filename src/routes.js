@@ -8,12 +8,27 @@ const knex = require("./database/connection"); //acho que não precisa disso
 const firebase = require("firebase"); //acho que não precisa disso
 const { AuthLogin, AuthCadastro } = require("./models/FirebaseModel"); //precisa disso?
 const { response } = require("express"); //acho que não precisa disso
+const nodemailer = require("nodemailer");
+
+const email = "";
+const pass = "";
+//pensar em uma forma de criptografar email e senha
 
 // IMOPORT VALIDATORS ------------------------------------------------------------------
 const userValidator = require("./validators/userValidators");
+const userClassValidator = require("./validators/user_classValidators");
 const liveValidator = require("./validators/liveValidators");
 const sessionValidator = require("./validators/sessionValidators");
 const classValidator = require("./validators/classValidators");
+const courseValidator = require("./validators/courseValidators");
+const organizationValidator = require("./validators/organizationValidators");
+const occupationValidator = require("./validators/occupationValidators");
+const lessonValidator = require("./validators/lessonValidators");
+const lessonPresenceValidator = require("./validators/lesson_presenceValidators");
+const fileLessonValidator = require("./validators/file_lessonValidators");
+const fileValidator = require("./validators/fileValidators");
+const livePresenceValidator = require("./validators/live_presenceValidators");
+
 
 //  IMPORT CONTROLLERS -----------------------------------------------------------------
 
@@ -29,9 +44,12 @@ const lessonController = require("./controllers/lessonController");
 const lessonPresenceController = require("./controllers/lessonPresenceController");
 const fileLessonController = require("./controllers/fileLessonController");
 const livePresenceController = require("./controllers/livePresenceController");
-// const fileController = require("./controllers/fileController");
+//const fileController = require("./controllers/fileController");
 
-// IMPORT AUTHENTICATION METHODS --------------------------------------------------------
+// IMPORT VIEWS -------------------------------------------------------------------------
+const createClass = require("./views/createClass")
+
+// IMPORT MIDDLEWARES --------------------------------------------------------
 const {
   authenticateToken,
   authenticateOptionalToken,
@@ -39,20 +57,54 @@ const {
   isMaster,
 } = require("./middlewares/authentication");
 
+const multer = require("./middlewares/multer")
+
 // TEST ROUTE ---------------------------------------------------------------------------
 routes.get("/", (request, response) => {
   response.send("eae galerinha xdxxdxdxdxd");
 });
 
+// USUÁRIO -------------------------------------------------------------------------------
+routes.post(
+  "/newuser",
+  authenticateOptionalToken,
+  celebrate(userValidator.create),
+  userController.create
+);
+routes.post(
+  "/forgottenPassword",
+  celebrate(userValidator.forgottenPassword),
+  userController.forgottenPassword
+);
+routes.delete(
+  "/deleteUser/:user_id",
+  authenticateToken,
+  isMaster,
+  userController.delete
+);
+routes.put("/user/:id",
+  authenticateToken,
+  userController.update
+);
+
 // ORGANIZATION -------------------------------------------------------------------------
-routes.post("/organization", authenticateToken, organizationController.create);
-routes.get("/organization", authenticateToken, organizationController.read);
+routes.post("/organization",
+  authenticateToken,
+  organizationController.create
+);
+routes.get("/organization",
+  authenticateToken,
+  organizationController.read
+);
 routes.get(
   "/organization/:id",
   authenticateToken,
   organizationController.getById
 );
-routes.put("/organization", authenticateToken, organizationController.update);
+routes.put("/organization",
+  authenticateToken,
+  organizationController.update
+);
 routes.put(
   "/organization/:id",
   authenticateToken,
@@ -94,7 +146,7 @@ routes.put("/class/:id", authenticateToken, classController.delete);
 
 // LESSON -------------------------------------------------------------------------------
 routes.post("/lesson", authenticateToken, lessonController.create);
-routes.get("/lesson", authenticateToken, lessonController.read);
+routes.get("/lesson/:id", authenticateToken, lessonController.read);
 routes.put("/lesson", authenticateToken, lessonController.update);
 routes.put("/lesson", authenticateToken, lessonController.delete);
 
@@ -107,8 +159,15 @@ routes.put("/user/:id", authenticateToken, userController.delete);
 
 // LIVE -----------------------------------------------------------------------------------
 
-routes.post("/live", authenticateToken, liveController.create);
-routes.get("/live", authenticateToken, liveController.read);
+routes.post("/live",
+  authenticateToken,
+  celebrate(liveValidator.create),
+  liveController.create
+);
+routes.get("/live",
+  authenticateToken,
+  liveController.read
+);
 routes.get("/live/:id", authenticateToken, liveController.getById);
 routes.put("/live", authenticateToken, liveController.update);
 routes.delete("/live/:id", authenticateToken, liveController.delete);
@@ -165,5 +224,42 @@ routes.delete(
 routes.post("/class/user", authenticateToken, userClassController.create);
 routes.get("/class/user", authenticateToken, userClassController.read);
 routes.delete("/class/user", authenticateToken, userClassController.delete);
+
+//ENVIAR EMAIL ----------------------------------------------------------------------
+routes.get(
+  "/sendemail", (response, replyTo, text) => {
+    var sender = nodemailer.createTransport({
+      host: 'SMTP.office365.com',
+      //varia com o servidor de emails, testei com o outlook, o gmail é 
+      //mais chato de mexer por conta da segurança
+      port: '587',
+      //a porta também varia com o servidor
+      auth: {
+        user: email,
+        pass: pass
+        //precisa do email e senha de uma conta de emails
+      }
+    });
+
+    var emailSend = {
+      from: email,
+      to: email,
+      replyTo: replyTo,
+      //o resplyTo permite que seja possível a pessoa responder o email para o email da pessoa que
+      //mandou sem pegar a senha da mesma
+      subject: subject,
+      text: text,
+    };
+
+    sender.sendMail(emailSend).then(info => {
+      response.send(info)
+    }).catch(error => {
+      response.send(error)
+    });
+  });
+
+//COMPLEX ROUTES ------------------------------------------------------------
+routes.post("/lesson/create", authenticateToken, createClass.createClass)
+routes.post("/lesson/upload", authenticateToken, createClass.uploadFile)
 
 module.exports = routes;

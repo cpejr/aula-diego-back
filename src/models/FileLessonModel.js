@@ -2,11 +2,11 @@ const connection = require("../database/connection");
 
 module.exports = {
   async create(FileLesson) {
-    const response = await connection("FileLesson").insert(FileLesson);
+    const response = await connection("file_lesson").insert(FileLesson);
     return response;
   },
   async read(filters) {
-    const response = await connection("FileLesson")
+    const response = await connection("file_lesson")
       .where(filters)
       .andWhere("user.is_deleted", false)
       .andWhere("file.is_deleted", false)
@@ -20,13 +20,13 @@ module.exports = {
     return response;
   },
   async update(FileLesson) {
-    const response = await connection("FileLesson")
+    const response = await connection("file_lesson")
       .where({ id: FileLesson.id })
       .update(FileLesson);
     return response;
   },
   async delete(id) {
-    const response = await connection("FileLesson").where({ id }).delete();
+    const response = await connection("file_lesson").where({ id }).delete();
     return response;
   },
 };

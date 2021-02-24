@@ -2,7 +2,7 @@ const connection = require("../database/connection");
 
 module.exports = {
   async create(lesson) {
-    const response = await connection("lesson").insert(lesson);
+    const response = await connection("lesson").insert(lesson, "id");
     return response;
   },
 
