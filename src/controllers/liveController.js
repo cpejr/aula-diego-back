@@ -20,7 +20,6 @@ module.exports = {
     try {
       const filters = request.query;
       const result = await LiveModel.read(filters);
-      console.log(result);
       return response.status(200).json(result);
     } catch (error) {
       console.warn(error);

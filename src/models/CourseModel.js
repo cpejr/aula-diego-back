@@ -7,9 +7,13 @@ module.exports = {
   },
   async getById(id) {
     const response = await connection("course")
-      .where({ id })
+      .where({ "course.id": id })
       .innerJoin("organization", "course.organization_id", "organization.id")
-      .select("course.*", "organization.name as organization")
+      .select(
+        "course.*",
+        "organization.name as organization_name",
+        "organization.id as organization_id"
+      )
       .first();
     return response;
   },

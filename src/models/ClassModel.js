@@ -16,7 +16,6 @@ module.exports = {
   },
 
   async read(filters) {
-    console.log({ ...filters });
     const response = await connection("class")
       .where(filters)
       .andWhere({ is_deleted: false })

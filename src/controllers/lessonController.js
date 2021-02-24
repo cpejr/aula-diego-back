@@ -1,3 +1,4 @@
+const LessonModel = require("../models/LessonModel");
 const lessonModel = require("../models/LessonModel");
 
 module.exports = {
@@ -8,7 +9,6 @@ module.exports = {
 
       response.status(200).json("Aula criada com sucesso.");
       return id;
-    
     } catch (error) {
       console.log(error.message);
       response.status(500).json("Internal server error.");
@@ -34,17 +34,9 @@ module.exports = {
 
   async read(request, response) {
     try {
-      const { id } = request.params;
-      const lesson = await lessonModel.getById(id);
-      const allowed = await ClassModel.getUsersInClass(id);
-      const user = request.session.user;
-
-      for (let student in allowed) {
-        if (user.user_id === student.user_id)
-          return response.status(200).json(lesson);
-      }
-
-      return response.status(500).json("Unauthorized");
+      const filters = request.params;
+      const result = await LessonModel.read(filters);
+      response.status(200).json(result);
     } catch (error) {
       console.log(error.message);
       response.status(500).json("Internal server error.");

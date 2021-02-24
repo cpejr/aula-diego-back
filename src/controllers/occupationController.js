@@ -17,7 +17,7 @@ module.exports = {
   async read(request, response) {
     try {
       const filters = request.query;
-      const result = OccupationModel.read(filters);
+      const result = await OccupationModel.read(filters);
       return response.status(200).json(result);
     } catch (error) {
       console.warn(error);
