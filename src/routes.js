@@ -46,6 +46,7 @@ const livePresenceController = require("./controllers/livePresenceController");
 //const fileController = require("./controllers/fileController");
 
 // IMPORT VIEWS -------------------------------------------------------------------------
+const createLesson = require("./views/createLesson");
 const createClass = require("./views/createClass");
 
 // IMPORT MIDDLEWARES --------------------------------------------------------
@@ -247,7 +248,9 @@ routes.get("/sendemail", (response, replyTo, text) => {
 });
 
 //COMPLEX ROUTES ------------------------------------------------------------
-routes.post("/lesson/create", authenticateToken, createClass.createClass);
-routes.post("/lesson/upload", authenticateToken, createClass.uploadFile);
+routes.post("/lesson/create", authenticateToken, createLesson.createLesson);
+routes.post("/lesson/upload", authenticateToken, createLesson.uploadFile);
+
+routes.post("/class/create", authenticateToken, createClass.createClass);
 
 module.exports = routes;
