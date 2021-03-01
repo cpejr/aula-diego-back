@@ -1,12 +1,11 @@
 const OccupationModel = require("../models/OccupationModel");
-const { v4: uuidv4 } = require("uuid");
+const OrganizationModel = require("../models/OrganizationModel");
 
 module.exports = {
   async create(request, response) {
     try {
       const occupation = request.body;
-
-      const response = await OccupationModel.create(occupation);
+      const result = await OccupationModel.create(occupation);
       return response.status(200).json("Ocupação criada com succeso!");
     } catch (error) {
       console.warn(error.message);
@@ -18,6 +17,16 @@ module.exports = {
     try {
       const filters = request.query;
       const result = await OccupationModel.read(filters);
+      return response.status(200).json(result);
+    } catch (error) {
+      console.warn(error);
+      response.status(500).json("internal server error");
+    }
+  },
+
+  async getAll(request, response) {
+    try {
+      const result = await OccupationModel.getAll();
       return response.status(200).json(result);
     } catch (error) {
       console.warn(error);

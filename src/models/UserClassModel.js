@@ -25,10 +25,13 @@ module.exports = {
       .update(userClass);
     return response;
   },
-  async delete(id) {
+  async delete(class_id, user_id) {
     const response = await connection("user_class")
-      .where({ id })
-      .update({ is_deleted: true });
+      .where({
+        "class_id": class_id,
+        "user_id": user_id
+      })
+      .del();
     return response;
   },
 };

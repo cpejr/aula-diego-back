@@ -33,6 +33,7 @@ module.exports = {
         await fileLessonModel.create(fileLesson);
         fileIds.push(fileId);
       }
+      
       response.status(200).json(fileIds);
     } catch (error) {
       console.log(error.message);
