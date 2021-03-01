@@ -3,7 +3,7 @@ const connection = require("../database/connection");
 module.exports = {
   //foi colocado turma porque class é um nome reservado
   async create(turma) {
-    const response = await connection("class").insert(turma);
+    const response = await connection("class").insert(turma, "id");
     return response;
   },
 
