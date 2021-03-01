@@ -17,7 +17,7 @@ module.exports = {
           class_id: classId[0]
         })
       }
-
+      
       response.status(200).json("Turma criada com sucesso!");
     } catch (error) {
       console.log(error.message);

@@ -19,6 +19,17 @@ module.exports = {
       .select("*");
     return response;
   },
+  async getAll() {
+    const response = await connection("occupation")
+      .join("organization", "occupation.organization_id", "organization.id")
+      .where({ "occupation.is_deleted": false, "organization.is_deleted": false })
+      .select("occupation.id", 
+        "occupation.name", 
+        "occupation.description", 
+        "organization.name as organization_name"
+      );
+    return response;
+  },
   async update(occupation) {
     const response = await connection("occupation")
       .where({ id: occupation.id })

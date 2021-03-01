@@ -8,7 +8,8 @@ module.exports = {
 
       const result = await ClassModel.create(turma);
       return response.status(200).json("Turma criada com succeso!");
-    } catch (error) {
+    } 
+    catch (error) {
       console.warn(error.message);
       response.status(500).json("internal server error");
     }
@@ -20,7 +21,30 @@ module.exports = {
 
       const result = await ClassModel.read({ ...filters });
       return response.status(200).json(result);
-    } catch (error) {
+    } 
+    catch (error) {
+      console.warn(error);
+      response.status(500).json("internal server error");
+    }
+  },
+
+  async getAll(request, response) {
+    try {
+      const result = await ClassModel.getAll();
+      return response.status(200).json(result);
+    } 
+    catch (error) {
+      console.warn(error);
+      response.status(500).json("internal server error");
+    }
+  },
+
+  async getStudents(request, response) {
+    try {
+      const result = await ClassModel.getStudents(request.params.id);
+      return response.status(200).json(result);
+    } 
+    catch (error) {
       console.warn(error);
       response.status(500).json("internal server error");
     }
@@ -32,7 +56,8 @@ module.exports = {
 
       const turma = await ClassModel.getById(id);
       return response.status(200).json(turma);
-    } catch (error) {
+    } 
+    catch (error) {
       console.warn(error.message);
       response.status(500).json("internal server error");
     }
@@ -60,7 +85,8 @@ module.exports = {
       } else {
         return response.status(200).json("Turma alterada com sucesso ");
       }
-    } catch (error) {
+    } 
+    catch (error) {
       console.log(error.message);
       return response.status(500).json("internal server error ");
     }
@@ -69,10 +95,10 @@ module.exports = {
   async delete(request, response) {
     try {
       const { id } = request.params;
-
       const result = await ClassModel.delete(id);
       response.status(200).json("Turma apagada com sucesso!");
-    } catch (error) {
+    } 
+    catch (error) {
       console.warn(error.message);
       response.status(500).json("internal server error ");
     }

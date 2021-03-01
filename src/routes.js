@@ -101,10 +101,10 @@ routes.put(
 
 // OCCUPATION -------------------------------------------------------------------------------
 routes.post("/occupation", authenticateToken, occupationController.create);
-routes.get("/occupation", authenticateToken, occupationController.read);
+routes.get("/occupation", authenticateToken, occupationController.getAll);
 routes.get("/occupation/:id", authenticateToken, occupationController.getById);
 routes.get("/occupation", authenticateToken, occupationController.update);
-routes.get("/occupation/:id", authenticateToken, occupationController.delete);
+routes.put("/occupation/:id", authenticateToken, occupationController.delete);
 
 // COURSE -------------------------------------------------------------------------------
 routes.post("/course", authenticateToken, isAdmin, courseController.create);
@@ -120,8 +120,9 @@ routes.put("/course/:id", authenticateToken, courseController.delete);
 
 // CLASS ------------------------------------------------------------------------------
 routes.post("/class", authenticateToken, classController.create);
-routes.get("/class", authenticateToken, classController.read);
+routes.get("/class", authenticateToken, classController.getAll);
 routes.get("/class/:id", authenticateToken, classController.getById);
+routes.get("/class/users/:id", authenticateToken, classController.getStudents);
 routes.put("/class/:id", authenticateToken, classController.update);
 routes.put("/class/:id", authenticateToken, classController.delete);
 
@@ -182,7 +183,7 @@ routes.put(
   lessonPresenceController.update
 );
 routes.delete(
-  "/lesson/presence",
+  "/lesson/presence/:id",
   authenticateToken,
   lessonPresenceController.delete
 );
@@ -209,7 +210,7 @@ routes.delete(
 // userClass
 routes.post("/class/user", authenticateToken, userClassController.create);
 routes.get("/class/user", authenticateToken, userClassController.read);
-routes.delete("/class/user", authenticateToken, userClassController.delete);
+routes.delete("/class/user/:class_id/:user_id", authenticateToken, userClassController.delete);
 
 //ENVIAR EMAIL ----------------------------------------------------------------------
 routes.get("/sendemail", (response, replyTo, text) => {

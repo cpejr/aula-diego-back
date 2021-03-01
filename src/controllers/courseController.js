@@ -77,9 +77,7 @@ module.exports = {
   async delete(request, response) {
     try {
       const { id } = request.params;
-
       const result = await CourseModel.delete(id);
-      console.log(result);
       response.status(200).json("Curso apagado com sucesso!");
     } catch (error) {
       console.warn(error.message);
