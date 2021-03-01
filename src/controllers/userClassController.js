@@ -28,9 +28,8 @@ module.exports = {
 
   async delete(request, response) {
     try {
-      const { filters } = request.query;
-
-      const result = await UserClassModel.delete(filters);
+      const result = await UserClassModel.delete(request.params.class_id, request.params.user_id);
+      console.log("deleting")
       response.status(200).json("Aluno removido da turma com sucesso!");
     } catch (error) {
       console.warn(error.message);
