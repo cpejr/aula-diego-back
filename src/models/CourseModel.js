@@ -43,13 +43,11 @@ module.exports = {
       .where(filters)
       .andWhereNot("course.is_deleted", "true")
       .join("organization", "organization.id", "course.organization_id")
-      .join("class", "class.course_id", "course.id")
-      .select(
-        "class.name as class_name",
-        "course.id as course_id",
-        "course.description as course_description",
+        "course.id",
+        "course.description",
         "organization.name as organization_name",
-        "course.name as course_name"
+        "course.name as course_name",
+        "organization.id as organization_id"
       );
     return response;
   },
