@@ -43,6 +43,7 @@ module.exports = {
       .where(filters)
       .andWhereNot("course.is_deleted", "true")
       .join("organization", "organization.id", "course.organization_id")
+      .select(
         "course.id",
         "course.description",
         "organization.name as organization_name",
