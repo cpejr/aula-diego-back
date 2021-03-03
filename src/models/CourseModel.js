@@ -46,7 +46,7 @@ module.exports = {
         "course.id",
         "course.description",
         "organization.name as organization_name",
-        "course.name as course_name",
+        "course.name",
         "organization.id as organization_id"
       );
     return response;
