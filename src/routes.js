@@ -143,7 +143,7 @@ routes.put("/lesson/:id", authenticateToken, lessonController.delete);
 routes.post("/user", authenticateOptionalToken, userController.create);
 routes.get("/user", authenticateToken, userController.read);
 routes.get("/user/:id", authenticateToken, userController.getById);
-routes.put("/user/:id", authenticateToken, userController.update);
+routes.put("/user/", authenticateToken, userController.update);
 routes.put("/user/:id", authenticateToken, userController.delete);
 
 // LIVE -----------------------------------------------------------------------------------
@@ -210,7 +210,11 @@ routes.delete(
 // userClass
 routes.post("/class/user", authenticateToken, userClassController.create);
 routes.get("/class/user", authenticateToken, userClassController.read);
-routes.delete("/class/user/:class_id/:user_id", authenticateToken, userClassController.delete);
+routes.delete(
+  "/class/user/:class_id/:user_id",
+  authenticateToken,
+  userClassController.delete
+);
 
 //ENVIAR EMAIL ----------------------------------------------------------------------
 routes.get("/sendemail", (response, replyTo, text) => {
