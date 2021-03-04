@@ -70,7 +70,7 @@ module.exports = {
       const user = request.body;
       const loggedUser = request.session;
 
-      if (loggedUser.id != user.id && loggedUser.type != "master")
+      if (loggedUser.id != user.id && loggedUser.type == "student")
         return response
           .status(403)
           .json("Você não tem permissão para realizar esta operação");
@@ -113,7 +113,7 @@ module.exports = {
       return response.status(500).json("internal server error ");
     }
   },
-  
+
   async forgottenPassword(request, response) {
     try {
       const { email } = request.body;
@@ -121,9 +121,8 @@ module.exports = {
       response.status(200).json("Usuário apagado com sucesso!");
       const response = await FirebaseModel.sendPasswordChangeEmail(email);
 
-      response.status(200).json({ message:"Sucesso!"});
-    }
-    catch (err) {
+      response.status(200).json({ message: "Sucesso!" });
+    } catch (err) {
       console.error(err);
       return response.status(500).json({ notification: err.message });
     }
