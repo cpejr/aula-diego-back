@@ -22,6 +22,14 @@ module.exports = {
     return response;
   },
 
+  async getById(id) {
+    const response = await connection("lesson")
+      .where({ id })
+      .select("*")
+      .first();
+    return response;
+  },
+
   async update(lesson) {
     const response = await connection("lesson")
       .where({ id: lesson.id })

@@ -42,6 +42,20 @@ module.exports = {
       response.status(500).json("Internal server error.");
     }
   },
+
+  async getById(request, response) {
+    try {
+      const { id } = request.params;
+
+      const lesson = await LessonModel.getById(id);
+      return response.status(200).json(lesson);
+    } 
+    catch (error) {
+      console.warn(error.message);
+      response.status(500).json("internal server error");
+    }
+  },
+
   async update(request, response) {
     try {
       const { id } = request.params;

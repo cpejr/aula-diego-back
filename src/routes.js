@@ -136,6 +136,7 @@ routes.put("/class/:id", authenticateToken, classController.delete);
 // LESSON -------------------------------------------------------------------------------
 routes.post("/lesson", authenticateToken, lessonController.create);
 routes.get("/lesson", authenticateToken, lessonController.read);
+routes.get("/lesson/:id", authenticateToken, lessonController.getById);
 routes.put("/lesson", authenticateToken, lessonController.update);
 routes.put("/lesson/:id", authenticateToken, lessonController.delete);
 
