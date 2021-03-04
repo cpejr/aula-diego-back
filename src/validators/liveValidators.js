@@ -5,7 +5,7 @@ const liveValidator = {};
 liveValidator.create = {
   [Segments.BODY]: Joi.object().keys({
     name: Joi.string().required(),
-    description: Joi.string().required(),
+    description: Joi.string(),
     date: Joi.string().required(),
     confirmation_code: Joi.string().required(),
     link: Joi.string().required(),
