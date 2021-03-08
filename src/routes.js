@@ -138,7 +138,7 @@ routes.post("/lesson", authenticateToken, lessonController.create);
 routes.get("/lesson", authenticateToken, lessonController.read);
 routes.get("/lesson/:id", authenticateToken, lessonController.getById);
 routes.put("/lesson", authenticateToken, lessonController.update);
-routes.put("/lesson/:id", authenticateToken, lessonController.delete);
+routes.delete("/lesson/:id", authenticateToken, lessonController.delete);
 
 // USER -------------------------------------------------------------------------------
 routes.post("/user", authenticateOptionalToken, userController.create);
