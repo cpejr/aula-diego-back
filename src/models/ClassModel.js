@@ -11,10 +11,12 @@ module.exports = {
   async getAll() {
     const response = await connection("class")
       .join("course", "class.course_id", "course.id")
-      .where({ "class.is_deleted": false, "course.is_deleted": false })
+      .join("organization", "class.organization_id", "organization.id")
+      .where({ "class.is_deleted": false, "course.is_deleted": false , "organization.is_deleted": false})
       .select(
         "class.*", 
-        "course.name as course_name"
+        "course.name as course_name",
+        "organization.name as organization_name"
       );
     return response;
   },
