@@ -23,7 +23,7 @@ module.exports = {
       if (!foundlesson) {
         throw new Error("Aula não encontrada.");
       } else {
-        await lessonModel.deletelesson(id);
+        await lessonModel.delete(id);
         response.status(200).json("Aula deletada com sucesso.");
       }
     } catch (error) {
