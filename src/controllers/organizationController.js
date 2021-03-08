@@ -39,6 +39,8 @@ module.exports = {
     try {
       const organization = request.body;
       const { user } = request.session;
+      const { id } = request.params;
+      console.log(organization);
 
       if (
         !(
@@ -51,7 +53,7 @@ module.exports = {
           .json("Você não tem permissão para realizar esta operação");
       }
 
-      const res = await OrganizationModel.update(organization);
+      const res = await OrganizationModel.update( organization, id);
 
       if (res !== 1) {
         return response.status(404).json("Organização não encontrada!");
