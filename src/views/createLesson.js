@@ -22,18 +22,16 @@ module.exports = {
       };
 
       const lessonId = await lessonModel.create(lesson);
-
       for await (let upload of files) {
         const fileId = await fileModel.create(file);
         const fileLesson = {
           lesson_id: lessonId[0],
           file_id: fileId[0],
         };
-
+        
         await fileLessonModel.create(fileLesson);
         fileIds.push(fileId);
       }
-      
       response.status(200).json(fileIds);
     } catch (error) {
       console.log(error.message);
