@@ -3,6 +3,7 @@ exports.up = (knex) => {
     table.uuid('id').defaultTo(knex.raw('uuid_generate_v4()')).primary().notNullable();
     table.string('name').notNullable();
     table.text('description', 'longtext');
+    table.text('text', 'longtext');
     table.uuid('course_id').notNullable();
     table.foreign('course_id').references('id').inTable('course').onDelete('NO ACTION');
     table.timestamp('created_at').defaultTo(knex.fn.now());
