@@ -6,7 +6,7 @@ module.exports = {
     return response;
   },
   async getById(id) {
-    const response = await connection("file").where({ id }).select("*").first();
+    const response = await connection("file").where({ id }).select("*");
     return response;
   },
   async read(filters) {

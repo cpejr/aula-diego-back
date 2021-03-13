@@ -20,6 +20,7 @@ module.exports = {
     try {
       const filters = request.query;
       const result = await LiveModel.read(filters);
+      
       return response.status(200).json(result);
     } catch (error) {
       console.warn(error);
@@ -33,6 +34,7 @@ module.exports = {
       const foundLive = await LiveModel.getById(id);
 
       if (!foundLive) {
+      console.log("🚀 ~ file: liveController.js ~ line 38 ~ read ~ filters", filters)
         throw new Error("Live não encontrada.");
       } else {
         await LiveModel.delete(id);

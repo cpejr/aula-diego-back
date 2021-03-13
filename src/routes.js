@@ -41,7 +41,9 @@ const organizationController = require("./controllers/organizationController");
 const occupationController = require("./controllers/occupationController");
 const lessonController = require("./controllers/lessonController");
 const lessonPresenceController = require("./controllers/lessonPresenceController");
+const fileController = require("./controllers/fileController");
 const fileLessonController = require("./controllers/fileLessonController");
+const videoLessonController = require("./controllers/videoLessonController");
 const livePresenceController = require("./controllers/livePresenceController");
 //const fileController = require("./controllers/fileController");
 
@@ -127,9 +129,9 @@ routes.put("/class/:id", authenticateToken, classController.update);
 routes.put("/class/:id", authenticateToken, classController.delete);
 
 // // FILE ------------------------------------------------------------------------------
-// routes.post("/file", authenticateToken, fileController.create);
-// routes.get("/file", authenticateToken, fileController.read);
-// routes.get("/file/:id", authenticateToken, fileController.getById);
+//routes.post("/file", authenticateToken, fileController.create);
+//routes.get("/file/:id", authenticateToken, fileController.getById);
+routes.get("/file_get/:id", authenticateToken, fileController.getFile);
 // routes.put("/file/:id", authenticateToken, fileController.update);
 // routes.put("/file/:id", authenticateToken, fileController.delete);
 
@@ -149,12 +151,7 @@ routes.put("/user/:id", authenticateToken, userController.delete);
 
 // LIVE -----------------------------------------------------------------------------------
 
-routes.post(
-  "/live",
-  authenticateToken,
-  celebrate(liveValidator.create),
-  liveController.create
-);
+routes.post("/live", authenticateToken, celebrate(liveValidator.create), liveController.create);
 routes.get("/live", authenticateToken, liveController.read);
 routes.get("/live/:id", authenticateToken, liveController.getById);
 routes.put("/live", authenticateToken, liveController.update);
@@ -200,13 +197,14 @@ routes.delete(
 
 // LINKING TABLES ------------------------------------------------------------------------------------------------------
 // fileLesson
-routes.post("/lesson/file", authenticateToken, fileLessonController.create);
-routes.get("/lesson/file", authenticateToken, fileLessonController.read);
-routes.delete(
-  "/lesson/file/:id",
-  authenticateToken,
-  fileLessonController.delete
-);
+routes.post("/lesson_file", authenticateToken, fileLessonController.create);
+routes.get("/lesson_file", authenticateToken, fileLessonController.read);
+routes.delete("/lesson_file/:id", authenticateToken, fileLessonController.delete);
+
+// videoLesson
+routes.post("/lesson_video", authenticateToken, videoLessonController.create);
+routes.get("/lesson_video", authenticateToken, videoLessonController.read);
+routes.delete("/lesson_video/:id", authenticateToken, videoLessonController.delete);
 
 // userClass
 routes.post("/class/user", authenticateToken, userClassController.create);
@@ -253,9 +251,9 @@ routes.get("/sendemail", (response, replyTo, text) => {
 });
 
 //COMPLEX ROUTES ------------------------------------------------------------
-routes.post("/lesson/create", authenticateToken, createLesson.createLesson);
-routes.post("/lesson/upload", authenticateToken, createLesson.uploadFile);
+routes.post("/lesson_create", authenticateToken, createLesson.createLesson);
+routes.post("/lesson_upload", authenticateToken, createLesson.uploadFile);
 
-routes.post("/class/create", authenticateToken, createClass.createClass);
+routes.post("/class_create", authenticateToken, createClass.createClass);
 
 module.exports = routes;

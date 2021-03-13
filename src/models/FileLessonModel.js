@@ -8,14 +8,14 @@ module.exports = {
   async read(filters) {
     const response = await connection("file_lesson")
       .where(filters)
-      .andWhere("user.is_deleted", false)
+      .andWhere("lesson.is_deleted", false)
       .andWhere("file.is_deleted", false)
-      .join("user", "file_presence.user_id", "user.id")
-      .join("file", "file_presence.file_id", "file.id")
+      .join("lesson", "file_lesson.lesson_id", "lesson.id")
+      .join("file", "file_lesson.file_id", "file.id")
       .select(
         "file.*",
-        "user.name as user_name",
-        "user.registration as user_registration"
+        "lesson.name as lesson_name",
+        "lesson.id as lesson_id"
       );
     return response;
   },

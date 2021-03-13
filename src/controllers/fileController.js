@@ -1,10 +1,11 @@
-const fileModel = require("../models/FileModel");
+const FileModel = require("../models/FileModel");
+const path = require("path")
 
 module.exports = {
   async create(request, response) {
     try {
       const file = request.body;
-      await fileModel.create(file);
+      await FileModel.create(file);
       response.status(200).json("Arquivo criado com sucesso.");
     } catch (error) {
       console.log(error.message);
@@ -31,22 +32,27 @@ module.exports = {
 
   async read(request, response) {
     try {
-      const { id } = request.params;
-      const lesson = await lessonModel.getById(id);
-      const allowed = await ClassModel.getUsersInClass(id);
-      const user = request.session.user;
-
-      for (let student in allowed) {
-        if (user.user_id === student.user_id)
-          return response.status(200).json(lesson);
-      }
-
-      return response.status(500).json("Unauthorized");
+      const filters = request.params;
+      const result = await FileModel.read(filters);
+      response.status(200).json(result);
     } catch (error) {
       console.log(error.message);
       response.status(500).json("Internal server error.");
     }
   },
+
+  async getFile(request, response) {
+    try {
+      const { id } = request.params;
+      const file = await FileModel.getById(id);
+      
+      response.sendFile(path.join(__dirname, ".." , "images", file[0].path));
+    } catch (error) {
+      console.log(error.message);
+      response.status(500).json("Internal server error.");
+    }
+  },
+
   async update(request, response) {
     try {
       const { id } = request.params;
