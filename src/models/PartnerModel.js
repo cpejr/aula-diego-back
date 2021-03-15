@@ -23,7 +23,7 @@ module.exports = {
       .select(
         "partner.*",
         "file.id as file_id",
-        "file.path as logo"
+        "file.path as file_path"
       );
       
     return response;
