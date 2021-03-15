@@ -45,6 +45,7 @@ const fileController = require("./controllers/fileController");
 const fileLessonController = require("./controllers/fileLessonController");
 const videoLessonController = require("./controllers/videoLessonController");
 const livePresenceController = require("./controllers/livePresenceController");
+const partnerController = require("./controllers/partnerController");
 //const fileController = require("./controllers/fileController");
 
 // IMPORT VIEWS -------------------------------------------------------------------------
@@ -156,6 +157,14 @@ routes.get("/live", authenticateToken, liveController.read);
 routes.get("/live/:id", authenticateToken, liveController.getById);
 routes.put("/live", authenticateToken, liveController.update);
 routes.delete("/live/:id", authenticateToken, liveController.delete);
+
+// PARTNERS -----------------------------------------------------------------------------------
+
+routes.post("/partner", authenticateToken, partnerController.create);
+routes.get("/partner", authenticateToken, partnerController.read);
+routes.get("/partner/:id", authenticateToken, partnerController.getById);
+routes.put("/partner", authenticateToken, partnerController.update);
+routes.delete("/partner/:id", authenticateToken, partnerController.delete);
 
 //SESSION ---------------------------------------------------------------------------------
 
