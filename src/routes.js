@@ -94,7 +94,11 @@ routes.get(
   authenticateToken,
   organizationController.getById
 );
-routes.put("/organization/:id", authenticateToken, organizationController.update);
+routes.put(
+  "/organization/:id",
+  authenticateToken,
+  organizationController.update
+);
 routes.delete(
   "/organization/:id",
   authenticateToken,
@@ -151,11 +155,22 @@ routes.put("/user/:id", authenticateToken, userController.delete);
 
 // LIVE -----------------------------------------------------------------------------------
 
-routes.post("/live", authenticateToken, celebrate(liveValidator.create), liveController.create);
+routes.post(
+  "/live",
+  authenticateToken,
+  celebrate(liveValidator.create),
+  liveController.create
+);
 routes.get("/live", authenticateToken, liveController.read);
 routes.get("/live/:id", authenticateToken, liveController.getById);
 routes.put("/live", authenticateToken, liveController.update);
 routes.delete("/live/:id", authenticateToken, liveController.delete);
+
+routes.post(
+  "/score",
+  // authenticateToken,
+  livePresenceController.getScore
+);
 
 //SESSION ---------------------------------------------------------------------------------
 
@@ -199,12 +214,20 @@ routes.delete(
 // fileLesson
 routes.post("/lesson_file", authenticateToken, fileLessonController.create);
 routes.get("/lesson_file", authenticateToken, fileLessonController.read);
-routes.delete("/lesson_file/:id", authenticateToken, fileLessonController.delete);
+routes.delete(
+  "/lesson_file/:id",
+  authenticateToken,
+  fileLessonController.delete
+);
 
 // videoLesson
 routes.post("/lesson_video", authenticateToken, videoLessonController.create);
 routes.get("/lesson_video", authenticateToken, videoLessonController.read);
-routes.delete("/lesson_video/:id", authenticateToken, videoLessonController.delete);
+routes.delete(
+  "/lesson_video/:id",
+  authenticateToken,
+  videoLessonController.delete
+);
 
 // userClass
 routes.post("/class/user", authenticateToken, userClassController.create);
@@ -253,7 +276,6 @@ routes.get("/sendemail", (response, replyTo, text) => {
 //COMPLEX ROUTES ------------------------------------------------------------
 routes.post("/lesson_create", authenticateToken, createLesson.createLesson);
 routes.post("/lesson_upload", authenticateToken, createLesson.uploadFile);
-
 routes.post("/class_create", authenticateToken, createClass.createClass);
 
 module.exports = routes;
