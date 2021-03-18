@@ -34,7 +34,7 @@ module.exports = {
 
   async read(request, response) {
     try {
-      const filters = request.params;
+      const filters = request.query;
       const result = await LessonModel.read(filters);
       response.status(200).json(result);
     } catch (error) {
@@ -49,8 +49,7 @@ module.exports = {
 
       const lesson = await LessonModel.getById(id);
       return response.status(200).json(lesson);
-    } 
-    catch (error) {
+    } catch (error) {
       console.warn(error.message);
       response.status(500).json("internal server error");
     }

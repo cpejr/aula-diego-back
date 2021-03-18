@@ -95,7 +95,11 @@ routes.get(
   authenticateToken,
   organizationController.getById
 );
-routes.put("/organization/:id", authenticateToken, organizationController.update);
+routes.put(
+  "/organization/:id",
+  authenticateToken,
+  organizationController.update
+);
 routes.delete(
   "/organization/:id",
   authenticateToken,
@@ -123,7 +127,7 @@ routes.put("/course/:id", authenticateToken, courseController.delete);
 
 // CLASS ------------------------------------------------------------------------------
 routes.post("/class", authenticateToken, classController.create);
-routes.get("/class", authenticateToken, classController.getAll);
+routes.get("/class", authenticateToken, classController.read);
 routes.get("/class/:id", authenticateToken, classController.getById);
 routes.get("/class/users/:id", authenticateToken, classController.getStudents);
 routes.put("/class/:id", authenticateToken, classController.update);
@@ -152,7 +156,12 @@ routes.put("/user/:id", authenticateToken, userController.delete);
 
 // LIVE -----------------------------------------------------------------------------------
 
-routes.post("/live", authenticateToken, celebrate(liveValidator.create), liveController.create);
+routes.post(
+  "/live",
+  authenticateToken,
+  celebrate(liveValidator.create),
+  liveController.create
+);
 routes.get("/live", authenticateToken, liveController.read);
 routes.get("/live/:id", authenticateToken, liveController.getById);
 routes.put("/live", authenticateToken, liveController.update);
@@ -197,6 +206,11 @@ routes.delete(
 // live
 routes.post("/presence/live", authenticateToken, livePresenceController.create);
 routes.get("/presence/live", authenticateToken, livePresenceController.read);
+routes.get(
+  "/presence/live/:id",
+  authenticateToken,
+  livePresenceController.getAudience
+);
 routes.put("/presence/live", authenticateToken, livePresenceController.update);
 routes.delete(
   "/presence/live",
@@ -208,12 +222,20 @@ routes.delete(
 // fileLesson
 routes.post("/lesson_file", authenticateToken, fileLessonController.create);
 routes.get("/lesson_file", authenticateToken, fileLessonController.read);
-routes.delete("/lesson_file/:id", authenticateToken, fileLessonController.delete);
+routes.delete(
+  "/lesson_file/:id",
+  authenticateToken,
+  fileLessonController.delete
+);
 
 // videoLesson
 routes.post("/lesson_video", authenticateToken, videoLessonController.create);
 routes.get("/lesson_video", authenticateToken, videoLessonController.read);
-routes.delete("/lesson_video/:id", authenticateToken, videoLessonController.delete);
+routes.delete(
+  "/lesson_video/:id",
+  authenticateToken,
+  videoLessonController.delete
+);
 
 // userClass
 routes.post("/class/user", authenticateToken, userClassController.create);
