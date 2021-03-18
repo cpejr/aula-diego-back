@@ -44,6 +44,13 @@ module.exports = {
 
     return numLives;
   },
+  async getAudience(id) {
+    const response = await connection(
+      "live_presence"
+    ).count(/*"corfirmation",
+      { as: true } || */ "live_id", { as: id });
+    return response;
+  },
   async update(livePresence) {
     const response = await connection("live_presence")
       .where({ id: livePresence.id })

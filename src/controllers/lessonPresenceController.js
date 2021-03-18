@@ -1,4 +1,5 @@
 const LessonPresenceModel = require("../models/LessonPresenceModel");
+const LivePresenceModel = require("../models/LivePresenceModel");
 
 module.exports = {
   async create(request, response) {
@@ -21,6 +22,17 @@ module.exports = {
     } catch (error) {
       console.warn(error);
       response.status(500).json("internal server error");
+    }
+  },
+
+  async getAudience(request, response) {
+    try {
+      const { id } = request.params;
+      const result = await LivePresenceModel.getAudience(id);
+      return response.status(200).json(result);
+    } catch (error) {
+      console.log(error.message);
+      response.status(500).json("Internal server error.");
     }
   },
 

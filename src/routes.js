@@ -45,6 +45,7 @@ const fileController = require("./controllers/fileController");
 const fileLessonController = require("./controllers/fileLessonController");
 const videoLessonController = require("./controllers/videoLessonController");
 const livePresenceController = require("./controllers/livePresenceController");
+const partnerController = require("./controllers/partnerController");
 //const fileController = require("./controllers/fileController");
 
 // IMPORT VIEWS -------------------------------------------------------------------------
@@ -126,7 +127,7 @@ routes.put("/course/:id", authenticateToken, courseController.delete);
 
 // CLASS ------------------------------------------------------------------------------
 routes.post("/class", authenticateToken, classController.create);
-routes.get("/class", authenticateToken, classController.getAll);
+routes.get("/class", authenticateToken, classController.read);
 routes.get("/class/:id", authenticateToken, classController.getById);
 routes.get("/class/users/:id", authenticateToken, classController.getStudents);
 routes.put("/class/:id", authenticateToken, classController.update);
@@ -171,6 +172,13 @@ routes.post(
   // authenticateToken,
   livePresenceController.getScore
 );
+// PARTNERS -----------------------------------------------------------------------------------
+
+routes.post("/partner", authenticateToken, partnerController.create);
+routes.get("/partner", authenticateToken, partnerController.read);
+routes.get("/partner/:id", authenticateToken, partnerController.getById);
+routes.put("/partner", authenticateToken, partnerController.update);
+routes.delete("/partner/:id", authenticateToken, partnerController.delete);
 
 //SESSION ---------------------------------------------------------------------------------
 
@@ -203,6 +211,11 @@ routes.delete(
 // live
 routes.post("/presence/live", authenticateToken, livePresenceController.create);
 routes.get("/presence/live", authenticateToken, livePresenceController.read);
+routes.get(
+  "/presence/live/:id",
+  authenticateToken,
+  livePresenceController.getAudience
+);
 routes.put("/presence/live", authenticateToken, livePresenceController.update);
 routes.delete(
   "/presence/live",

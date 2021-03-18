@@ -51,6 +51,17 @@ module.exports = {
     }
   },
 
+  async getAudience(request, response) {
+    try {
+      const { id } = request.params;
+      const result = await LivePresenceModel.getAudience(id);
+      return response.status(200).json(result);
+    } catch (error) {
+      console.log(error.message);
+      response.status(500).json("Internal server error.");
+    }
+  },
+
   async update(request, response) {
     try {
       const livePresence = request.body;
