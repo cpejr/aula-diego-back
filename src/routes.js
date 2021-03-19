@@ -110,7 +110,7 @@ routes.delete(
 routes.post("/occupation", authenticateToken, occupationController.create);
 routes.get("/occupation", authenticateToken, occupationController.getAll);
 routes.get("/occupation/:id", authenticateToken, occupationController.getById);
-routes.get("/occupation", authenticateToken, occupationController.update);
+routes.put("/occupation", authenticateToken, occupationController.update);
 routes.put("/occupation/:id", authenticateToken, occupationController.delete);
 
 // COURSE -------------------------------------------------------------------------------
@@ -130,7 +130,7 @@ routes.post("/class", authenticateToken, classController.create);
 routes.get("/class", authenticateToken, classController.read);
 routes.get("/class/:id", authenticateToken, classController.getById);
 routes.get("/class/users/:id", authenticateToken, classController.getStudents);
-routes.put("/class/:id", authenticateToken, classController.update);
+routes.put("/class", authenticateToken, classController.update);
 routes.put("/class/:id", authenticateToken, classController.delete);
 
 // // FILE ------------------------------------------------------------------------------
