@@ -13,7 +13,7 @@ module.exports = {
       .join("user", "live_presence.user_id", "user.id")
       .join("live", "live_presence.live_id", "live.id")
       .join("course", "live.course_id", "course.id")
-      .join("class", "course.id", "class.course_id")
+      .distinct("live.id")
       .select(
         "live.id as live_id",
         "live.description as live_description",
@@ -21,11 +21,28 @@ module.exports = {
         "course.name as course_name",
         "user.name as user_name",
         "user.registration as user_registration",
-        "user.id as user_id",
-        "class.name as class_name"
+        "user.id as user_id"
       );
-
     return present;
+  },
+  async getLiveCount(user_id) {
+    /* 
+      select count(l.id) as num_lives from user_class as uc
+      inner join "class" c ON c.id = uc.class_id
+      inner join live l on l.course_id = c.course_id
+      where uc.user_id = 'ccf04c46-cd1f-4cdc-b5f7-b8ad15610ed5'::uuid
+      */
+
+    let numLives = await connection("user_class")
+      .join("class", "user_class.class_id", "class.id")
+      .join("live", "live.course_id", "class.course_id")
+      .where({ "user_class.user_id": user_id })
+      .count("live.id")
+      .first();
+
+    numLives = numLives.count;
+
+    return numLives;
   },
   async getAudience(id) {
     const response = await connection(

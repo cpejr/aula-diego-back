@@ -167,6 +167,11 @@ routes.get("/live/:id", authenticateToken, liveController.getById);
 routes.put("/live", authenticateToken, liveController.update);
 routes.delete("/live/:id", authenticateToken, liveController.delete);
 
+routes.post(
+  "/score",
+  // authenticateToken,
+  livePresenceController.getScore
+);
 // PARTNERS -----------------------------------------------------------------------------------
 
 routes.post("/partner", authenticateToken, partnerController.create);
@@ -284,7 +289,6 @@ routes.get("/sendemail", (response, replyTo, text) => {
 //COMPLEX ROUTES ------------------------------------------------------------
 routes.post("/lesson_create", authenticateToken, createLesson.createLesson);
 routes.post("/lesson_upload", authenticateToken, createLesson.uploadFile);
-
 routes.post("/class_create", authenticateToken, createClass.createClass);
 
 module.exports = routes;
