@@ -1,7 +1,6 @@
 const lessonModel = require("../models/LessonModel");
 const fileModel = require("../models/FileModel");
 const fileLessonModel = require("../models/FileLessonModel");
-const multer = require("../middlewares/multer");
 
 module.exports = {
   async createLesson(request, response) {
@@ -37,11 +36,5 @@ module.exports = {
       console.log(error.message);
       response.status(500).json("Internal server error.");
     }
-  },
-
-  async uploadFile(request, response, next) {
-    multer.upload(request, response, next);
-
-    response.status(200).json("Arquivos enviado com sucesso.");
-  },
+  }
 };

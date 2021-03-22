@@ -1,16 +1,41 @@
 const OrganizationModel = require("../models/OrganizationModel");
+const FileModel = require("../models/FileModel");
 const { v4: uuidv4 } = require("uuid");
 
 module.exports = {
   async create(request, response) {
     try {
-      const organization = request.body;
+      const data = request.body;
+      const fileType = data.file_type.match(/.+(?=\/)/)[0];
+      const fileExtension = data.file_type.match(/(?<=\/).+/)[0];
+      const file_id = uuidv4();
 
-      const result = await OrganizationModel.create(organization);
-      return response.status(200).json("Organização criada com succeso!");
+      if (fileType !== "image") {
+        console.warn('Avatar is not a image');
+        response.status(500).json("Internal server error");
+      }
+
+      const logo = {
+        id: file_id,
+        name: data.file_name,
+        type: fileExtension,
+        path: `${file_id}.${fileExtension}`,
+        user_id: data.user_id
+      }
+
+      const organization = {
+        name: data.name,
+        description: data.description,
+        file_id: file_id
+      }
+
+      await FileModel.create(logo);
+      await OrganizationModel.create(organization)
+      
+      return response.status(200).json({file_id: file_id});
     } catch (error) {
       console.warn(error.message);
-      response.status(500).json("internal server error");
+      response.status(500).json("Internal server error");
     }
   },
 
