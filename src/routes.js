@@ -137,6 +137,7 @@ routes.put("/class/:id", authenticateToken, classController.delete);
 //routes.post("/file", authenticateToken, fileController.create);
 //routes.get("/file/:id", authenticateToken, fileController.getById);
 routes.get("/file_get/:id", authenticateToken, fileController.getFile);
+routes.post("/file_upload", authenticateToken, fileController.uploadFile)
 // routes.put("/file/:id", authenticateToken, fileController.update);
 // routes.put("/file/:id", authenticateToken, fileController.delete);
 
@@ -172,14 +173,6 @@ routes.post(
   // authenticateToken,
   livePresenceController.getScore
 );
-// PARTNERS -----------------------------------------------------------------------------------
-
-routes.post("/partner", authenticateToken, partnerController.create);
-routes.get("/partner", authenticateToken, partnerController.read);
-routes.get("/partner/:id", authenticateToken, partnerController.getById);
-routes.put("/partner", authenticateToken, partnerController.update);
-routes.delete("/partner/:id", authenticateToken, partnerController.delete);
-
 //SESSION ---------------------------------------------------------------------------------
 
 routes.post("/login", sessionController.signin);
@@ -288,7 +281,6 @@ routes.get("/sendemail", (response, replyTo, text) => {
 
 //COMPLEX ROUTES ------------------------------------------------------------
 routes.post("/lesson_create", authenticateToken, createLesson.createLesson);
-routes.post("/lesson_upload", authenticateToken, createLesson.uploadFile);
 routes.post("/class_create", authenticateToken, createClass.createClass);
 
 module.exports = routes;

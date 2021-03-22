@@ -1,4 +1,5 @@
 const FileModel = require("../models/FileModel");
+const multer = require("../middlewares/multer");
 const path = require("path")
 
 module.exports = {
@@ -11,6 +12,11 @@ module.exports = {
       console.log(error.message);
       response.status(500).json("Internal server error.");
     }
+  },
+
+  async uploadFile(request, response, next) {
+    multer.upload(request, response, next);
+    response.status(200).json("Arquivos enviado com sucesso.");
   },
 
   async delete(request, response) {
