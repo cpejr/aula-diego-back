@@ -45,10 +45,11 @@ module.exports = {
     return numLives;
   },
   async getAudience(id) {
-    const response = await connection(
-      "live_presence"
-    ).count(/*"corfirmation",
-      { as: true } || */ "live_id", { as: id });
+    const response = await connection("live_presence").count(
+      "confirmation",
+      { as: true } && "live_id",
+      { as: id }
+    );
     return response;
   },
   async update(livePresence) {
