@@ -151,7 +151,7 @@ routes.delete("/lesson/:id", authenticateToken, lessonController.delete);
 routes.post("/user", authenticateOptionalToken, userController.create);
 routes.get("/user", authenticateToken, userController.read);
 routes.get("/user/:id", authenticateToken, userController.getById);
-routes.put("/user/", authenticateToken, userController.update);
+routes.put("/user/:id", authenticateToken, userController.update);
 routes.put("/user/:id", authenticateToken, userController.delete);
 
 // LIVE -----------------------------------------------------------------------------------
