@@ -7,6 +7,7 @@ module.exports = {
   async create(request, response) {
     try {
       const live = request.body;
+      const { id } = request.params;
 
       await LiveModel.create(live);
       response.status(200).json("Live criada com sucesso.");
@@ -20,7 +21,7 @@ module.exports = {
     try {
       const filters = request.query;
       const result = await LiveModel.read(filters);
-      
+
       return response.status(200).json(result);
     } catch (error) {
       console.warn(error);
@@ -34,7 +35,10 @@ module.exports = {
       const foundLive = await LiveModel.getById(id);
 
       if (!foundLive) {
-      console.log("🚀 ~ file: liveController.js ~ line 38 ~ read ~ filters", filters)
+        console.log(
+          "🚀 ~ file: liveController.js ~ line 38 ~ read ~ filters",
+          filters
+        );
         throw new Error("Live não encontrada.");
       } else {
         await LiveModel.delete(id);
@@ -62,7 +66,7 @@ module.exports = {
       const { id } = request.params;
       const live = request.body;
 
-      const res = await LiveModel.update(live);
+      const res = await LiveModel.update(live, id);
       if (res !== 1) {
         return response.status(400).json("Live não encontrada!");
       } else {

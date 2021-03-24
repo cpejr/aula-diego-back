@@ -19,9 +19,9 @@ module.exports = {
     return response;
   },
 
-  async update(live) {
+  async update(live, live_id) {
     const response = await connection("live")
-      .where({ id: live.id })
+      .where({ id: live_id })
       .update(live);
     return response;
   },
