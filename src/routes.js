@@ -46,6 +46,7 @@ const fileLessonController = require("./controllers/fileLessonController");
 const videoLessonController = require("./controllers/videoLessonController");
 const livePresenceController = require("./controllers/livePresenceController");
 const partnerController = require("./controllers/partnerController");
+const questioncontroller = require("./controllers/questionController");
 //const fileController = require("./controllers/fileController");
 
 // IMPORT VIEWS -------------------------------------------------------------------------
@@ -285,6 +286,13 @@ routes.get("/sendemail", (response, replyTo, text) => {
       response.send(error);
     });
 });
+
+//QUESTIONS -----------------------------------------------------------------
+routes.post("/question", authenticateToken, questioncontroller.create);
+routes.get("/question/:id", authenticateToken, questioncontroller.getById);
+routes.get("/question", authenticateToken, questioncontroller.read);
+routes.put("/question", authenticateToken, questioncontroller.update);
+routes.put("/question/:id", authenticateToken, questioncontroller.delete);
 
 //COMPLEX ROUTES ------------------------------------------------------------
 routes.post("/lesson_create", authenticateToken, createLesson.createLesson);
