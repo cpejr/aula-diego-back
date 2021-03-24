@@ -165,7 +165,7 @@ routes.post(
 );
 routes.get("/live", authenticateToken, liveController.read);
 routes.get("/live/:id", authenticateToken, liveController.getById);
-routes.put("/live", authenticateToken, liveController.update);
+routes.put("/live/:id", authenticateToken, liveController.update);
 routes.delete("/live/:id", authenticateToken, liveController.delete);
 
 routes.post(
