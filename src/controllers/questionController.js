@@ -27,8 +27,7 @@ module.exports = {
     }
   },
   async read(req, res) {
-    const filters = req.params;
-
+    const filters = req.query;
     try {
       const questions = await QuestionModel.read(filters);
 
