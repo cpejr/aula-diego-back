@@ -1,8 +1,11 @@
 const UserModel = require("../models/UserModel");
 const FirebaseModel = require("../models/FirebaseModel");
+const LivePresenceModel = require("../models/LivePresenceModel");
+
 const { v4: uuidv4 } = require("uuid");
 var datetime = require("node-datetime");
 const connection = require("../database/connection");
+const LessonPresenceModel = require("../models/LessonPresenceModel");
 
 module.exports = {
   async create(request, response) {
@@ -143,6 +146,35 @@ module.exports = {
       }
     } catch (error) {
       console.warn(error);
+      response.status(500).json("internal server error ");
+    }
+  },
+  // extra functions:
+
+  async getScore(request, response) {
+    try {
+      const { user_id } = request.body;
+
+      const totalLives = await LivePresenceModel.getLiveCount(user_id);
+      const totalLessons = await LessonPresenceModel.getLessonCount(user_id);
+
+      const watchedLives = await LivePresenceModel.read({
+        user_id,
+        confirmation: true,
+      });
+      const completedLessons = await LessonPresenceModel.read({
+        user_id,
+        confirmation: true,
+      });
+
+      let score =
+        ((watchedLives.length + completedLessons.length) /
+          (totalLives + totalLessons)) *
+        1000;
+      score = score.toFixed(2);
+      response.status(200).json({ score });
+    } catch (error) {
+      console.warn(error.message);
       response.status(500).json("internal server error ");
     }
   },

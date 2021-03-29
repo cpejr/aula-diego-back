@@ -171,7 +171,7 @@ routes.delete("/live/:id", authenticateToken, liveController.delete);
 routes.post(
   "/score",
   // authenticateToken,
-  livePresenceController.getScore
+  userController.getScore
 );
 // PARTNERS -----------------------------------------------------------------------------------
 
