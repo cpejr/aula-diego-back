@@ -108,7 +108,7 @@ routes.delete(
 
 // OCCUPATION -------------------------------------------------------------------------------
 routes.post("/occupation", authenticateToken, occupationController.create);
-routes.get("/occupation", authenticateToken, occupationController.getAll);
+routes.get("/occupation", authenticateToken, occupationController.read);
 routes.get("/occupation/:id", authenticateToken, occupationController.getById);
 routes.get("/occupation", authenticateToken, occupationController.update);
 routes.put("/occupation/:id", authenticateToken, occupationController.delete);
