@@ -10,13 +10,9 @@ module.exports = {
       .where(filters)
       .andWhere("user.is_deleted", false)
       .andWhere("class.is_deleted", false)
-      .join("user", "class_presence.user_id", "user.id")
-      .join("class", "class_presence.class_id", "class.id")
-      .select(
-        "class.*",
-        "user.name as user_name",
-        "user.registration as user_registration"
-      );
+      .join("user", "user_class.user_id", "user.id")
+      .join("class", "user_class.class_id", "class.id")
+      .select("class.name as class_name", "user.name as user_name");
     return response;
   },
   async update(userClass) {
@@ -28,8 +24,8 @@ module.exports = {
   async delete(class_id, user_id) {
     const response = await connection("user_class")
       .where({
-        "class_id": class_id,
-        "user_id": user_id
+        class_id: class_id,
+        user_id: user_id,
       })
       .del();
     return response;

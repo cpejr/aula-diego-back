@@ -41,9 +41,8 @@ module.exports = {
 
   async read(request, response) {
     try {
-      console.log("filters");
       const filters = request.query;
-      const result = await LivePresenceModel.read({});
+      const result = await LivePresenceModel.read(filters);
       return response.status(200).json(result);
     } catch (error) {
       console.warn(error);
