@@ -97,26 +97,4 @@ module.exports = {
       response.status(500).json("internal server error ");
     }
   },
-
-  // extra functions:
-
-  async getScore(request, response) {
-    try {
-      const { user_id } = request.body;
-
-      const totalLives = await LivePresenceModel.getLiveCount(user_id);
-
-      const watchedLives = await LivePresenceModel.read({
-        user_id,
-        confirmation: true,
-      });
-
-      const score = `${(watchedLives.length / totalLives) * 100000} XP`;
-
-      response.status(200).json({ score });
-    } catch (error) {
-      console.warn(error.message);
-      response.status(500).json("internal server error ");
-    }
-  },
 };
