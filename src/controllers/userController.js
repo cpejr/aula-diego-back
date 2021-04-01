@@ -72,13 +72,14 @@ module.exports = {
     try {
       const user = request.body;
       const loggedUser = request.session;
+      const { id } = request.params;
 
       if (loggedUser.id != user.id && loggedUser.type == "student")
         return response
           .status(403)
           .json("Você não tem permissão para realizar esta operação");
 
-      const res = await UserModel.update(user);
+      const res = await UserModel.update(user, id);
 
       if (res !== 1) {
         return response.status(404).json("Usuário não encontrado!");

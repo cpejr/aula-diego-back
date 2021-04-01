@@ -14,14 +14,24 @@ module.exports = {
   async read(filters) {
     const response = await connection("live")
       .where(filters)
-      .andWhere({ is_deleted: false })
-      .select("*");
+      .andWhere("live.is_deleted", false)
+      .join("course", "live.course_id", "course.id")
+      .join("organization", "course.organization_id", "organization.id")
+      .select(
+        "live.id as id",
+        "live.name as name",
+        "live.date as date",
+        "course.id as course_id",
+        "course.name as course_name",
+        "organization.id as organization_id",
+        "organization.name as organization_name"
+      );
     return response;
   },
 
-  async update(live) {
+  async update(live, live_id) {
     const response = await connection("live")
-      .where({ id: live.id })
+      .where({ id: live_id })
       .update(live);
     return response;
   },

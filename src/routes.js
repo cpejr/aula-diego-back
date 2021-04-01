@@ -109,7 +109,7 @@ routes.delete(
 
 // OCCUPATION -------------------------------------------------------------------------------
 routes.post("/occupation", authenticateToken, occupationController.create);
-routes.get("/occupation", authenticateToken, occupationController.getAll);
+routes.get("/occupation", authenticateToken, occupationController.read);
 routes.get("/occupation/:id", authenticateToken, occupationController.getById);
 routes.put("/occupation", authenticateToken, occupationController.update);
 routes.put("/occupation/:id", authenticateToken, occupationController.delete);
@@ -138,6 +138,7 @@ routes.put("/class/:id", authenticateToken, classController.delete);
 //routes.post("/file", authenticateToken, fileController.create);
 //routes.get("/file/:id", authenticateToken, fileController.getById);
 routes.get("/file_get/:id", authenticateToken, fileController.getFile);
+routes.post("/file_upload", authenticateToken, fileController.uploadFile)
 // routes.put("/file/:id", authenticateToken, fileController.update);
 // routes.put("/file/:id", authenticateToken, fileController.delete);
 
@@ -152,7 +153,7 @@ routes.delete("/lesson/:id", authenticateToken, lessonController.delete);
 routes.post("/user", authenticateOptionalToken, userController.create);
 routes.get("/user", authenticateToken, userController.read);
 routes.get("/user/:id", authenticateToken, userController.getById);
-routes.put("/user/", authenticateToken, userController.update);
+routes.put("/user/:id", authenticateToken, userController.update);
 routes.put("/user/:id", authenticateToken, userController.delete);
 
 // LIVE -----------------------------------------------------------------------------------
@@ -165,7 +166,7 @@ routes.post(
 );
 routes.get("/live", authenticateToken, liveController.read);
 routes.get("/live/:id", authenticateToken, liveController.getById);
-routes.put("/live", authenticateToken, liveController.update);
+routes.put("/live/:id", authenticateToken, liveController.update);
 routes.delete("/live/:id", authenticateToken, liveController.delete);
 
 routes.post(
@@ -173,14 +174,6 @@ routes.post(
   // authenticateToken,
   userController.getScore
 );
-// PARTNERS -----------------------------------------------------------------------------------
-
-routes.post("/partner", authenticateToken, partnerController.create);
-routes.get("/partner", authenticateToken, partnerController.read);
-routes.get("/partner/:id", authenticateToken, partnerController.getById);
-routes.put("/partner", authenticateToken, partnerController.update);
-routes.delete("/partner/:id", authenticateToken, partnerController.delete);
-
 //SESSION ---------------------------------------------------------------------------------
 
 routes.post("/login", sessionController.signin);
@@ -296,7 +289,6 @@ routes.put("/question/:id", authenticateToken, questioncontroller.delete);
 
 //COMPLEX ROUTES ------------------------------------------------------------
 routes.post("/lesson_create", authenticateToken, createLesson.createLesson);
-routes.post("/lesson_upload", authenticateToken, createLesson.uploadFile);
 routes.post("/class_create", authenticateToken, createClass.createClass);
 
 module.exports = routes;

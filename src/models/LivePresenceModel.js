@@ -13,12 +13,15 @@ module.exports = {
       .join("user", "live_presence.user_id", "user.id")
       .join("live", "live_presence.live_id", "live.id")
       .join("course", "live.course_id", "course.id")
+      .join("class", "live.course_id", "class.course_id")
       .distinct("live.id")
       .select(
         "live.id as live_id",
+        "live.name as live_name",
         "live.description as live_description",
         "course.id as course_id",
         "course.name as course_name",
+        "class.name as class_name",
         "user.name as user_name",
         "user.registration as user_registration",
         "user.id as user_id"
@@ -45,10 +48,11 @@ module.exports = {
     return numLives;
   },
   async getAudience(id) {
-    const response = await connection(
-      "live_presence"
-    ).count(/*"corfirmation",
-      { as: true } || */ "live_id", { as: id });
+    const response = await connection("live_presence").count(
+      "confirmation",
+      { as: true } && "live_id",
+      { as: id }
+    );
     return response;
   },
   async update(livePresence) {
