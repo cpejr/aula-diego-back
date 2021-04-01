@@ -138,7 +138,7 @@ routes.put("/class/:id", authenticateToken, classController.delete);
 routes.post("/file", authenticateToken, fileController.create);
 //routes.get("/file/:id", authenticateToken, fileController.getById);
 routes.get("/file_get/:id", authenticateToken, fileController.getFile);
-routes.post("/file_upload", authenticateToken, fileController.uploadFile)
+routes.post("/file_upload", authenticateToken, fileController.uploadFile);
 // routes.put("/file/:id", authenticateToken, fileController.update);
 // routes.put("/file/:id", authenticateToken, fileController.delete);
 
@@ -158,7 +158,12 @@ routes.put("/user/:id", authenticateToken, userController.delete);
 
 // LIVE -----------------------------------------------------------------------------------
 
-routes.post("/live", authenticateToken, celebrate(liveValidator.create), liveController.create);
+routes.post(
+  "/live",
+  authenticateToken,
+  celebrate(liveValidator.create),
+  liveController.create
+);
 routes.get("/live", authenticateToken, liveController.read);
 routes.get("/live/:id", authenticateToken, liveController.getById);
 routes.put("/live/:id", authenticateToken, liveController.update);
