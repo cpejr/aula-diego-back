@@ -1,13 +1,31 @@
 const FileModel = require("../models/FileModel");
 const multer = require("../middlewares/multer");
+const { v4: uuidv4 } = require("uuid");
 const path = require("path")
 
 module.exports = {
   async create(request, response) {
     try {
-      const file = request.body;
-      await FileModel.create(file);
-      response.status(200).json("Arquivo criado com sucesso.");
+      const data = request.body;
+      const fileType = data.file_type.match(/.+(?=\/)/)[0];
+      const fileExtension = data.file_type.match(/(?<=\/).+/)[0];
+      const file_id = uuidv4();
+
+      if (fileType !== "image") {
+        console.warn('Not a image');
+        response.status(500).json("Internal server error");
+      }
+
+      const image = {
+        id: file_id,
+        name: data.file_name,
+        type: fileExtension,
+        path: `${file_id}.${fileExtension}`,
+        user_id: data.user_id
+      }
+
+      await FileModel.create(image);
+      response.status(200).json({file_id: file_id});
     } catch (error) {
       console.log(error.message);
       response.status(500).json("Internal server error.");

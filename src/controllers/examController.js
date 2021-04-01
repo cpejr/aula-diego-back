@@ -1,16 +1,11 @@
-const ClassModel = require("../models/ClassModel");
-const LiveModel = require("../models/LiveModel");
-const { v4: uuidv4 } = require("uuid");
-var datetime = require("node-datetime");
+const examModel = require("../models/ExamModel");
 
 module.exports = {
   async create(request, response) {
     try {
-      const live = request.body;
-      const { id } = request.params;
-
-      await LiveModel.create(live);
-      response.status(200).json("Live criada com sucesso.");
+      const exam = request.body;
+      await examModel.create(exam);
+      response.status(200).json("Prova criada com sucesso.");
     } catch (error) {
       console.log(error.message);
       response.status(500).json("Internal server error.");
@@ -20,7 +15,7 @@ module.exports = {
   async read(request, response) {
     try {
       const filters = request.query;
-      const result = await LiveModel.read(filters);
+      const result = await examModel.read(filters);
 
       return response.status(200).json(result);
     } catch (error) {
@@ -32,13 +27,13 @@ module.exports = {
   async delete(request, response) {
     try {
       const { id } = request.params;
-      const foundLive = await LiveModel.getById(id);
+      const foundExam = await examModel.getById(id);
 
-      if (!foundLive) {
-        throw new Error("Live não encontrada.");
+      if (!foundExam) {
+        throw new Error("Prova não encontrada.");
       } else {
-        await LiveModel.delete(id);
-        response.status(200).json("Live deletada com sucesso.");
+        await examModel.delete(id);
+        response.status(200).json("Prova deletada com sucesso.");
       }
     } catch (error) {
       console.log(error.message);
@@ -49,9 +44,9 @@ module.exports = {
   async getById(request, response) {
     try {
       const { id } = request.params;
-      const live = await LiveModel.getById(id);
+      const exam = await examModel.getById(id);
 
-      return response.status(200).json(live);
+      return response.status(200).json(exam);
     } catch (error) {
       console.log(error.message);
       response.status(500).json("Internal server error.");
@@ -60,13 +55,13 @@ module.exports = {
   async update(request, response) {
     try {
       const { id } = request.params;
-      const live = request.body;
+      const exam = request.body;
 
-      const res = await LiveModel.update(live, id);
+      const res = await examModel.update(exam, id);
       if (res !== 1) {
-        return response.status(400).json("Live não encontrada!");
+        return response.status(400).json("Prova não encontrada!");
       } else {
-        return response.status(200).json("Live alterada com sucesso ");
+        return response.status(200).json("Prova alterada com sucesso ");
       }
     } catch (error) {
       console.log(error.message);
