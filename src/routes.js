@@ -109,7 +109,7 @@ routes.delete(
 
 // OCCUPATION -------------------------------------------------------------------------------
 routes.post("/occupation", authenticateToken, occupationController.create);
-routes.get("/occupation", authenticateToken, occupationController.getAll);
+routes.get("/occupation", authenticateToken, occupationController.read);
 routes.get("/occupation/:id", authenticateToken, occupationController.getById);
 routes.put("/occupation", authenticateToken, occupationController.update);
 routes.put("/occupation/:id", authenticateToken, occupationController.delete);
@@ -174,7 +174,11 @@ routes.delete("/exam/:id", authenticateToken, examController.delete);
 
 // SCORE ------------------------------
 
-routes.post("/score",  authenticateToken, livePresenceController.getScore);
+routes.post(
+  "/score",
+  // authenticateToken,
+  userController.getScore
+);
 
 //SESSION ---------------------------------------------------------------------------------
 

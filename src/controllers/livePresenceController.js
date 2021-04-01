@@ -41,9 +41,8 @@ module.exports = {
 
   async read(request, response) {
     try {
-      console.log("filters");
       const filters = request.query;
-      const result = await LivePresenceModel.read({});
+      const result = await LivePresenceModel.read(filters);
       return response.status(200).json(result);
     } catch (error) {
       console.warn(error);
@@ -93,28 +92,6 @@ module.exports = {
 
       const result = await LivePresenceModel.delete(filters);
       response.status(200).json("Presença em live apagada com sucesso!");
-    } catch (error) {
-      console.warn(error.message);
-      response.status(500).json("internal server error ");
-    }
-  },
-
-  // extra functions:
-
-  async getScore(request, response) {
-    try {
-      const { user_id } = request.body;
-
-      const totalLives = await LivePresenceModel.getLiveCount(user_id);
-
-      const watchedLives = await LivePresenceModel.read({
-        user_id,
-        confirmation: true,
-      });
-
-      const score = `${(watchedLives.length / totalLives) * 100000} XP`;
-
-      response.status(200).json({ score });
     } catch (error) {
       console.warn(error.message);
       response.status(500).json("internal server error ");

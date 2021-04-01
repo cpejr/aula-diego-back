@@ -14,18 +14,34 @@ module.exports = {
   },
   async read(filters) {
     const response = await connection("occupation")
+      .join("organization", "occupation.organization_id", "organization.id")
       .where(filters)
-      .andWhere({ is_deleted: false })
-      .select("*");
+      .andWhere({
+        "occupation.is_deleted": false,
+        "organization.is_deleted": false,
+      })
+      .select(
+        "occupation.id",
+        "occupation.name",
+        "occupation.description",
+        "organization.id as organization_id",
+        "organization.name as organization_name"
+      )
+      .orderBy("organization_name", "asc");
+
     return response;
   },
   async getAll() {
     const response = await connection("occupation")
       .join("organization", "occupation.organization_id", "organization.id")
-      .where({ "occupation.is_deleted": false, "organization.is_deleted": false })
-      .select("occupation.id", 
-        "occupation.name", 
-        "occupation.description", 
+      .where({
+        "occupation.is_deleted": false,
+        "organization.is_deleted": false,
+      })
+      .select(
+        "occupation.id",
+        "occupation.name",
+        "occupation.description",
         "organization.name as organization_name"
       );
     return response;
