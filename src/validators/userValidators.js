@@ -1,7 +1,7 @@
 const { Segments, Joi } = require("celebrate");
 const { string } = require("joi");
 const { integer } = require("joi");
-const phoneJoi = Joi.extend(require('joi-phone-number'));
+const phoneJoi = Joi.extend(require("joi-phone-number"));
 
 const userValidator = {};
 
@@ -9,20 +9,23 @@ userValidator.create = {
   [Segments.BODY]: Joi.object().keys({
     name: Joi.string().required(),
     email: Joi.string().email().required(),
-    registration: Joi.number().integer().required(),
     birthdate: Joi.string().required(),
-    phone: phoneJoi.string().phoneNumber({ defaultCountry: 'BR', format: 'national'}).required(),
+    phone: phoneJoi
+      .string()
+      .phoneNumber({ defaultCountry: "BR", format: "national" })
+      .required(),
     organization_id: Joi.string().uuid().required(),
     occupation_id: Joi.string().uuid().required(),
-    type: Joi.string().default('student'),
-    status: Joi.string().default('pending'),
+    password: Joi.string().required(),
+    type: Joi.string().default("student"),
+    status: Joi.string().default("pending"),
   }),
 };
 
 userValidator.forgottenPassword = {
   [Segments.BODY]: Joi.object().keys({
-      email: Joi.string().email().required(),
-  })
+    email: Joi.string().email().required(),
+  }),
 };
 
 userValidator.uptade = {

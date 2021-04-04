@@ -69,12 +69,7 @@ routes.get("/", (request, response) => {
 });
 
 // USUÁRIO -------------------------------------------------------------------------------
-routes.post(
-  "/newuser",
-  authenticateOptionalToken,
-  celebrate(userValidator.create),
-  userController.create
-);
+routes.post("/newuser", celebrate(userValidator.create), userController.create);
 routes.post(
   "/forgottenPassword",
   celebrate(userValidator.forgottenPassword),
@@ -90,7 +85,7 @@ routes.put("/user/:id", authenticateToken, userController.update);
 
 // ORGANIZATION -------------------------------------------------------------------------
 routes.post("/organization", authenticateToken, organizationController.create);
-routes.get("/organization", authenticateToken, organizationController.read);
+routes.get("/organization", organizationController.read);
 routes.get(
   "/organization/:id",
   authenticateToken,
@@ -109,7 +104,7 @@ routes.delete(
 
 // OCCUPATION -------------------------------------------------------------------------------
 routes.post("/occupation", authenticateToken, occupationController.create);
-routes.get("/occupation", authenticateToken, occupationController.read);
+routes.get("/occupation", occupationController.read);
 routes.get("/occupation/:id", authenticateToken, occupationController.getById);
 routes.put("/occupation", authenticateToken, occupationController.update);
 routes.put("/occupation/:id", authenticateToken, occupationController.delete);
