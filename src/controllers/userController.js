@@ -24,7 +24,7 @@ module.exports = {
         .first();
       const registration = year * 10000 + count;
       registration.toString();
-      user.registrarion = registration;
+      user.registration = registration;
 
       firebaseUid = await FirebaseModel.createNewUser(
         user.email,
@@ -35,7 +35,7 @@ module.exports = {
 
       user.firebase_id = firebaseUid;
 
-      const response = await UserModel.create(user);
+      const res = await UserModel.create(user);
       return response.status(200).json("Usuário Criado com succeso!");
     } catch (error) {
       if (firebaseUid) {
