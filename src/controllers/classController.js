@@ -18,7 +18,7 @@ module.exports = {
     try {
       const filters = request.query;
 
-      const result = await ClassModel.getAll(filters);
+      const result = await ClassModel.read(filters);
       return response.status(200).json(result);
     } catch (error) {
       console.warn(error);

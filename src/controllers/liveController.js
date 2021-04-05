@@ -7,7 +7,6 @@ module.exports = {
   async create(request, response) {
     try {
       const live = request.body;
-      const { id } = request.params;
 
       await LiveModel.create(live);
       response.status(200).json("Live criada com sucesso.");
