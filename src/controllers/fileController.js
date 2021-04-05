@@ -8,7 +8,7 @@ module.exports = {
     try {
       const data = request.body;
       const fileType = data.file_type.match(/.+(?=\/)/)[0];
-      const fileExtension = data.file_type.match(/(?<=\/).+/)[0];
+      const fileExtension = data.file_original.match(/(?<=\.).+/)[0];
       const file_id = uuidv4();
 
       if (fileType !== "image") {

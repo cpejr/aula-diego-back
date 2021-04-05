@@ -127,7 +127,7 @@ routes.get("/class", authenticateToken, classController.read);
 routes.get("/class/:id", authenticateToken, classController.getById);
 routes.get("/class/users/:id", authenticateToken, classController.getStudents);
 routes.put("/class", authenticateToken, classController.update);
-routes.put("/class/:id", authenticateToken, classController.delete);
+routes.delete("/class/:id", authenticateToken, classController.delete);
 
 // // FILE ------------------------------------------------------------------------------
 routes.post("/file", authenticateToken, fileController.create);
@@ -245,11 +245,7 @@ routes.delete(
 // userClass
 routes.post("/class/user", authenticateToken, userClassController.create);
 routes.get("/class/user", authenticateToken, userClassController.read);
-routes.delete(
-  "/class/user/:class_id/:user_id",
-  authenticateToken,
-  userClassController.delete
-);
+routes.delete("/class/user/:class_id/:user_id", authenticateToken, userClassController.delete);
 
 //ENVIAR EMAIL ----------------------------------------------------------------------
 routes.get("/sendemail", (response, replyTo, text) => {
