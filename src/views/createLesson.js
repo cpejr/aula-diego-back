@@ -6,7 +6,7 @@ module.exports = {
   async createLesson(request, response) {
     try {
       const data = request.body;
-      const files = request.body.files;
+
       let fileIds = [];
 
       const lesson = {
@@ -15,13 +15,18 @@ module.exports = {
         course_id: data.course_id,
       };
 
-      const file = {
-        user_id: data.user_id,
-        path: "waiting",
-      };
-
       const lessonId = await lessonModel.create(lesson);
-      for await (let upload of files) {
+      for await (let filename of data.file_names) {
+        const fileName = filename.match(/.+(?=\.)/)[0];
+        const fileExt = filename.match(/(?<=\.).+/)[0];
+
+        const file = {
+          name: fileName,
+          type: fileExt,
+          path: `${fileName}.${fileExt}`,
+          user_id: data.user_id
+        };
+
         const fileId = await fileModel.create(file);
         const fileLesson = {
           lesson_id: lessonId[0],
@@ -31,6 +36,7 @@ module.exports = {
         await fileLessonModel.create(fileLesson);
         fileIds.push(fileId);
       }
+
       response.status(200).json(fileIds);
     } catch (error) {
       console.log(error.message);

@@ -22,10 +22,10 @@ module.exports = {
       );
     return response;
   },
-  async update(user, user_id) {
+  async update(id ,update) {
     const response = await connection("user")
-      .where({ id: user_id })
-      .update(user);
+      .where({ id: id })
+      .update(update);
     return response;
   },
   async delete(id) {
