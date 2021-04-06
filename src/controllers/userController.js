@@ -171,7 +171,7 @@ module.exports = {
         ((watchedLives.length + completedLessons.length) /
           (totalLives + totalLessons)) *
         1000;
-      if (!isNaN(score) && score.toString().indexOf(".") != -1) {
+      if (!isNaN(score)) {
         score = score.toFixed(2);
       } else {
         score = 0;
