@@ -31,6 +31,13 @@ module.exports = {
         user = user[0];
       }
 
+      if (user.status === "pending")
+        return response
+          .status(403)
+          .json({ message: "Usuário em análise para aprovação" });
+      if (user.status === "refused")
+        return response.status(403).json({ message: "Usuário recusado" });
+
       const accessToken = jwt.sign({ user }, process.env.AUTH_TOKEN_SECRET, {
         expiresIn: "30d",
       });
