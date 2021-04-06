@@ -24,7 +24,9 @@ module.exports = {
       database: process.env.DB_NAME,
       user:     process.env.DB_USER,
       password: process.env.DB_PASS,
-      ssl: true
+      ssl: {
+        rejectUnauthorized: false
+      }
     },
     dialectOptions: {
       ssl: true,
