@@ -165,14 +165,17 @@ module.exports = {
       });
       const completedLessons = await LessonPresenceModel.read({
         user_id,
-        confirmation: true,
       });
 
       let score =
         ((watchedLives.length + completedLessons.length) /
           (totalLives + totalLessons)) *
         1000;
-      score = score.toFixed(2);
+      if (!isNaN(score)) {
+        score = score.toFixed(2);
+      } else {
+        score = 0;
+      }
       response.status(200).json({ score });
     } catch (error) {
       console.warn(error.message);
