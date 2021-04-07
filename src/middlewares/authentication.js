@@ -36,7 +36,7 @@ module.exports = {
   },
 
   async isMaster(request, response, next) {
-    const type = request.session.user[0].type;
+    const type = request.session.user.type;
 
     if (type !== "master") {
       return response.status(401).json({ error: "Access denied!" });

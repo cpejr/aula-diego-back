@@ -22,9 +22,9 @@ module.exports = {
       );
     return response;
   },
-  async update(user, user_id) {
+  async update(user) {
     const response = await connection("user")
-      .where({ id: user_id })
+      .where({ id: user.id })
       .update(user);
     return response;
   },
