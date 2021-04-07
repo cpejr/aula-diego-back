@@ -75,13 +75,8 @@ routes.post(
   celebrate(userValidator.forgottenPassword),
   userController.forgottenPassword
 );
-routes.delete(
-  "/deleteUser/:user_id",
-  authenticateToken,
-  isMaster,
-  userController.delete
-);
-routes.put("/user/:id", authenticateToken, userController.update);
+routes.put("/user/:id", authenticateToken, isMaster, userController.delete);
+routes.put("/user", authenticateToken, userController.update);
 
 // ORGANIZATION -------------------------------------------------------------------------
 routes.post("/organization", authenticateToken, organizationController.create);
@@ -245,7 +240,11 @@ routes.delete(
 // userClass
 routes.post("/class/user", authenticateToken, userClassController.create);
 routes.get("/class/user", authenticateToken, userClassController.read);
-routes.delete("/class/user/:class_id/:user_id", authenticateToken, userClassController.delete);
+routes.delete(
+  "/class/user/:class_id/:user_id",
+  authenticateToken,
+  userClassController.delete
+);
 
 //ENVIAR EMAIL ----------------------------------------------------------------------
 routes.get("/sendemail", (response, replyTo, text) => {
