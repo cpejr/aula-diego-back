@@ -18,7 +18,11 @@ module.exports = {
   async read(request, response) {
     try {
       const filters = request.query;
-      const result = UserClassModel.read(filters);
+      const result = await UserClassModel.read(filters);
+      if (!result || result.length == 0)
+        return response
+          .status(404)
+          .json({ message: "Relation user class not found" });
       return response.status(200).json(result);
     } catch (error) {
       console.warn(error);
@@ -28,8 +32,11 @@ module.exports = {
 
   async delete(request, response) {
     try {
-      const result = await UserClassModel.delete(request.params.class_id, request.params.user_id);
-      console.log("deleting")
+      const result = await UserClassModel.delete(
+        request.params.class_id,
+        request.params.user_id
+      );
+      console.log("deleting");
       response.status(200).json("Aluno removido da turma com sucesso!");
     } catch (error) {
       console.warn(error.message);
