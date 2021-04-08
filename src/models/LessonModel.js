@@ -30,12 +30,13 @@ module.exports = {
     return response;
   },
 
-  async update(lesson) {
+  async update(lesson, lesson_id) {
     const response = await connection("lesson")
-      .where({ id: lesson.id })
+      .where({ id: lesson_id })
       .update(lesson);
     return response;
   },
+
   async delete(id) {
     const response = await connection("lesson")
       .where({ id })
