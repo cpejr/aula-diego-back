@@ -46,9 +46,9 @@ module.exports = {
       .select(
         "course.id",
         "course.description",
+        "course.organization_id",
         "organization.name as organization_name",
-        "course.name",
-        "organization.id as organization_id"
+        "course.name"
       );
     return response;
   },
