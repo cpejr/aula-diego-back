@@ -57,9 +57,10 @@ module.exports = {
 
   async update(request, response) {
     try {
+      const { id } = request.params;
       const newLesson = request.body;
 
-      const res = await lessonModel.update(newLesson);
+      const res = await lessonModel.update(newLesson, id);
       if (res !== 1) {
         return response.status(400).json("Aula não encontrada!");
       } else {

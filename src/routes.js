@@ -136,7 +136,7 @@ routes.post("/file_upload", authenticateToken, fileController.uploadFile);
 routes.post("/lesson", authenticateToken, lessonController.create);
 routes.get("/lesson", authenticateToken, lessonController.read);
 routes.get("/lesson/:id", authenticateToken, lessonController.getById);
-routes.put("/lesson", authenticateToken, lessonController.update);
+routes.put("/lesson/:id", authenticateToken, lessonController.update);
 routes.delete("/lesson/:id", authenticateToken, lessonController.delete);
 
 // USER -------------------------------------------------------------------------------

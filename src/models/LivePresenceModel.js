@@ -11,9 +11,9 @@ module.exports = {
       .andWhere("user.is_deleted", false)
       .andWhere("live.is_deleted", false)
       .join("user", "live_presence.user_id", "user.id")
-      .join("live", "live_presence.live_id", "live.id")
-      .join("course", "live.course_id", "course.id")
+      .join("live", "live.id", "live_presence.live_id")
       .join("class", "live.course_id", "class.course_id")
+      .join("course", "live.course_id", "course.id")
       .distinct("live.id")
       .select(
         "live.id as live_id",
@@ -28,13 +28,11 @@ module.exports = {
       );
     return present;
   },
-  /*async getLiveCount(user_id) {
-     
-      select count(l.id) as num_lives from user_class as uc
+  async getLiveCount(user_id) {
+    /*select count(l.id) as num_lives from user_class as uc
       inner join "class" c ON c.id = uc.class_id
       inner join live l on l.course_id = c.course_id
-      where uc.user_id = 'ccf04c46-cd1f-4cdc-b5f7-b8ad15610ed5'::uuid
-      
+      where uc.user_id = 'ccf04c46-cd1f-4cdc-b5f7-b8ad15610ed5'::uuid*/
 
     let numLives = await connection("user_class")
       .join("class", "user_class.class_id", "class.id")
@@ -46,7 +44,7 @@ module.exports = {
     numLives = numLives.count;
 
     return numLives;
-  }, */
+  },
   async getAudience(filters) {
     console.log(filters);
     const response = await connection("live_presence")
