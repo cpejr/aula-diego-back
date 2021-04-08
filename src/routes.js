@@ -238,10 +238,10 @@ routes.delete(
 );
 
 // userClass
-routes.post("/class/user", authenticateToken, userClassController.create);
-routes.get("/class/user", authenticateToken, userClassController.read);
+routes.post("/class_user", authenticateToken, userClassController.create);
+routes.get("/class_user", authenticateToken, userClassController.read);
 routes.delete(
-  "/class/user/:class_id/:user_id",
+  "/class_user/:class_id/:user_id",
   authenticateToken,
   userClassController.delete
 );
