@@ -28,13 +28,13 @@ module.exports = {
       );
     return present;
   },
-  async getLiveCount(user_id) {
-    /* 
+  /*async getLiveCount(user_id) {
+     
       select count(l.id) as num_lives from user_class as uc
       inner join "class" c ON c.id = uc.class_id
       inner join live l on l.course_id = c.course_id
       where uc.user_id = 'ccf04c46-cd1f-4cdc-b5f7-b8ad15610ed5'::uuid
-      */
+      
 
     let numLives = await connection("user_class")
       .join("class", "user_class.class_id", "class.id")
@@ -46,13 +46,13 @@ module.exports = {
     numLives = numLives.count;
 
     return numLives;
-  },
-  async getAudience(id) {
-    const response = await connection("live_presence").count(
-      "confirmation",
-      { as: true } && "live_id",
-      { as: id }
-    );
+  }, */
+  async getAudience(filters) {
+    console.log(filters);
+    const response = await connection("live_presence")
+      .where(filters)
+      .count("live_id");
+    console.log(response);
     return response;
   },
   async update(livePresence) {

@@ -114,7 +114,7 @@ routes.get(
   courseController.getByUserId
 );
 routes.put("/course", authenticateToken, courseController.update);
-routes.put("/course/:id", authenticateToken, courseController.delete);
+routes.delete("/course/:id", authenticateToken, courseController.delete);
 
 // CLASS ------------------------------------------------------------------------------
 routes.post("/class", authenticateToken, classController.create);
