@@ -1,4 +1,5 @@
 const UserModel = require("../models/UserModel");
+const organizationModel = require("../models/OrganizationModel");
 const FirebaseModel = require("../models/FirebaseModel");
 const admin = require("firebase-admin");
 const jwt = require("jsonwebtoken");
@@ -30,6 +31,24 @@ module.exports = {
         var user = await UserModel.read({ email: user_email });
         user = user[0];
       }
+      const organization = await organizationModel.getById(
+        user.organization_id
+      );
+
+      if (organization.is_deleted === true)
+        return response
+          .status(403)
+          .json({
+            message:
+              "Organização não possui mais acesso à plataforma. Entre em contato com o responsável",
+          });
+
+      if (user.status === "pending")
+        return response
+          .status(403)
+          .json({ message: "Usuário em análise para aprovação" });
+      if (user.status === "refused")
+        return response.status(403).json({ message: "Usuário recusado" });
 
       const accessToken = jwt.sign({ user }, process.env.AUTH_TOKEN_SECRET, {
         expiresIn: "30d",

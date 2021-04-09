@@ -75,13 +75,8 @@ routes.post(
   celebrate(userValidator.forgottenPassword),
   userController.forgottenPassword
 );
-routes.delete(
-  "/deleteUser/:user_id",
-  authenticateToken,
-  isMaster,
-  userController.delete
-);
-routes.put("/user/:id", authenticateToken, userController.update);
+routes.put("/user/:id", authenticateToken, isMaster, userController.delete);
+routes.put("/user", authenticateToken, userController.update);
 
 // ORGANIZATION -------------------------------------------------------------------------
 routes.post("/organization", authenticateToken, organizationController.create);
@@ -119,7 +114,7 @@ routes.get(
   courseController.getByUserId
 );
 routes.put("/course", authenticateToken, courseController.update);
-routes.put("/course/:id", authenticateToken, courseController.delete);
+routes.delete("/course/:id", authenticateToken, courseController.delete);
 
 // CLASS ------------------------------------------------------------------------------
 routes.post("/class", authenticateToken, classController.create);
@@ -141,7 +136,7 @@ routes.post("/file_upload", authenticateToken, fileController.uploadFile);
 routes.post("/lesson", authenticateToken, lessonController.create);
 routes.get("/lesson", authenticateToken, lessonController.read);
 routes.get("/lesson/:id", authenticateToken, lessonController.getById);
-routes.put("/lesson", authenticateToken, lessonController.update);
+routes.put("/lesson/:id", authenticateToken, lessonController.update);
 routes.delete("/lesson/:id", authenticateToken, lessonController.delete);
 
 // USER -------------------------------------------------------------------------------
@@ -244,9 +239,13 @@ routes.delete(
 );
 
 // userClass
-routes.post("/class/user", authenticateToken, userClassController.create);
-routes.get("/class/user", authenticateToken, userClassController.read);
-routes.delete("/class/user/:class_id/:user_id", authenticateToken, userClassController.delete);
+routes.post("/class_user", authenticateToken, userClassController.create);
+routes.get("/class_user", authenticateToken, userClassController.read);
+routes.delete(
+  "/class_user/:class_id/:user_id",
+  authenticateToken,
+  userClassController.delete
+);
 
 //ENVIAR EMAIL ----------------------------------------------------------------------
 routes.get("/sendemail", (response, replyTo, text) => {

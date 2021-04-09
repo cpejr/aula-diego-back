@@ -52,8 +52,8 @@ module.exports = {
 
   async getAudience(request, response) {
     try {
-      const { id } = request.params;
-      const result = await LivePresenceModel.getAudience(id);
+      const filters = request.query;
+      const result = await LivePresenceModel.getAudience(filters);
       return response.status(200).json(result);
     } catch (error) {
       console.log(error.message);

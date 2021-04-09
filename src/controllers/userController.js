@@ -70,15 +70,17 @@ module.exports = {
 
   async update(request, response) {
     try {
+
       const { id } = request.params;
       const update = request.body;
+
       const loggedUser = request.session;
 
       if (loggedUser.id != user.id && loggedUser.type == "student")
         return response
           .status(403)
           .json("Você não tem permissão para realizar esta operação");
-
+      
       const res = await UserModel.update(id, update);
 
       if (res !== 1) {
@@ -94,18 +96,19 @@ module.exports = {
 
   async delete(request, response) {
     try {
+      console.log(request);
       const { id } = request.params;
       const result = await UserModel.delete(id);
-      // const foundUser = await UserModel.getById(id);
+      const foundUser = await UserModel.getById(id);
 
-      // if (!foundUser) {
-      //   return response.status(404).json("Usuário não encontrado");
-      // }
+      if (!foundUser) {
+        return response.status(404).json("Usuário não encontrado");
+      }
 
-      // await FirebaseModel.deleteUser(foundUser.firebase_id);
+      await FirebaseModel.deleteUser(foundUser.firebase_id);
 
-      // await UserModel.delete(id);
-      if (res !== 1) {
+      await UserModel.delete(id);
+      if (result !== 1) {
         return response.status(400).json("Usuário não encontrado");
       } else {
         return response
@@ -165,14 +168,17 @@ module.exports = {
       });
       const completedLessons = await LessonPresenceModel.read({
         user_id,
-        confirmation: true,
       });
 
       let score =
         ((watchedLives.length + completedLessons.length) /
           (totalLives + totalLessons)) *
         1000;
-      score = score.toFixed(2);
+      if (!isNaN(score)) {
+        score = score.toFixed(2);
+      } else {
+        score = 0;
+      }
       response.status(200).json({ score });
     } catch (error) {
       console.warn(error.message);
