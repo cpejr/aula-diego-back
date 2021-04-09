@@ -1,3 +1,4 @@
+const knexfile = require("../../knexfile");
 const examModel = require("../models/ExamModel");
 
 module.exports = {
@@ -58,6 +59,23 @@ module.exports = {
       const exam = request.body;
 
       const res = await examModel.update(exam, id);
+      if (res !== 1) {
+        return response.status(400).json("Prova não encontrada!");
+      } else {
+        return response.status(200).json("Prova alterada com sucesso ");
+      }
+    } catch (error) {
+      console.log(error.message);
+      response.status(500).json("Internal server error.");
+    }
+  },
+  async close(request, response) {
+    try {
+      const { id } = request.params;
+      const extend = {end_date: Date.now() / 1000.0};
+
+      const res = await examModel.update(extend, id);
+
       if (res !== 1) {
         return response.status(400).json("Prova não encontrada!");
       } else {
