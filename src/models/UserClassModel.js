@@ -15,7 +15,8 @@ module.exports = {
       .select(
         "class.name as class_name",
         "user.name as user_name",
-        "class.course_id as course_id"
+        "class.course_id as course_id",
+        "user_class.*"        
       );
     return response;
   },
