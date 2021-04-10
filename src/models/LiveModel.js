@@ -21,6 +21,7 @@ module.exports = {
         "live.id as id",
         "live.name as name",
         "live.date as date",
+        "live.description as description",
         "course.id as course_id",
         "course.name as course_name",
         "organization.id as organization_id",
