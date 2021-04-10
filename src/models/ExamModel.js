@@ -8,6 +8,16 @@ module.exports = {
 
   async getById(id) {
     const response = await connection("exam").where({ id }).select("*").first();
+
+    const questions = response.body;
+    const keys = Object.keys(questions);
+
+    for (const key in keys) {
+      if (questions[key].alternatives !== undefined)
+        delete questions[key].alternatives.correct;
+    }
+
+    response.body = questions;
     return response;
   },
 
