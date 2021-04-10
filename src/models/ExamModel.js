@@ -13,10 +13,14 @@ module.exports = {
 
   async read(filters) {
     const response = await connection("exam")
+      .join("course", "exam.course_id", "course.id")
       .where(filters)
-      .andWhere({ is_deleted: false })
-      .andWhere({ open: true })
-      .select("*");
+      .andWhere("exam.is_deleted", false)
+      .andWhere("course.is_deleted", false)
+      .select(
+        "exam.*",
+        "course.name as course_name"
+      );
     return response;
   },
 

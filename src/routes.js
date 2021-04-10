@@ -165,6 +165,7 @@ routes.post("/exam", authenticateToken, examController.create);
 routes.get("/exam", authenticateToken, examController.read);
 routes.get("/exam/:id", authenticateToken, examController.getById);
 routes.put("/exam/:id", authenticateToken, examController.update);
+routes.put("/exam/close/:id", authenticateToken, examController.close);
 routes.delete("/exam/:id", authenticateToken, examController.delete);
 
 // SCORE ------------------------------
