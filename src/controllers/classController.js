@@ -1,6 +1,7 @@
 const ClassModel = require("../models/ClassModel");
-const { v4: uuidv4 } = require("uuid");
-//como classe é uma palavra reservada, usaremos turma
+const UserClassModel = require("../models/UserClassModel");
+const {v4: uuidv4} = require("uuid");
+// como classe é uma palavra reservada, usaremos turma
 module.exports = {
   async create(request, response) {
     try {
@@ -48,7 +49,7 @@ module.exports = {
 
   async getById(request, response) {
     try {
-      const { id } = request.params;
+      const {id} = request.params;
 
       const turma = await ClassModel.getById(id);
       return response.status(200).json(turma);
@@ -62,38 +63,47 @@ module.exports = {
       const turma = request.body;
       const loggedUser = request.session;
 
-      if (
-        !(
-          (loggedUser.organization == turma.organization &&
-            loggedUser.type != "student") ||
-          loggedUser.type == "master"
-        )
-      )
-        return response
-          .status(403)
-          .json("Você não tem permissão para realizar esta operação");
+      if (!((loggedUser.organization == turma.organization && loggedUser.type != "student") || loggedUser.type == "master")) 
+        return response.status(403).json("Você não tem permissão para realizar esta operação");
+      
+      const res = await ClassModel.update({
+        id: request.body.id,
+        name: request.body.name,
+        description: request.body.description,
+        organization_id: request.body.organization_id,
+        course_id: request.body.course_id
+      });
 
-      const res = await ClassModel.update(turma);
 
-      if (res !== 1) {
-        return response.status(404).json("Turma não encontrada!");
-      } else {
-        return response.status(200).json("Turma alterada com sucesso ");
+      // await UserClassModel.update(request.body.students);
+      let classStudents = [];
+      for await(student of request.body.students) {
+        classStudents.push({
+          user_id: student, 
+          class_id: request.body.id
+        })
+        // await UserClassModel.update({user_id: student, class_id: request.body.id})
       }
-    } catch (error) {
-      console.log(error.message);
-      return response.status(500).json("internal server error ");
-    }
-  },
+      await UserClassModel.update(classStudents);
 
-  async delete(request, response) {
-    try {
-      const { id } = request.params;
-      const result = await ClassModel.delete(id);
-      response.status(200).json("Turma apagada com sucesso!");
-    } catch (error) {
-      console.warn(error.message);
-      response.status(500).json("internal server error ");
+    if (res !== 1) {
+      return response.status(404).json("Turma não encontrada!");
+    } else {
+      return response.status(200).json("Turma alterada com sucesso ");
     }
-  },
-};
+  } catch (error) {
+    console.log(error.message);
+    return response.status(500).json("internal server error ");
+  }
+},
+
+async delete(request, response) {
+  try {
+    const {id} = request.params;
+    const result = await ClassModel.delete(id);
+    response.status(200).json("Turma apagada com sucesso!");
+  } catch (error) {
+    console.warn(error.message);
+    response.status(500).json("internal server error ");
+  }
+}};

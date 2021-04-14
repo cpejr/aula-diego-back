@@ -21,9 +21,13 @@ module.exports = {
     return response;
   },
   async update(userClass) {
-    const response = await connection("user_class")
-      .where({ id: userClass.id })
-      .update(userClass);
+    console.log(userClass);
+    await connection("user_class")
+    .where({
+      class_id: userClass[0].class_id,
+    })
+    .del();
+    const response = await connection("user_class").insert(userClass)
     return response;
   },
   async delete(class_id, user_id) {
