@@ -21,7 +21,6 @@ module.exports = {
     return response;
   },
   async update(userClass) {
-    console.log(userClass);
     await connection("user_class")
     .where({
       class_id: userClass[0].class_id,

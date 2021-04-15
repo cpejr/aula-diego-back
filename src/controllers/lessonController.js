@@ -35,7 +35,6 @@ module.exports = {
 
   async read(request, response) {
     try {
-      console.log("alou galera de cowboy")
       const filters = request.query;
       // const result = await LessonModel.read(filters);
       const result = await connection("lesson")
