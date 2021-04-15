@@ -87,7 +87,7 @@ routes.get(
   organizationController.getById
 );
 routes.put(
-  "/organization/:id",
+  "/organization",
   authenticateToken,
   organizationController.update
 );
