@@ -4,7 +4,7 @@ exports.up = (knex) => {
     table.string('name').notNullable();
     table.timestamp('start_date').notNullable();
     table.timestamp('end_date').notNullable();
-    table.json('body').notNullable();
+    table.json('questions').notNullable();
     table.uuid('course_id').notNullable();
     table.foreign('course_id').references('id').inTable('course').onDelete('NO ACTION');
     table.timestamp('created_at').defaultTo(knex.fn.now());

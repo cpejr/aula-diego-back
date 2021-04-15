@@ -1,4 +1,3 @@
-const knexfile = require("../../knexfile");
 const examModel = require("../models/ExamModel");
 
 module.exports = {

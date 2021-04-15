@@ -9,7 +9,7 @@ module.exports = {
   async getById(id) {
     const response = await connection("exam").where({ id }).select("*").first();
 
-    const questions = response.body;
+    const questions = response.questions;
     const keys = Object.keys(questions);
 
     for (const key in keys) {
@@ -17,7 +17,7 @@ module.exports = {
         delete questions[key].alternatives.correct;
     }
 
-    response.body = questions;
+    response.questions = questions;
     return response;
   },
 

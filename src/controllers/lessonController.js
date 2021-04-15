@@ -1,5 +1,4 @@
 const LessonModel = require("../models/LessonModel");
-const lessonModel = require("../models/LessonModel");
 
 module.exports = {
   async create(request, response) {
