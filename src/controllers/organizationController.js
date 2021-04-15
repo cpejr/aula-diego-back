@@ -78,7 +78,7 @@ module.exports = {
           .json("Você não tem permissão para realizar esta operação");
       }
 
-      const res = await OrganizationModel.update( organization, id);
+      const res = await OrganizationModel.update( organization );
 
       if (res !== 1) {
         return response.status(404).json("Organização não encontrada!");
