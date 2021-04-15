@@ -8,7 +8,7 @@ module.exports = {
       const result = await UserClassModel.create(userClass);
       return response
         .status(200)
-        .json("Alunno adicionado à turma com succeso!");
+        .json("Aluno adicionado à turma com succeso!");
     } catch (error) {
       console.warn(error.message);
       response.status(500).json("internal server error");

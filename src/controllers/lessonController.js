@@ -1,3 +1,4 @@
+const connection = require("../database/connection");
 const LessonModel = require("../models/LessonModel");
 const lessonModel = require("../models/LessonModel");
 
@@ -35,7 +36,11 @@ module.exports = {
   async read(request, response) {
     try {
       const filters = request.query;
-      const result = await LessonModel.read(filters);
+      // const result = await LessonModel.read(filters);
+      const result = await connection("lesson")
+      .join("file_lesson", "lesson.id", "file_lesson.lesson_id")
+      .where(filters)
+      .select("*")
       response.status(200).json(result);
     } catch (error) {
       console.log(error.message);
@@ -45,9 +50,21 @@ module.exports = {
 
   async getById(request, response) {
     try {
+      console.log("alsodksod");
       const { id } = request.params;
 
-      const lesson = await LessonModel.getById(id);
+      const lesson = await connection("lesson")
+      .join("file_lesson", "lesson.id", "file_lesson.lesson_id")
+      .join("file", "file.id", "file_lesson.file_id")
+      .where({ 
+        "lesson.is_deleted": false,
+        "file.is_deleted": false,
+        "lesson.id": id,
+       })
+      .select(
+        "lesson.*", "file.name as file_name", "file.type as type", "file.id as file_id"
+      )
+      .first()
       return response.status(200).json(lesson);
     } catch (error) {
       console.warn(error.message);
