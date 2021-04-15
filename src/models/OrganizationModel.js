@@ -19,9 +19,9 @@ module.exports = {
       .select("*");
     return response;
   },
-  async update(organization, organization_id) {
+  async update(organization) {
     const response = await connection("organization")
-      .where({ id: organization_id })
+      .where({ id: organization.id })
       .update(organization);
     return response;
   },
