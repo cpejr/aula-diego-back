@@ -11,7 +11,7 @@ module.exports = {
       const file_id = uuidv4();
 
       if (fileType !== "image") {
-        console.warn('Avatar is not a image');
+        console.warn("Avatar is not a image");
         response.status(500).json("Internal server error");
       }
 
@@ -20,19 +20,19 @@ module.exports = {
         name: data.file_name,
         type: fileExtension,
         path: `${file_id}.${fileExtension}`,
-        user_id: data.user_id
-      }
+        user_id: data.user_id,
+      };
 
       const organization = {
         name: data.name,
         description: data.description,
-        file_id: file_id
-      }
+        file_id: file_id,
+      };
 
       await FileModel.create(logo);
-      await OrganizationModel.create(organization)
-      
-      return response.status(200).json({file_id: file_id});
+      await OrganizationModel.create(organization);
+
+      return response.status(200).json({ file_id: file_id });
     } catch (error) {
       console.warn(error.message);
       response.status(500).json("Internal server error");
@@ -64,7 +64,6 @@ module.exports = {
     try {
       const organization = request.body;
       const { user } = request.session;
-      const { id } = request.params;
       console.log(organization);
 
       if (
@@ -78,7 +77,7 @@ module.exports = {
           .json("Você não tem permissão para realizar esta operação");
       }
 
-      const res = await OrganizationModel.update( organization, id);
+      const res = await OrganizationModel.update(organization);
 
       if (res !== 1) {
         return response.status(404).json("Organização não encontrada!");

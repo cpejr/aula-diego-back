@@ -65,18 +65,18 @@ const multer = require("./middlewares/multer");
 
 // TEST ROUTE ---------------------------------------------------------------------------
 routes.get("/", (request, response) => {
-  response.send("eae galerinha xdxxdxdxdxd");
+  response.send("🔥 server up and running");
 });
 
 // USUÁRIO -------------------------------------------------------------------------------
-routes.post("/newuser", celebrate(userValidator.create), userController.create);
+routes.post("/user", celebrate(userValidator.create), userController.create);
 routes.post(
   "/forgottenPassword",
   celebrate(userValidator.forgottenPassword),
   userController.forgottenPassword
 );
-routes.put("/user/:id", authenticateToken, isMaster, userController.delete);
-routes.put("/user", authenticateToken, userController.update);
+routes.put("/user", authenticateToken, userController.update); //UPDATE
+routes.put("/user/:id", authenticateToken, isMaster, userController.delete); //DELETE
 
 // ORGANIZATION -------------------------------------------------------------------------
 routes.post("/organization", authenticateToken, organizationController.create);
@@ -86,16 +86,12 @@ routes.get(
   authenticateToken,
   organizationController.getById
 );
+routes.put("/organization", authenticateToken, organizationController.update); //UPDATE
 routes.put(
   "/organization/:id",
   authenticateToken,
-  organizationController.update
-);
-routes.delete(
-  "/organization/:id",
-  authenticateToken,
   organizationController.delete
-);
+); //DELETE
 
 // OCCUPATION -------------------------------------------------------------------------------
 routes.post("/occupation", authenticateToken, occupationController.create);
