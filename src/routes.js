@@ -68,16 +68,6 @@ routes.get("/", (request, response) => {
   response.send("🔥 server up and running");
 });
 
-// USUÁRIO -------------------------------------------------------------------------------
-routes.post("/user", celebrate(userValidator.create), userController.create);
-routes.post(
-  "/forgottenPassword",
-  celebrate(userValidator.forgottenPassword),
-  userController.forgottenPassword
-);
-routes.put("/user", authenticateToken, userController.update); //UPDATE
-routes.put("/user/:id", authenticateToken, isMaster, userController.delete); //DELETE
-
 // ORGANIZATION -------------------------------------------------------------------------
 routes.post("/organization", authenticateToken, organizationController.create);
 routes.get("/organization", organizationController.read);
@@ -97,8 +87,8 @@ routes.put(
 routes.post("/occupation", authenticateToken, occupationController.create);
 routes.get("/occupation", occupationController.read);
 routes.get("/occupation/:id", authenticateToken, occupationController.getById);
-routes.put("/occupation", authenticateToken, occupationController.update);
-routes.put("/occupation/:id", authenticateToken, occupationController.delete);
+routes.put("/occupation", authenticateToken, occupationController.update); //UPDATE
+routes.put("/occupation/:id", authenticateToken, occupationController.delete); //DELETE
 
 // COURSE -------------------------------------------------------------------------------
 routes.post("/course", authenticateToken, isAdmin, courseController.create);
@@ -136,11 +126,21 @@ routes.put("/lesson/:id", authenticateToken, lessonController.update);
 routes.delete("/lesson/:id", authenticateToken, lessonController.delete);
 
 // USER -------------------------------------------------------------------------------
-routes.post("/user", authenticateOptionalToken, userController.create);
+routes.post(
+  "/user",
+  celebrate(userValidator.create),
+  authenticateOptionalToken,
+  userController.create
+);
 routes.get("/user", authenticateToken, userController.read);
 routes.get("/user/:id", authenticateToken, userController.getById);
-routes.put("/user/:id", authenticateToken, userController.update);
-routes.put("/user/:id", authenticateToken, userController.delete);
+routes.put("/user", authenticateToken, userController.update); //UPDATE
+routes.put("/user/:id", authenticateToken, isMaster, userController.delete); //DELETE
+routes.post(
+  "/forgottenPassword",
+  celebrate(userValidator.forgottenPassword),
+  userController.forgottenPassword
+);
 
 // LIVE -----------------------------------------------------------------------------------
 
