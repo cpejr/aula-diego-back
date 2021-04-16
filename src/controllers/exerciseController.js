@@ -1,11 +1,11 @@
-const examModel = require("../models/ExamModel");
+const exerciseModel = require("../models/ExerciseModel");
 
 module.exports = {
   async create(request, response) {
     try {
-      const exam = request.body;
-      await examModel.create(exam);
-      response.status(200).json("Prova criada com sucesso.");
+      const exercise = request.body;
+      await exerciseModel.create(exercise);
+      response.status(200).json("Atividade criada com sucesso.");
     } catch (error) {
       console.log(error.message);
       response.status(500).json("Internal server error.");
@@ -15,7 +15,7 @@ module.exports = {
   async read(request, response) {
     try {
       const filters = request.query;
-      const result = await examModel.read(filters);
+      const result = await exerciseModel.read(filters);
 
       return response.status(200).json(result);
     } catch (error) {
@@ -27,13 +27,13 @@ module.exports = {
   async delete(request, response) {
     try {
       const { id } = request.params;
-      const foundExam = await examModel.getById(id);
+      const foundExam = await exerciseModel.getById(id);
 
       if (!foundExam) {
-        throw new Error("Prova não encontrada.");
+        throw new Error("Atividade não encontrada.");
       } else {
-        await examModel.delete(id);
-        response.status(200).json("Prova deletada com sucesso.");
+        await exerciseModel.delete(id);
+        response.status(200).json("Atividade deletada com sucesso.");
       }
     } catch (error) {
       console.log(error.message);
@@ -44,9 +44,9 @@ module.exports = {
   async getById(request, response) {
     try {
       const { id } = request.params;
-      const exam = await examModel.getById(id);
+      const exercise = await exerciseModel.getById(id);
 
-      return response.status(200).json(exam);
+      return response.status(200).json(exercise);
     } catch (error) {
       console.log(error.message);
       response.status(500).json("Internal server error.");
@@ -55,13 +55,13 @@ module.exports = {
   async update(request, response) {
     try {
       const { id } = request.params;
-      const exam = request.body;
+      const exercise = request.body;
 
-      const res = await examModel.update(exam, id);
+      const res = await exerciseModel.update(exercise, id);
       if (res !== 1) {
-        return response.status(400).json("Prova não encontrada!");
+        return response.status(400).json("Atividade não encontrada!");
       } else {
-        return response.status(200).json("Prova alterada com sucesso ");
+        return response.status(200).json("Atividade alterada com sucesso ");
       }
     } catch (error) {
       console.log(error.message);
@@ -73,12 +73,12 @@ module.exports = {
       const { id } = request.params;
       const extend = {end_date: Date.now() / 1000.0};
 
-      const res = await examModel.update(extend, id);
+      const res = await exerciseModel.update(extend, id);
 
       if (res !== 1) {
-        return response.status(400).json("Prova não encontrada!");
+        return response.status(400).json("Atividade não encontrada!");
       } else {
-        return response.status(200).json("Prova alterada com sucesso ");
+        return response.status(200).json("Atividade alterada com sucesso ");
       }
     } catch (error) {
       console.log(error.message);

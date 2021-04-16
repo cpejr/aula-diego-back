@@ -45,7 +45,7 @@ const fileController = require("./controllers/fileController");
 const fileLessonController = require("./controllers/fileLessonController");
 const videoLessonController = require("./controllers/videoLessonController");
 const livePresenceController = require("./controllers/livePresenceController");
-const examController = require("./controllers/examController");
+const exerciseController = require("./controllers/exerciseController");
 const questionController = require("./controllers/questionController");
 const answerController = require("./controllers/answerController");
 
@@ -161,13 +161,13 @@ routes.delete("/live/:id", authenticateToken, liveController.delete);
 
 // EXAM --------------------------------------------------------------------------
 
-routes.post("/exam", authenticateToken, examController.create);
-routes.get("/exam", authenticateToken, examController.read);
-routes.get("/exam/:id", authenticateToken, examController.getById);
-routes.get("/exam/:id", authenticateToken, examController.getById);
-routes.put("/exam/:id", authenticateToken, examController.update);
-routes.put("/exam/close/:id", authenticateToken, examController.close);
-routes.delete("/exam/:id", authenticateToken, examController.delete);
+routes.post("/exercise", authenticateToken, exerciseController.create);
+routes.get("/exercise", authenticateToken, exerciseController.read);
+routes.get("/exercise/:id", authenticateToken, exerciseController.getById);
+routes.get("/exercise/:id", authenticateToken, exerciseController.getById);
+routes.put("/exercise/:id", authenticateToken, exerciseController.update);
+routes.put("/exerciseclose/:id", authenticateToken, exerciseController.close);
+routes.delete("/exercise/:id", authenticateToken, exerciseController.delete);
 
 // SCORE ------------------------------
 
@@ -295,7 +295,7 @@ routes.post("/answer", authenticateToken, answerController.create);
 routes.get("/answer/:id", authenticateToken, isAdmin, answerController.getById);
 routes.get("/answer", authenticateToken, isAdmin, answerController.read);
 routes.put("/answer", authenticateToken, answerController.update);
-routes.put("/answer/:id", authenticateToken, answerController.delete);
+routes.delete("/answer/:id", authenticateToken, answerController.delete);
 
 //COMPLEX ROUTES ------------------------------------------------------------
 routes.post("/lesson_create", authenticateToken, createLesson.createLesson);

@@ -8,14 +8,14 @@ module.exports = {
 
   async getById(id) {
     const response = await connection("answer")
-    .join("exam", "answer.exam_id", "exam.id")
+    .join("exercise", "answer.exercise_id", "exercise.id")
     .where("answer.id", id)
     .andWhere("answer.is_deleted", false)
     .andWhere("exam.is_deleted", false)
     .select(
       "answer.*",
-      "exam.name as name",
-      "exam.questions as questions"
+      "exercise.name as name",
+      "exercise.questions as questions"
     )
     .first();
 

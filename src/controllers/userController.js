@@ -105,8 +105,6 @@ module.exports = {
         return response.status(404).json("Usuário não encontrado");
       }
 
-      await FirebaseModel.deleteUser(foundUser.firebase_id);
-
       await UserModel.delete(id);
       if (result !== 1) {
         return response.status(400).json("Usuário não encontrado");

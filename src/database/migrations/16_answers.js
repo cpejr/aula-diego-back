@@ -1,8 +1,8 @@
 exports.up = (knex) => {
   return knex.schema.createTable('answer', (table) => {
     table.uuid('id').defaultTo(knex.raw('uuid_generate_v4()')).primary().notNullable();
-    table.uuid('exam_id').notNullable();
-    table.foreign('exam_id').references('id').inTable('exam').onDelete('NO ACTION');
+    table.uuid('exercise_id').notNullable();
+    table.foreign('exercise_id').references('id').inTable('exercise').onDelete('NO ACTION');
     table.uuid('user_id').notNullable();
     table.foreign('user_id').references('id').inTable('user').onDelete('NO ACTION');
     table.json('answers').notNullable();

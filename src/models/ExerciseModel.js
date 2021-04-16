@@ -1,13 +1,13 @@
 const connection = require("../database/connection");
 
 module.exports = {
-  async create(exam) {
-    const response = await connection("exam").insert(exam);
+  async create(exercise) {
+    const response = await connection("exercise").insert(exercise);
     return response;
   },
 
   async getById(id) {
-    const response = await connection("exam").where({ id }).select("*").first();
+    const response = await connection("exercise").where({ id }).select("*").first();
 
     const questions = response.questions;
     const keys = Object.keys(questions);
@@ -22,27 +22,27 @@ module.exports = {
   },
 
   async read(filters) {
-    const response = await connection("exam")
-      .join("course", "exam.course_id", "course.id")
+    const response = await connection("exercise")
+      .join("course", "exercise.course_id", "course.id")
       .where(filters)
-      .andWhere("exam.is_deleted", false)
+      .andWhere("exercise.is_deleted", false)
       .andWhere("course.is_deleted", false)
       .select(
-        "exam.*",
+        "exercise.*",
         "course.name as course_name"
       );
     return response;
   },
 
-  async update(exam, exam_id) {
-    const response = await connection("exam")
+  async update(exercise, exam_id) {
+    const response = await connection("exercise")
       .where({ id: exam_id })
-      .update(exam);
+      .update(exercise);
     return response;
   },
 
   async delete(id) {
-    const response = await connection("exam")
+    const response = await connection("exercise")
       .where({ id })
       .update({ is_deleted: true });
     return response;
