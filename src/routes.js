@@ -126,12 +126,7 @@ routes.put("/lesson/:id", authenticateToken, lessonController.update);
 routes.delete("/lesson/:id", authenticateToken, lessonController.delete);
 
 // USER -------------------------------------------------------------------------------
-routes.post(
-  "/user",
-  celebrate(userValidator.create),
-  authenticateOptionalToken,
-  userController.create
-);
+routes.post("/user", celebrate(userValidator.create), userController.create);
 routes.get("/user", authenticateToken, userController.read);
 routes.get("/user/:id", authenticateToken, userController.getById);
 routes.put("/user", authenticateToken, userController.update); //UPDATE
