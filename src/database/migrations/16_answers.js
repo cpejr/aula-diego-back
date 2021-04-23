@@ -7,6 +7,7 @@ exports.up = (knex) => {
     table.foreign('user_id').references('id').inTable('user').onDelete('NO ACTION');
     table.json('answers').notNullable();
     table.json('correction');
+    table.integer('grade');
     table.timestamp('created_at').defaultTo(knex.fn.now());
     table.timestamp('updated_at').defaultTo(knex.fn.now());
     table.bool('is_deleted').defaultTo(false); 
