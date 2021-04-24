@@ -86,11 +86,7 @@ routes.get(
   authenticateToken,
   organizationController.getById
 );
-routes.put(
-  "/organization",
-  authenticateToken,
-  organizationController.update
-);
+routes.put("/organization", authenticateToken, organizationController.update);
 routes.delete(
   "/organization/:id",
   authenticateToken,
@@ -168,14 +164,6 @@ routes.get("/exercise/:id", authenticateToken, exerciseController.getById);
 routes.put("/exercise/:id", authenticateToken, exerciseController.update);
 routes.put("/exerciseclose/:id", authenticateToken, exerciseController.close);
 routes.delete("/exercise/:id", authenticateToken, exerciseController.delete);
-
-// SCORE ------------------------------
-
-routes.post(
-  "/score",
-  // authenticateToken,
-  userController.getScore
-);
 
 //SESSION ---------------------------------------------------------------------------------
 
