@@ -12,7 +12,9 @@ module.exports = {
   async read(filters) {
     const response = await connection("user")
       .where(filters)
-      .andWhereNot({ "user.is_deleted": "true" })
+      .andWhere({ "user.is_deleted": "false" })
+      .andWhere({ "organization.is_deleted": "false" })
+      .andWhere({ "occupation.is_deleted": "false" })
       .join("organization", "organization.id", "user.organization_id")
       .join("occupation", "occupation.id", "user.occupation_id")
       .select(

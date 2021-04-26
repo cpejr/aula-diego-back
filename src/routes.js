@@ -107,6 +107,7 @@ routes.put("/occupation/:id", authenticateToken, occupationController.delete);
 // COURSE -------------------------------------------------------------------------------
 routes.post("/course", authenticateToken, isAdmin, courseController.create);
 routes.get("/course", authenticateToken, courseController.read);
+routes.get("/course/:id/all", authenticateToken, courseController.getByIdAll);
 routes.get("/course/:id", authenticateToken, courseController.getById);
 routes.get(
   "/course/user/:user_id",
