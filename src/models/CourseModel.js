@@ -19,10 +19,10 @@ module.exports = {
     return response;
   },
   async getByIdAll(id) {
-    const response = await connection("lesson").where("course_id", id).select("name", "created_at", knex.raw("'lesson' as type")).union([
-      connection("live").where("course_id", id).select("name", "created_at", knex.raw("'live' as type")),
-      connection("exercise").where("course_id", id).select("name", "created_at", knex.raw("'exercise' as type")),
-      connection("class").where("course_id", id).select("name", "created_at", knex.raw("'class' as type")),
+    const response = await connection("lesson").where("course_id", id).select("id", "name", "created_at as date", knex.raw("'lesson' as type")).union([
+      connection("live").where("course_id", id).select("id", "name", "date", knex.raw("'live' as type")),
+      connection("exercise").where("course_id", id).select("id", "name", "start_date as date", knex.raw("'exercise-start' as type")),
+      connection("exercise").where("course_id", id).select("id", "name", "end_date as date", knex.raw("'exercise-end' as type"))
     ])
 
     return response;
