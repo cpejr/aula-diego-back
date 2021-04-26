@@ -1,5 +1,6 @@
 const LessonPresenceModel = require("../models/LessonPresenceModel");
 const LivePresenceModel = require("../models/LivePresenceModel");
+const UserModel = require("../models/UserModel");
 
 module.exports = {
   async create(request, response) {
@@ -7,6 +8,11 @@ module.exports = {
       const lessonPresence = request.body;
 
       const response = await LessonPresenceModel.create(lessonPresence);
+
+      // gamification related:
+      const user = await UserModel.getById(lessonPresence.user_id);
+      await UserModel.update(lessonPresence.user_id, { score: user.score + 1 });
+
       return response.status(200).json("Presença em lição criada com succeso!");
     } catch (error) {
       console.warn(error.message);
