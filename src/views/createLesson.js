@@ -9,6 +9,8 @@ module.exports = {
     try {
       const data = request.body;
 
+      console.log(data)
+
       let fileIds = [];
 
       const lesson = {
@@ -27,30 +29,6 @@ module.exports = {
         }
 
         await videoLessonModel.create(videoLesson);
-      }
-
-      for await (let filename of data.file_names) {
-        const fileName = filename.match(/.+(?=\.)/)[0];
-        const fileExt = filename.match(/(?<=\.).+/)[0];
-        const fileId = uuidv4();
-
-        const file = {
-          id: fileId,
-          name: fileName,
-          type: fileExt,
-          path: `${fileId}.${fileExt}`,
-          user_id: data.user_id
-        };
-
-        await fileModel.create(file);
-
-        const fileLesson = {
-          lesson_id: lessonId[0],
-          file_id: fileId,
-        };
-
-        await fileLessonModel.create(fileLesson);
-        fileIds.push(fileId);
       }
 
       for await (let filename of data.file_names) {
