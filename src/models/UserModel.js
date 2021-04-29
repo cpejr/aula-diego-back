@@ -21,7 +21,8 @@ module.exports = {
         "user.*",
         "organization.name as organization_name",
         "occupation.name as occupation_name"
-      );
+      )
+      .orderBy('user.name', 'asc');
     return response;
   },
   async update(update) {
