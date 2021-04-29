@@ -35,6 +35,19 @@ module.exports = {
       response.status(500).json("internal server error");
     }
   },
+  async getByIdAll(request, response) {
+    try {
+      const { id } = request.params;
+      const course = await CourseModel.getById(id);
+      const content = await CourseModel.getByIdAll(id);
+      const entries = content.map(item => ({...item, course_name: course.name}))
+
+      return response.status(200).json(entries);
+    } catch (error) {
+      console.warn(error.message);
+      response.status(500).json("internal server error");
+    }
+  },
   async getByUserId(request, response) {
     try {
       const { user_id } = request.params;

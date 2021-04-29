@@ -1,4 +1,5 @@
 const connection = require("../database/connection");
+const knex = require("knex");
 
 module.exports = {
   async create(course) {
@@ -15,6 +16,15 @@ module.exports = {
         "organization.id as organization_id"
       )
       .first();
+    return response;
+  },
+  async getByIdAll(id) {
+    const response = await connection("lesson").where("course_id", id).select("id", "name", "created_at as date", knex.raw("'lesson' as type")).union([
+      connection("live").where("course_id", id).select("id", "name", "date", knex.raw("'live' as type")),
+      connection("exercise").where("course_id", id).select("id", "name", "start_date as date", knex.raw("'exercise-start' as type")),
+      connection("exercise").where("course_id", id).select("id", "name", "end_date as date", knex.raw("'exercise-end' as type"))
+    ])
+
     return response;
   },
   async getByUserId(user_id) {
@@ -44,11 +54,8 @@ module.exports = {
       .andWhereNot("course.is_deleted", "true")
       .join("organization", "organization.id", "course.organization_id")
       .select(
-        "course.id",
-        "course.description",
-        "course.organization_id",
-        "organization.name as organization_name",
-        "course.name"
+        "course.*",
+        "organization.name as organization_name"
       );
     return response;
   },

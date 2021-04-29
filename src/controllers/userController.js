@@ -103,8 +103,6 @@ module.exports = {
         return response.status(404).json("Usuário não encontrado");
       }
 
-      await FirebaseModel.deleteUser(foundUser.firebase_id);
-
       await UserModel.delete(id);
       if (result !== 1) {
         return response.status(400).json("Usuário não encontrado");
@@ -148,38 +146,6 @@ module.exports = {
       }
     } catch (error) {
       console.warn(error);
-      response.status(500).json("internal server error ");
-    }
-  },
-  // extra functions:
-
-  async getScore(request, response) {
-    try {
-      const { user_id } = request.body;
-
-      const totalLives = await LivePresenceModel.getLiveCount(user_id);
-      const totalLessons = await LessonPresenceModel.getLessonCount(user_id);
-
-      const watchedLives = await LivePresenceModel.read({
-        user_id,
-        confirmation: true,
-      });
-      const completedLessons = await LessonPresenceModel.read({
-        user_id,
-      });
-
-      let score =
-        ((watchedLives.length + completedLessons.length) /
-          (totalLives + totalLessons)) *
-        1000;
-      if (!isNaN(score)) {
-        score = score.toFixed(2);
-      } else {
-        score = 0;
-      }
-      response.status(200).json({ score });
-    } catch (error) {
-      console.warn(error.message);
       response.status(500).json("internal server error ");
     }
   },
