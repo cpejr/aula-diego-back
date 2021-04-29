@@ -70,8 +70,7 @@ module.exports = {
 
   async update(request, response) {
     try {
-      const { id } = request.params;
-      const update = request.body;
+      const user = request.body;
 
       const loggedUser = request.session;
 
@@ -80,7 +79,7 @@ module.exports = {
           .status(403)
           .json("Você não tem permissão para realizar esta operação");
 
-      const res = await UserModel.update(id, update);
+      const res = await UserModel.update(user);
 
       if (res !== 1) {
         return response.status(404).json("Usuário não encontrado!");
