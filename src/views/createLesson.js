@@ -9,8 +9,6 @@ module.exports = {
     try {
       const data = request.body;
 
-      console.log(data)
-
       let fileIds = [];
 
       const lesson = {
@@ -57,7 +55,7 @@ module.exports = {
 
       response.status(200).json(fileIds);
     } catch (error) {
-      console.log(error.message);
+
       response.status(500).json("Internal server error.");
     }
   }
