@@ -18,12 +18,12 @@ module.exports = {
   async delete(request, response) {
     try {
       const { id } = request.params;
-      const foundlesson = await lessonModel.getById(id);
+      const foundlesson = await LessonModel.getById(id);
 
       if (!foundlesson) {
         throw new Error("Aula não encontrada.");
       } else {
-        await lessonModel.delete(id);
+        await LessonModel.delete(id);
         response.status(200).json("Aula deletada com sucesso.");
       }
     } catch (error) {
