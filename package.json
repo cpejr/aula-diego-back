@@ -20,6 +20,7 @@
     "express": "^4.17.1",
     "firebase": "^7.23.0",
     "firebase-admin": "^9.4.1",
+    "handlebars": "^4.7.7",
     "joi": "^17.2.1",
     "joi-phone-number": "^5.0.0",
     "jsonwebtoken": "^8.5.1",
@@ -30,7 +31,9 @@
     "nodemailer": "^6.4.18",
     "nodemailer-express-handlebars": "^4.0.0",
     "path": "^0.12.7",
+    "pdf-creator-node": "^2.2.2",
     "pg": "^8.5.1",
+    "puppeteer": "^9.1.0",
     "react-uuid": "^1.0.2",
     "sqlite3": "^5.0.0",
     "uuid": "^8.3.1"
