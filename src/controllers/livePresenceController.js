@@ -7,7 +7,7 @@ const UserModel = require("../models/UserModel");
 module.exports = {
   async create(request, response) {
     try {
-      const livePresence = request.body; //user_id + live_id + confirmation_code + entry_time
+      const livePresence = request.body; //user_id + live_id + confirmation_code 
       const loggedUser = request.session.user;
 
       if (loggedUser.id != livePresence.user_id) {
@@ -36,7 +36,8 @@ module.exports = {
 
       // gamification related:
       const user = await UserModel.getById(livePresence.user_id);
-      await UserModel.update(livePresence.user_id, { score: user.score + 1 });
+      console.log(user);
+      await UserModel.update({id: livePresence.user_id,  score: user.score + 1 });
 
       return response.status(200).json("Presença em live criada com succeso!");
     } catch (error) {
