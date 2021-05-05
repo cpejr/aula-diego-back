@@ -21,7 +21,7 @@ module.exports = {
         live_id: livePresence.live_id,
       });
       if (alreadyExists.length >= 1)
-        return response.status(200).json("Presença já cadastrada");
+        return response.status(409).json({ message: "Presença já cadastrada!"});
 
       const live = await LiveModel.getById(livePresence.live_id);
       if (live.confirmation_code != livePresence.confirmation_code)
