@@ -40,9 +40,11 @@ module.exports = {
       const { id } = request.params;
       const course = await CourseModel.getById(id);
       const content = await CourseModel.getByIdAll(id);
-      const entries = content.map(item => ({...item, course_name: course.name}))
-
-      return response.status(200).json(entries);
+      if(!course.is_deleted){
+        const entries = content.map(item => ({...item, course_name: course.name}))
+        return response.status(200).json(entries);
+      }
+      response.status(200).json([]);
     } catch (error) {
       console.warn(error.message);
       response.status(500).json("internal server error");

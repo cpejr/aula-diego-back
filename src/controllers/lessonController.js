@@ -49,7 +49,6 @@ module.exports = {
 
   async getById(request, response) {
     try {
-      console.log("alsodksod");
       const { id } = request.params;
 
       const lesson = await connection("lesson")
