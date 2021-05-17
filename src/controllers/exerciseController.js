@@ -57,6 +57,11 @@ module.exports = {
       const { id } = request.params;
       const exercise = request.body;
 
+      const exerc = await exerciseModel.getById(id);
+
+      if (exerc.open === true)
+        return response.status(400).json("Provas abertas não podem ser alteradas!");
+
       const res = await exerciseModel.update(exercise, id);
       if (res !== 1) {
         return response.status(400).json("Atividade não encontrada!");
