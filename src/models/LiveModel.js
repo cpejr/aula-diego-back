@@ -15,6 +15,7 @@ module.exports = {
     const response = await connection("live")
       .where(filters)
       .andWhere("live.is_deleted", false)
+      .andWhere("course.is_deleted", false)
       .join("course", "live.course_id", "course.id")
       .join("organization", "course.organization_id", "organization.id")
       .select(

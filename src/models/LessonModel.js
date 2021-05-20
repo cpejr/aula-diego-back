@@ -17,8 +17,11 @@ module.exports = {
   async read(filters) {
     const response = await connection("lesson")
       .where(filters)
-      .andWhere({ is_deleted: false })
-      .select("*");
+      .andWhere("lesson.is_deleted", false)
+      .andWhere("course.is_deleted", false)
+      .join("course", "lesson.course_id", "course.id")
+      .select("lesson.*");
+      
     return response;
   },
 
