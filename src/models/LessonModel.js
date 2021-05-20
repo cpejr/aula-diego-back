@@ -11,6 +11,7 @@ module.exports = {
       .where({ id })
       .select("*")
       .first();
+      
     return response;
   },
 
@@ -21,7 +22,7 @@ module.exports = {
       .andWhere("course.is_deleted", false)
       .join("course", "lesson.course_id", "course.id")
       .select("lesson.*");
-      
+
     return response;
   },
 

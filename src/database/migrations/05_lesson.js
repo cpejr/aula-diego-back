@@ -5,6 +5,7 @@ exports.up = (knex) => {
     table.text('description', 'longtext');
     table.text('text', 'longtext');
     table.uuid('course_id').notNullable();
+    table.string('video');
     table.foreign('course_id').references('id').inTable('course').onDelete('NO ACTION');
     table.timestamp('created_at').defaultTo(knex.fn.now());
     table.timestamp('updated_at').defaultTo(knex.fn.now());

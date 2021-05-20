@@ -1,7 +1,7 @@
 const lessonModel = require("../models/LessonModel");
 const fileModel = require("../models/FileModel");
 const fileLessonModel = require("../models/FileLessonModel");
-const videoLessonModel = require("../models/FileLessonModel");
+const videoLessonModel = require("../models/videoLessonModel");
 const { v4: uuidv4 } = require("uuid");
 
 module.exports = {
@@ -18,7 +18,9 @@ module.exports = {
         course_id: data.course_id,
       };
 
-      const lessonId = await lessonModel.create(lesson);
+      const lessonId = (await lessonModel.create(lesson))[0];
+
+      console.log(lessonId)
 
       for await (let video of data.videos) {
         const videoLesson = {
@@ -55,7 +57,7 @@ module.exports = {
 
       response.status(200).json(fileIds);
     } catch (error) {
-
+      console.warn(error);
       response.status(500).json("Internal server error.");
     }
   }
