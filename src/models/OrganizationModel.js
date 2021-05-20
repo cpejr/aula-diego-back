@@ -8,6 +8,7 @@ module.exports = {
   async getById(id) {
     const response = await connection("organization")
       .where({ id })
+      .andWhere({ is_deleted: false })
       .select("*")
       .first();
     return response;

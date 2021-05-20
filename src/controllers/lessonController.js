@@ -37,7 +37,6 @@ module.exports = {
       const filters = request.query;
       const result = await LessonModel.read(filters);
 
-      console.log(result)
       response.status(200).json(result);
     } catch (error) {
       console.log(error.message);
