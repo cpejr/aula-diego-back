@@ -1,4 +1,5 @@
 const AWS = require('aws-sdk');
+const path = require('path');
 
 const accessKeyId = process.env.WASABI_KEY_ID;
 const secretAccessKey = process.env.WASABI_SECRET;
