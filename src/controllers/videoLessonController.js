@@ -1,4 +1,4 @@
-const VideoLessonModel = require("../models/VideoLessonModel");
+const VideoLessonModel = require("../models/videoLessonModel");
 
 module.exports = {
   async create(request, response) {

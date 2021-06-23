@@ -20,13 +20,13 @@ module.exports = {
 
       const lessonId = (await lessonModel.create(lesson))[0];
 
-      console.log(lessonId)
+      console.log(lessonId);
 
       for await (let video of data.videos) {
         const videoLesson = {
           lesson_id: lessonId,
-          video_url: video
-        }
+          video_url: video,
+        };
 
         await videoLessonModel.create(videoLesson);
       }
@@ -41,7 +41,7 @@ module.exports = {
           name: fileName,
           type: fileExt,
           path: `${fileId}.${fileExt}`,
-          user_id: data.user_id
+          user_id: data.user_id,
         };
 
         await fileModel.create(file);
@@ -60,5 +60,5 @@ module.exports = {
       console.warn(error);
       response.status(500).json("Internal server error.");
     }
-  }
+  },
 };
