@@ -1,9 +1,8 @@
 // Update with your config settings.
-const path = require('path');
-require('dotenv').config();
+const path = require("path");
+require("dotenv").config();
 
 module.exports = {
-
   // development: {
   //   client: 'sqlite3',
   //   connection: {
@@ -16,64 +15,76 @@ module.exports = {
   // },
 
   development: {
-    client: 'pg',
+    client: "pg",
     dialect: "postgres",
     connection: {
       host: process.env.DB_HOST,
       port: process.env.DB_PORT,
       database: process.env.DB_NAME,
-      user:     process.env.DB_USER,
+      user: process.env.DB_USER,
       password: process.env.DB_PASS,
       ssl: {
-        rejectUnauthorized: false
-      }
+        rejectUnauthorized: false,
+      },
     },
     dialectOptions: {
       ssl: true,
     },
     pool: {
       min: 2,
-      max: 10
+      max: 10,
     },
     migrations: {
-      directory: path.resolve(__dirname, 'src', 'database', 'migrations')
+      directory: path.resolve(__dirname, "src", "database", "migrations"),
     },
     seeds: {
-      directory: path.resolve(__dirname, 'src', 'database', 'seeds')
+      directory: path.resolve(__dirname, "src", "database", "seeds"),
     },
-    ssl: true
+    ssl: true,
   },
 
   staging: {
-    client: 'postgresql',
+    client: "postgresql",
     connection: {
-      database: 'my_db',
-      user: 'username',
-      password: 'password'
+      database: "my_db",
+      user: "username",
+      password: "password",
     },
     pool: {
       min: 2,
-      max: 10
+      max: 10,
     },
     migrations: {
-      tableName: 'knex_migrations'
-    }
+      tableName: "knex_migrations",
+    },
   },
 
   production: {
-    client: 'postgresql',
+    client: "pg",
+    dialect: "postgres",
     connection: {
-      database: 'my_db',
-      user: 'username',
-      password: 'password'
+      host: process.env.DB_HOST,
+      port: process.env.DB_PORT,
+      database: process.env.DB_NAME,
+      user: process.env.DB_USER,
+      password: process.env.DB_PASS,
+      ssl: {
+        rejectUnauthorized: false,
+      },
+    },
+    dialectOptions: {
+      ssl: true,
     },
     pool: {
       min: 2,
-      max: 10
+      max: 10,
     },
     migrations: {
-      tableName: 'knex_migrations'
-    }
-  }
-
+      directory: path.resolve(__dirname, "src", "database", "migrations"),
+    },
+    seeds: {
+      directory: path.resolve(__dirname, "src", "database", "seeds"),
+    },
+    ssl: true,
+  },
 };
