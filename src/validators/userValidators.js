@@ -10,6 +10,7 @@ userValidator.create = {
     name: Joi.string().required(),
     email: Joi.string().email().required(),
     birthdate: Joi.string().required(),
+    cpf: Joi.string().required(),
     phone: phoneJoi
       .string()
       .phoneNumber({ defaultCountry: "BR", format: "national" })
