@@ -1,66 +1,155 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <mate charest="utf-8" />
+    <title>Certificate</title>
+    <link rel="stylesheet" href="certificate.css" />
+  </head>
 
-<head>
-  <mate charest="utf-8" />
-  <title>Certificate</title>
-  <link rel="stylesheet" href="certificate.css">
-</head>
+  <body
+    style="
+      border: 10px solid black;
+      margin: 0;
+      background-position: center;
+      background-image: url('file:///C:/Users/KRAKEN/Documents/Coding/CPE/Aula Diego/aula-diego-back/src/views/certificate/back.jpg');
+    "
+  >
+    <div style="text-align: center; padding: 5% 10%">
+      {{#each course}}
+      <h1
+        style="
+          font-family: Trebuchet MS, Helvetica, sans-serif;
+          font-size: 96px;
+        "
+      >
+        CERTIFICADO
+      </h1>
+      <p
+        style="
+          font-family: Trebuchet MS, Helvetica, sans-serif;
+          font-size: 40px;
+          text-align: justify;
+        "
+      >
+        Certificamos que
+        <span
+          style="
+            font-family: Trebuchet MS, Helvetica, sans-serif;
+            font-size: 40px;
+            font-weight: bold;
+          "
+          >{{this.name}}</span
+        >
+        participou do curso
+        <span
+          style="
+            font-family: Trebuchet MS, Helvetica, sans-serif;
+            font-size: 40px;
+            font-weight: bold;
+          "
+          >{{this.course}}</span
+        >
+        , oferecido por
+        <span
+          style="
+            font-family: Trebuchet MS, Helvetica, sans-serif;
+            font-size: 42px;
+            font-weight: bold;
+          "
+        >
+          {{this.organization}}</span
+        >
+        entre os dias
+        <span
+          style="
+            font-family: Trebuchet MS, Helvetica, sans-serif;
+            font-size: 40px;
+            font-weight: bold;
+          "
+          >{{this.start_date}}</span
+        >
+        e
+        <span
+          style="
+            font-family: Trebuchet MS, Helvetica, sans-serif;
+            font-size: 40px;
+            font-weight: bold;
+          "
+          >{{this.end_date}}</span
+        >.
+      </p>
 
-<body style="border: 10px solid black; margin: 0; background-position: center; background-image: url('file:///C:/Users/KRAKEN/Documents/Coding/CPE/Aula Diego/aula-diego-back/src/views/certificate/back.jpg');">
-  <div style="text-align: center; padding: 5% 10%;">
-    {{#each course}}
-    <h1 style="font-family: Trebuchet MS, Helvetica, sans-serif; font-size: 96px;">
-      CERTIFICADO
-    </h1>
-    <p style="font-family: Trebuchet MS, Helvetica, sans-serif; font-size: 40px; text-align: justify;">
-      Certificamos que
-      <span
-        style="font-family: Trebuchet MS, Helvetica, sans-serif; font-size: 40px; font-weight: bold;">{{this.name}}</span>
-      participou do curso
-      <span
-        style="font-family: Trebuchet MS, Helvetica, sans-serif; font-size: 40px; font-weight: bold;">{{this.course}}</span>
-      , oferecido por
-      <span style="font-family: Trebuchet MS, Helvetica, sans-serif; font-size: 42px; font-weight: bold;">
-        {{this.organization}}</span>
-      entre os dias
-      <span
-        style="font-family: Trebuchet MS, Helvetica, sans-serif; font-size: 40px; font-weight: bold;">{{this.start_date}}</span>
-      e
-      <span
-        style="font-family: Trebuchet MS, Helvetica, sans-serif; font-size: 40px; font-weight: bold;">{{this.end_date}}</span>.
-    </p>
-
-    <div style="margin:auto; text-align: center; margin-top: 72px; margin-bottom: 72px;">
-      <img src="file:///C:/Users/KRAKEN/Documents/Coding/CPE/Aula Diego/aula-diego-back/src/views/certificate/harry.jpg"
-        style="width: auto; height: 245px;">
-    </div>
-    <div style="text-align: center;">
-      <div style="display: inline-block; margin-right: 20px; width: 300px;">
+      <div
+        style="
+          margin: auto;
+          text-align: center;
+          margin-top: 72px;
+          margin-bottom: 72px;
+        "
+      >
         <img
-          src="file:///C:/Users/KRAKEN/Documents/Coding/CPE/Aula Diego/aula-diego-back/src/views/certificate/diego.jpg"
-          style="width: auto; height: 60px; max-width: fit-content;">
-        <hr>
-        <span
-          style="font-family: Trebuchet MS, Helvetica, sans-serif; font-size: 28px; display: block; margin-top: 5px; font-weight: bold;">DIEGO
-          MULELOS</span>
-        <span
-          style="font-family: Trebuchet MS, Helvetica, sans-serif; font-size: 24px; display: block; margin-top: 5px">Reclass</span>
+          src="file:///C:/Users/KRAKEN/Documents/Coding/CPE/Aula Diego/aula-diego-back/src/views/certificate/harry.jpg"
+          style="width: auto; height: 245px"
+        />
       </div>
-      <div style="display: inline-block; margin-left: 20px; width: 300px;">
-        <img
-          src="file:///C:/Users/KRAKEN/Documents/Coding/CPE/Aula Diego/aula-diego-back/src/views/certificate/ross.jpeg"
-          style="width: auto; height: 60px; max-width: fit-content;">
-        <hr>
-        <span
-          style="font-family: Trebuchet MS, Helvetica, sans-serif; font-size: 28px; display: block; margin-top: 5px; font-weight: bold;">{{this.admin}}</span>
-        <span
-          style="font-family: Trebuchet MS, Helvetica, sans-serif; font-size: 24px; display: block; margin-top: 5px">{{this.admin_occupation}}</span>
+      <div style="text-align: center">
+        <div style="display: inline-block; margin-right: 20px; width: 300px">
+          <img
+            src="file:///C:/Users/KRAKEN/Documents/Coding/CPE/Aula Diego/aula-diego-back/src/views/certificate/diego.jpg"
+            style="width: auto; height: 60px; max-width: fit-content"
+          />
+          <hr />
+          <span
+            style="
+              font-family: Trebuchet MS, Helvetica, sans-serif;
+              font-size: 28px;
+              display: block;
+              margin-top: 5px;
+              font-weight: bold;
+            "
+            >DIEGO MULELOS</span
+          >
+          <span
+            style="
+              font-family: Trebuchet MS, Helvetica, sans-serif;
+              font-size: 24px;
+              display: block;
+              margin-top: 5px;
+            "
+            >Reclass</span
+          >
+        </div>
+        <div style="display: inline-block; margin-left: 20px; width: 300px">
+          <img
+            src="file:///C:/Users/KRAKEN/Documents/Coding/CPE/Aula Diego/aula-diego-back/src/views/certificate/ross.jpeg"
+            style="width: auto; height: 60px; max-width: fit-content"
+          />
+          <hr />
+          <span
+            style="
+              font-family: Trebuchet MS, Helvetica, sans-serif;
+              font-size: 28px;
+              display: block;
+              margin-top: 5px;
+              font-weight: bold;
+            "
+            >{{this.admin}}</span
+          >
+          <span
+            style="
+              font-family: Trebuchet MS, Helvetica, sans-serif;
+              font-size: 24px;
+              display: block;
+              margin-top: 5px;
+            "
+            >{{this.admin_occupation}}</span
+          >
+        </div>
+        <img src={{ this.qrcode }} alt="Qr code de virificação de certificado"/>
       </div>
+      <p>Escaneie o qrcode acima para fazer a verificação do certificado</p>
+      <!-- colocar qr code com  -->
+      {{/each}}
     </div>
-    {{/each}}
-  </div>
-  
-</body>
-
+  </body>
 </html>
