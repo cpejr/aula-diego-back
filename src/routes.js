@@ -48,6 +48,7 @@ const livePresenceController = require("./controllers/livePresenceController");
 const exerciseController = require("./controllers/exerciseController");
 const questionController = require("./controllers/questionController");
 const answerController = require("./controllers/answerController");
+const certificateController = require("./controllers/certificateController");
 
 // IMPORT VIEWS -------------------------------------------------------------------------
 const createLesson = require("./views/createLesson");
@@ -90,6 +91,11 @@ routes.get("/occupation", occupationController.read);
 routes.get("/occupation/:id", authenticateToken, occupationController.getById);
 routes.put("/occupation", authenticateToken, occupationController.update); //UPDATE
 routes.put("/occupation/:id", authenticateToken, occupationController.delete); //DELETE
+
+// CERTIFICATE -------------------------------------------------------------------------------
+routes.post("/course-certificate", authenticateToken, certificateController.create);
+routes.get("/course-cerificate/:id", authenticateToken, certificateController.getById);
+routes.delete("/course-certificate/:id", authenticateToken, certificateController.delete);
 
 // COURSE -------------------------------------------------------------------------------
 routes.post("/course", authenticateToken, isAdmin, courseController.create);
