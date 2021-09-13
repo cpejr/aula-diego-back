@@ -17,17 +17,13 @@ module.exports = {
   },
 
   async getById(request, response) {
-    console.log(request);
     try {
-      console.log("aqui estou")
       const { id } = request.params;
-      console.log(id);
       const certificate = await CertificateModel.getById(id);
-
       return response.status(200).json(certificate);
     } catch (error) {
-      console.log(error.message);
-      response.status(500).json("Internal server error.");
+      console.warn(error.message);
+      response.status(500).json("internal server error");
     }
   },
 

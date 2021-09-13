@@ -7,11 +7,11 @@ module.exports = {
     return response;
   },
 
-  async getById(certificate_id) {
-    console.log(certificate_id);
+  async getById(id) {
     const response = await connection("certificate")
-      .where({ certificate_id })
-      .select("*");
+      .where({ "certificate.certificate_id": id })
+      .select("*")
+      .first();
     return response;
   },
 
