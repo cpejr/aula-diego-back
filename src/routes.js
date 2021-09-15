@@ -52,7 +52,7 @@ const answerController = require("./controllers/answerController");
 // IMPORT VIEWS -------------------------------------------------------------------------
 const createLesson = require("./views/createLesson");
 const createClass = require("./views/createClass");
-const certificate = require("./views/certificate")
+const certificateController = require("./controllers/certificateController");
 
 // IMPORT MIDDLEWARES --------------------------------------------------------
 const {
@@ -286,6 +286,6 @@ routes.delete("/answer/:id", authenticateToken, answerController.delete);
 routes.post("/lesson_create", authenticateToken, createLesson.createLesson);
 routes.post("/class_create", authenticateToken, createClass.createClass);
 
-routes.post('/certificate', certificate.createCertificate)
+routes.post("/certificate", certificateController.createCertificate);
 
 module.exports = routes;

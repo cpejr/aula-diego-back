@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <%= include styles/certificateStyle.ejs %>
+    <title>Certificado <%= name %></title>
+  </head>
+  <body>
+    <div class="document-container">
+      <section class="header">
+        <img class="recclass" src="<%= recclass_logo %>" />
+        <img class="organization" src="<%= organization_logo %>" />
+      </section>
+      <h1 class="title">Certificado</h1>
+      <!-- TEXT -->
+      <section class="text-container">
+        <p>
+          Certificamos que <strong> <%= name %> </strong>, inscrito no CPF nº
+          <strong> <%= cpf %> </strong> participou do curso
+          <it> <%= course %> </it> promovido por
+          <strong> <%= company %> </strong>, com carga horária de:
+          <strong><%= workload %></strong> horas
+        </p>
+      </section>
+      <!-- FOOTER -->
+      <div class="info-container">
+        <!-- SIGNATURE -->
+        <section class="signature-container">
+          <img class="signature-img" src="<%= signature %>" />
+          <hr />
+          <p class="signature-name"><strong><%= admin %> </strong></p>
+          <p class="signature-job"><strong><%= occupation %> </strong></p>
+        </section>
+        <!-- QRCODE -->
+        <section class="qrcode-container">
+          <img class="qrcode" src="<%= qrcode %>" />
+          <p><%= certificate_id %></p>
+          <p>Escaneie o código para verificar a autenticidade do certificado</p>
+        </section>
+      </div>
+    </div>
+  </body>
+</html>
