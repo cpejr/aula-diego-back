@@ -93,9 +93,9 @@ routes.put("/occupation", authenticateToken, occupationController.update); //UPD
 routes.put("/occupation/:id", authenticateToken, occupationController.delete); //DELETE
 
 // CERTIFICATE -------------------------------------------------------------------------------
-routes.post("/course-certificate", authenticateToken, certificateController.create);
-routes.get("/course-cerificate/:id", authenticateToken, certificateController.getById);
-routes.delete("/course-certificate/:id", authenticateToken, certificateController.delete);
+routes.post("/course-certificate", certificateController.create);
+routes.get("/course-cerificate/:id", certificateController.getById);
+routes.delete("/course-certificate/:id", certificateController.delete);
 
 // COURSE -------------------------------------------------------------------------------
 routes.post("/course", authenticateToken, isAdmin, courseController.create);
