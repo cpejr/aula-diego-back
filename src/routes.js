@@ -286,6 +286,10 @@ routes.delete("/answer/:id", authenticateToken, answerController.delete);
 routes.post("/lesson_create", authenticateToken, createLesson.createLesson);
 routes.post("/class_create", authenticateToken, createClass.createClass);
 
-routes.post("/certificate", certificateController.createCertificate);
+routes.post(
+  "/certificate",
+  authenticateToken,
+  certificateController.createCertificate
+);
 
 module.exports = routes;

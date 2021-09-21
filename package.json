@@ -43,6 +43,7 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "ejs-lint": "^1.2.1",
     "nodemon": "^2.0.4"
   }
 }
