@@ -85,13 +85,15 @@ module.exports = {
           "base64"
         );
 
-        signature_url = await uploadBase64(
+        const dataResult = await uploadBase64(
           signaturePath,
           signatureBuffer,
           "image/png"
-        ).Location;
+        );
 
-        user.signature_url = signature_url;
+        const { Location } = dataResult;
+
+        user.signature_url = Location;
         delete user.signature;
       }
 

@@ -27,16 +27,14 @@ module.exports = {
 
       if (!admin) return res.status(401).json({ message: "Não autorizado" });
 
+      //admin need a signature to be able to generate certificates
       if (!admin.signature_url)
-        return res
-          .status(400)
-          .json({
-            message:
-              "Antes de gerar certificados é preciso criar uma ssinatura",
-          });
+        return res.status(400).json({
+          message: "Antes de gerar certificados é preciso criar uma ssinatura",
+        });
+
       //get admin occupation
       const occupation = await Occupation.getById(admin.occupation_id);
-
       admin.occupation = occupation.name;
 
       // get user info
@@ -65,7 +63,9 @@ module.exports = {
       );
 
       // TODO: get admin's signature
-      const { body: signature } = await download(`image_2021-09-21_140911.png`);
+      const { Body } = await download(`signature_${admin.id}.png`);
+
+      const signature = `data:image/png;base64,${Body.toString("base64")}`;
 
       const recclass = `data:image/png;base64,${fs
         .readFileSync(
@@ -91,7 +91,7 @@ module.exports = {
         course: course.name,
         company: company.name,
         workload: company.workload,
-        signature: recclass,
+        signature,
         admin: admin.name,
         occupation: admin.occupation,
         certificate_id,
