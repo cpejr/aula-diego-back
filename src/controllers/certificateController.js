@@ -3,7 +3,7 @@ const pdf = require("html-pdf");
 const ejs = require("ejs");
 const qr = require("qrcode");
 const uuid = require("uuid");
-const fs = require("fs")
+const fs = require("fs");
 const { upload, download } = require("../services/wasabi");
 
 const User = require("../models/UserModel");
@@ -23,7 +23,7 @@ module.exports = {
       const { user_id, course_id } = req.body;
 
       // get admin from request
-      const {user: admin} = req.session;
+      const { user: admin } = req.session;
       console.log("admin: ", admin);
 
       //get admin occupation
@@ -61,8 +61,22 @@ module.exports = {
       // TODO: get admin's signature
       const { body: signature } = await download(`image_2021-09-21_140911.png`);
 
-      const recclass = `data:image/png;base64,${fs.readFileSync(path.resolve(__dirname, "..", "templates", "assets", "recclass.png")).toString("base64")}`;
-      const background = `data:image/png;base64,${fs.readFileSync(path.resolve(__dirname, "..", "templates", "assets", "certificateBG.png")).toString("base64")}`;
+      const recclass = `data:image/png;base64,${fs
+        .readFileSync(
+          path.resolve(__dirname, "..", "templates", "assets", "recclass.png")
+        )
+        .toString("base64")}`;
+      const background = `data:image/png;base64,${fs
+        .readFileSync(
+          path.resolve(
+            __dirname,
+            "..",
+            "templates",
+            "assets",
+            "certificateBG.png"
+          )
+        )
+        .toString("base64")}`;
 
       // template payload
       const pdfData = {
@@ -85,16 +99,14 @@ module.exports = {
         path.resolve(__dirname, "..", "templates", "certificate.ejs"),
         pdfData,
         (err, data) => {
-
           if (err) {
             return res.status(500).json({ message: "Internal server error." });
           }
-          
+
           const opt = {
             width: "11.25in",
             height: "8.5in",
           };
-
 
           pdf.create(data, opt).toBuffer((err, buffer) => {
             if (err)
