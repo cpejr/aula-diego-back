@@ -27,16 +27,14 @@ module.exports = {
 
       if (!admin) return res.status(401).json({ message: "Não autorizado" });
 
+      //admin need a signature to be able to generate certificates
       if (!admin.signature_url)
-        return res
-          .status(400)
-          .json({
-            message:
-              "Antes de gerar certificados é preciso criar uma ssinatura",
-          });
+        return res.status(400).json({
+          message: "Antes de gerar certificados é preciso criar uma ssinatura",
+        });
+
       //get admin occupation
       const occupation = await Occupation.getById(admin.occupation_id);
-
       admin.occupation = occupation.name;
 
       // get user info
@@ -49,13 +47,11 @@ module.exports = {
       if (!course)
         return res.status(404).json({ message: "Curso não encontrado" });
 
-      console.log("curso: ", course);
       // get company info
       const company = await Company.getById(user.organization_id);
       if (!company)
         return res.status(404).json({ message: "Empresa não encontrada" });
 
-      console.log("company: ", company);
       // generate certificate_id
       var certificate_id = uuid.v4();
 
@@ -64,14 +60,18 @@ module.exports = {
         `${process.env.FRONT_END_URL}/certificate?code=${certificate_id}`
       );
 
-      // TODO: get admin's signature
-      const { body: signature } = await download(`image_2021-09-21_140911.png`);
+      // get admin signature
+      const { Body } = await download(`signature_${admin.id}.png`);
+      const signature = `data:image/png;base64,${Body.toString("base64")}`;
 
+      // get recclass logo
       const recclass = `data:image/png;base64,${fs
         .readFileSync(
           path.resolve(__dirname, "..", "templates", "assets", "recclass.png")
         )
         .toString("base64")}`;
+
+      // get certificate background image
       const background = `data:image/png;base64,${fs
         .readFileSync(
           path.resolve(
@@ -91,7 +91,7 @@ module.exports = {
         course: course.name,
         company: company.name,
         workload: company.workload,
-        signature: recclass,
+        signature,
         admin: admin.name,
         occupation: admin.occupation,
         certificate_id,
@@ -120,12 +120,11 @@ module.exports = {
                 .status(500)
                 .json({ message: "Internal server error." });
 
-            // upload to wasabi
+            // TODO: upload to wasabi
             // const uploadResult = await upload(`/certificate_${certificate_id}`, stream);
             // const certificate_url = uploadResult.Location();
 
-            // save certificate data on database
-            // TODO: certificate model
+            // TODO: save certificate data on database
             // await Certificate.create({ certificate_id, course_id, user_id, url: certificate_url });
 
             return res.status(200).json({ pdf: buffer.toString("base64") });
