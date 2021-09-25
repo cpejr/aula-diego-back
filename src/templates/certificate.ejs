@@ -61,28 +61,46 @@
       }
 
       .signature-container {
+        width: fit-content;
+        text-align: center;
       }
 
       .signature-img {
         max-height: 80px;
+        max-width: 200px;
+
+        padding-bottom: 5px;
+        border-bottom: 1px solid black;
       }
 
       .signature-name {
       }
 
       .signature-job {
+        font-style: italic;
       }
 
       .qrcode-container {
-        padding-left: 100px;
         display: flex;
         flex-direction: column;
         justify-content: flex-end;
+        align-items: flex-end;
+        width: fit-content;
+        padding-right: 15px;
+
+      }
+      
+      .qrcode-inner-container {
+        position: relative;
+
+        height: 100px;
       }
 
       .qrcode {
-        margin-left: auto;
-        margin-right: 0;
+        position: absolute;
+        right: 0;
+        top: 0;
+
         width: 100px;
       }
 
@@ -94,6 +112,7 @@
       .qrcode-text{
         font-size: 14px;
         text-align: right;
+        font-style: italic;
       }
     </style>
     <title>Certificado <%= name %></title>
@@ -103,7 +122,7 @@
       <section class="header">
         <div class="logo-container">
           <img class="logo recclass" alt="Recclass logo" src="<%= recclass %>" />        
-          <img class="logo organization" alt="Recclass logo" src="<%= recclass %>" />        
+          <img class="logo organization" alt="Recclass logo" src="<%= logo %>" />        
         </div>
       </section>
       <h1 class="title">Certificado</h1>
@@ -123,13 +142,15 @@
         <section class="signature-container">
           <img class="signature-img" src="<%= signature %>" />
           <p class="signature-name"><strong><%= admin %> </strong></p>
-          <p class="signature-job"><strong><%= occupation %> </strong></p>
+          <p class="signature-job"><%= occupation %></p>
         </section>
         <!-- QRCODE -->
-        <section class="qrcode-container align-right">
-              <img class="qrcode" src="<%= qrcode %> " />
+        <section class="qrcode-container">
+          <div class="qrcode-inner-container">
+            <img class="qrcode" src="<%= qrcode %>" />
+          </div>
               <p class="qrcode-hash"><%= certificate_id %></p>
-              <p class="qrcode-text">Escaneie o código para verificar a autenticidade do certificado</p>
+              <p class="qrcode-text">Escaneie o código QR para verificar a autenticidade do certificado</p>
           </div>
         </section>
       </div>
