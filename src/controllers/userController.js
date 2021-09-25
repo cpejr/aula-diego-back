@@ -1,11 +1,7 @@
 const UserModel = require("../models/UserModel");
 const FirebaseModel = require("../models/FirebaseModel");
-const LivePresenceModel = require("../models/LivePresenceModel");
-
-const { v4: uuidv4 } = require("uuid");
-var datetime = require("node-datetime");
 const connection = require("../database/connection");
-const LessonPresenceModel = require("../models/LessonPresenceModel");
+const { upload, uploadBase64 } = require("../services/wasabi");
 
 module.exports = {
   async create(request, response) {
@@ -72,40 +68,65 @@ module.exports = {
     try {
       const user = request.body;
 
-      const loggedUser = request.session;
+      const { user: loggedUser } = request.session;
 
       if (loggedUser.id != user.id && loggedUser.type == "student")
         return response
           .status(403)
           .json("Você não tem permissão para realizar esta operação");
 
+      let = signature_url = null;
+
+      if (user.signature) {
+        const signaturePath = `signature_${loggedUser.id}.png`;
+        // const localPath = path.resolve(__dirname, "..", "tmp", signaturePath);
+        const signatureBuffer = Buffer.from(
+          user.signature.replace(/^data:image\/\w+;base64,/, ""),
+          "base64"
+        );
+
+        signature_url = await uploadBase64(
+          signaturePath,
+          signatureBuffer,
+          "image/png"
+        ).Location;
+
+        user.signature_url = signature_url;
+        delete user.signature;
+      }
+
+      user.id = loggedUser.id;
+
       const res = await UserModel.update(user);
 
       if (res !== 1) {
-        return response.status(404).json("Usuário não encontrado!");
+        return response
+          .status(404)
+          .json({ message: "Usuário não encontrado!" });
       } else {
-        return response.status(200).json("Usuário alterado com sucesso ");
+        return response
+          .status(200)
+          .json({ message: "Usuário alterado com sucesso" });
       }
     } catch (error) {
       console.log(error.message);
-      return response.status(500).json("internal server error ");
+      return response.status(500).json({ message: "Internal server error" });
     }
   },
 
   async delete(request, response) {
     try {
-      console.log(request);
       const { id } = request.params;
       const result = await UserModel.delete(id);
       const foundUser = await UserModel.getById(id);
 
       if (!foundUser) {
-        return response.status(404).json("Usuário não encontrado");
+        return response.status(404).json({ message: "Usuário não encontrado" });
       }
 
       await UserModel.delete(id);
       if (result !== 1) {
-        return response.status(400).json("Usuário não encontrado");
+        return response.status(400).json({ message: "Usuário não encontrado" });
       } else {
         return response
           .status(200)
@@ -121,32 +142,13 @@ module.exports = {
     try {
       const { email } = request.body;
 
-      response.status(200).json("Usuário apagado com sucesso!");
+      response.status(200).json({ message: "Usuário apagado com sucesso!" });
       const response = await FirebaseModel.sendPasswordChangeEmail(email);
 
       response.status(200).json({ message: "Sucesso!" });
     } catch (err) {
       console.error(err);
-      return response.status(500).json({ notification: err.message });
-    }
-  },
-
-  async demote(request, response) {
-    try {
-      const { user_id } = request.params;
-
-      const res = await UserModel.demoteUser(user_id);
-
-      console.log(res);
-
-      if (res !== 1) {
-        return response.status(400).json("Usuário não encontrado");
-      } else {
-        return response.status(200).json("Usuário demovido para aluno!");
-      }
-    } catch (error) {
-      console.warn(error);
-      response.status(500).json("internal server error ");
+      return response.status(500).json({ message: err.message });
     }
   },
 };

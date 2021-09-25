@@ -2,32 +2,34 @@ const jwt = require("jsonwebtoken");
 
 module.exports = {
   async authenticateToken(request, response, next) {
-    const authHeader = request.headers.authorization;
-    const [scheme, token] = authHeader
-      ? authHeader.split(" ")
-      : [undefined, undefined];
+    try {
+      const authHeader = request.headers.authorization;
+      const [scheme, token] = authHeader
+        ? authHeader.split(" ")
+        : [undefined, undefined];
 
-    if (!token || token === null)
-      return response.status(401).json({ error: "No token provided" });
+      if (!token || token === null)
+        return response.status(401).json({ error: "No token provided" });
 
-    if (!/^Bearer$/i.test(scheme))
-      return response.status(401).json({ error: "Token badformatted" });
+      if (!/^Bearer$/i.test(scheme))
+        return response.status(401).json({ error: "Token badformatted" });
 
-    const validToken = await new Promise((res) => {
-      jwt.verify(token, process.env.AUTH_TOKEN_SECRET, (err, user) => {
-        if (err) return res(false);
-        request.session = user;
+      const decoded = jwt.verify(token, process.env.AUTH_TOKEN_SECRET);
 
-        return res(true);
-      });
-    });
+      request.session = decoded;
 
-    if (validToken) return next();
-    return response.status(403).json({ error: "Invalid authorization token" });
+      return next();
+    } catch (error) {
+      console.log(error);
+      return response
+        .status(403)
+        .json({ error: "Invalid authorization token" });
+    }
   },
 
   async isAdmin(request, response, next) {
     const type = request.session.user.type;
+
     if (type !== "admin" && type !== "master") {
       return response.status(401).json({ error: "Access denied!" });
     } else {
