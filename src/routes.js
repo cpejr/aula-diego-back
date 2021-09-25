@@ -53,7 +53,6 @@ const certificateController = require("./controllers/certificateController");
 // IMPORT VIEWS -------------------------------------------------------------------------
 const createLesson = require("./views/createLesson");
 const createClass = require("./views/createClass");
-const certificateController = require("./controllers/certificateController");
 
 // IMPORT MIDDLEWARES --------------------------------------------------------
 const {
@@ -91,11 +90,6 @@ routes.get("/occupation", occupationController.read);
 routes.get("/occupation/:id", authenticateToken, occupationController.getById);
 routes.put("/occupation", authenticateToken, occupationController.update); //UPDATE
 routes.put("/occupation/:id", authenticateToken, occupationController.delete); //DELETE
-
-// CERTIFICATE -------------------------------------------------------------------------------
-routes.post("/course-certificate", certificateController.create);
-routes.get("/course-cerificate/:id", certificateController.getById);
-routes.delete("/course-certificate/:id", certificateController.delete);
 
 // COURSE -------------------------------------------------------------------------------
 routes.post("/course", authenticateToken, isAdmin, courseController.create);

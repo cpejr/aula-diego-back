@@ -24,8 +24,16 @@ module.exports = {
 
       // get admin from request
       const { user: admin } = req.session;
-      console.log("admin: ", admin);
 
+      if (!admin) return res.status(401).json({ message: "Não autorizado" });
+
+      if (!admin.signature_url)
+        return res
+          .status(400)
+          .json({
+            message:
+              "Antes de gerar certificados é preciso criar uma ssinatura",
+          });
       //get admin occupation
       const occupation = await Occupation.getById(admin.occupation_id);
 
@@ -35,8 +43,6 @@ module.exports = {
       const user = await User.getById(user_id);
       if (!user)
         return res.status(404).json({ message: "Usuário não encontrado" });
-
-      console.log("user: ", user);
 
       // get course info
       const course = await Course.getById(course_id);
