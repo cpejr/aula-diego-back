@@ -8,8 +8,14 @@ module.exports = {
 
   async getById(id) {
     const response = await connection("certificate")
-      .where({ id })
-      .select("*")
+      .where({ "certificate.id": id })
+      .join("user", "user.id", "certificate.user_id")
+      .join("course", "course.id", "certificate.course_id")
+      .select(
+        "certificate.*",
+        "user.name as user_name",
+        "course.name as course_name"
+      )
       .first();
     return response;
   },
