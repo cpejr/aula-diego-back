@@ -159,4 +159,15 @@ module.exports = {
       res.status(500).json({ message: "Internal server error." });
     }
   },
+
+  async getById(request, response) {
+    try {
+      const { id } = request.params;
+      const certificate = await Certificate.getById(id);
+      return response.status(200).json(certificate);
+    } catch (error) {
+      console.warn(error.message);
+      response.status(500).json("internal server error");
+    }
+  },
 };
