@@ -53,7 +53,6 @@ const certificateController = require("./controllers/certificateController");
 // IMPORT VIEWS -------------------------------------------------------------------------
 const createLesson = require("./views/createLesson");
 const createClass = require("./views/createClass");
-const certificate = require("./views/certificate")
 
 // IMPORT MIDDLEWARES --------------------------------------------------------
 const {
@@ -91,11 +90,6 @@ routes.get("/occupation", occupationController.read);
 routes.get("/occupation/:id", authenticateToken, occupationController.getById);
 routes.put("/occupation", authenticateToken, occupationController.update); //UPDATE
 routes.put("/occupation/:id", authenticateToken, occupationController.delete); //DELETE
-
-// CERTIFICATE -------------------------------------------------------------------------------
-routes.post("/course-certificate", certificateController.create);
-routes.get("/course-cerificate/:id", certificateController.getById);
-routes.delete("/course-certificate/:id", certificateController.delete);
 
 // COURSE -------------------------------------------------------------------------------
 routes.post("/course", authenticateToken, isAdmin, courseController.create);
@@ -292,6 +286,12 @@ routes.delete("/answer/:id", authenticateToken, answerController.delete);
 routes.post("/lesson_create", authenticateToken, createLesson.createLesson);
 routes.post("/class_create", authenticateToken, createClass.createClass);
 
-routes.post('/certificate', certificate.createCertificate)
+//CERTIFICATE
+routes.post(
+  "/certificate",
+  authenticateToken,
+  certificateController.createCertificate
+);
+routes.get("/course-cerificate/:id", certificateController.getById);
 
 module.exports = routes;
