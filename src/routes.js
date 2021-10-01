@@ -292,6 +292,7 @@ routes.post(
   authenticateToken,
   certificateController.createCertificate
 );
-routes.get("/course-cerificate/:id", certificateController.getById);
+routes.get("/cerificate/:id", certificateController.getById);
+routes.get("/certificate/user", certificateController.getByUserIdAndCourseId);
 
 module.exports = routes;

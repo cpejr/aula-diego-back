@@ -170,4 +170,18 @@ module.exports = {
       response.status(500).json("internal server error");
     }
   },
+
+  async getByUserIdAndCourseId(request, response) {
+    try {
+      const { user_id, course_id } = request.params;
+      const certificate = await Certificate.getByUserIdAndCourseId(
+        user_id,
+        course_id
+      );
+      return response.status(200).json(certificate);
+    } catch (error) {
+      console.warn(error.message);
+      response.status(500).json("internal server error");
+    }
+  },
 };
