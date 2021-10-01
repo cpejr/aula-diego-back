@@ -11,8 +11,7 @@ module.exports = {
       const file_id = uuidv4();
 
       if (fileType !== "image") {
-        console.warn("Avatar is not a image");
-        response.status(500).json("Internal server error");
+        response.status(400).json({ message: "Avatar is not an image" });
       }
 
       const logo = {
@@ -77,7 +76,7 @@ module.exports = {
           .json("Você não tem permissão para realizar esta operação");
       }
 
-      const res = await OrganizationModel.update( organization );
+      const res = await OrganizationModel.update(organization);
 
       if (res !== 1) {
         return response.status(404).json("Organização não encontrada!");

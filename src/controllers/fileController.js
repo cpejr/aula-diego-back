@@ -1,7 +1,7 @@
 const FileModel = require("../models/FileModel");
 const multer = require("../middlewares/multer");
 const { v4: uuidv4 } = require("uuid");
-const path = require("path")
+const path = require("path");
 
 module.exports = {
   async create(request, response) {
@@ -12,7 +12,7 @@ module.exports = {
       const file_id = uuidv4();
 
       if (fileType !== "image") {
-        console.warn('Not a image');
+        console.warn("Not a image");
         response.status(500).json("Internal server error");
       }
 
@@ -21,11 +21,11 @@ module.exports = {
         name: data.file_name,
         type: fileExtension,
         path: `${file_id}.${fileExtension}`,
-        user_id: data.user_id
-      }
+        user_id: data.user_id,
+      };
 
       await FileModel.create(image);
-      response.status(200).json({file_id: file_id});
+      response.status(200).json({ file_id: file_id });
     } catch (error) {
       console.log(error.message);
       response.status(500).json("Internal server error.");
@@ -34,7 +34,7 @@ module.exports = {
 
   async uploadFile(request, response, next) {
     multer.upload(request, response, next);
-    response.status(200).json("Arquivos enviado com sucesso.");
+    response.status(200).json("Arquivo enviado com sucesso.");
   },
 
   async delete(request, response) {
@@ -69,8 +69,8 @@ module.exports = {
     try {
       const { id } = request.params;
       const file = await FileModel.getById(id);
-      
-      response.sendFile(path.join(__dirname, ".." , "images", file[0].path));
+
+      response.sendFile(path.join(__dirname, "..", "images", file[0].path));
     } catch (error) {
       console.log(error.message);
       response.status(500).json("Internal server error.");

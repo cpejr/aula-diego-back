@@ -4,13 +4,13 @@ const ejs = require("ejs");
 const qr = require("qrcode");
 const uuid = require("uuid");
 const fs = require("fs");
-const { upload, download } = require("../services/wasabi");
+const { upload, uploadBase64, download } = require("../services/wasabi");
 
 const User = require("../models/UserModel");
 const Course = require("../models/CourseModel");
 const Company = require("../models/OrganizationModel");
 const Occupation = require("../models/OccupationModel");
-// const Certificate = require("../models/CertificateModel");
+const Certificate = require("../models/CertificateModel");
 
 async function createQrCode(url) {
   const result = await qr.toDataURL(url);
@@ -22,54 +22,59 @@ module.exports = {
     try {
       const { user_id, course_id } = req.body;
 
-      // get admin from request
       const { user: admin } = req.session;
 
       if (!admin) return res.status(401).json({ message: "Não autorizado" });
 
+      const certificateExists = await Certificate.getByUserIdAndCourseId(
+        user_id,
+        course_id
+      );
+      if (certificateExists) {
+        return res.status(400).json({
+          message: "Certificado já existente na base de dados",
+          url: certificateExists.url,
+        });
+      }
+
       //admin need a signature to be able to generate certificates
       if (!admin.signature_url)
         return res.status(400).json({
-          message: "Antes de gerar certificados é preciso criar uma ssinatura",
+          message: "Antes de gerar certificados é preciso criar uma assinatura",
         });
 
-      //get admin occupation
       const occupation = await Occupation.getById(admin.occupation_id);
       admin.occupation = occupation.name;
 
-      // get user info
       const user = await User.getById(user_id);
       if (!user)
         return res.status(404).json({ message: "Usuário não encontrado" });
 
-      // get course info
       const course = await Course.getById(course_id);
       if (!course)
         return res.status(404).json({ message: "Curso não encontrado" });
 
-      // get company info
       const company = await Company.getById(user.organization_id);
       if (!company)
         return res.status(404).json({ message: "Empresa não encontrada" });
 
-      // generate certificate_id
       var certificate_id = uuid.v4();
 
-      // generate qrcode
       const qrcode = await createQrCode(
         `${process.env.FRONT_END_URL}/certificate?code=${certificate_id}`
       );
 
-      // get admin signature
       const { Body } = await download(`signature_${admin.id}.png`);
       const signature = `data:image/png;base64,${Body.toString("base64")}`;
 
-      // get recclass logo
-      const recclass = `data:image/png;base64,${fs
+      const recclass_logo = `data:image/png;base64,${fs
         .readFileSync(
           path.resolve(__dirname, "..", "templates", "assets", "recclass.png")
         )
         .toString("base64")}`;
+
+      // ? Depends on logo upload implementation
+      const company_logo = await download(`logo_${company_id}.png`);
 
       // get certificate background image
       const background = `data:image/png;base64,${fs
@@ -95,12 +100,13 @@ module.exports = {
         admin: admin.name,
         occupation: admin.occupation,
         certificate_id,
-        recclass,
-        logo: recclass,
+        recclass: recclass_logo,
+        logo: company_logo,
         background,
         qrcode,
       };
 
+      // render HTML
       await ejs.renderFile(
         path.resolve(__dirname, "..", "templates", "certificate.ejs"),
         pdfData,
@@ -114,20 +120,31 @@ module.exports = {
             height: "8.5in",
           };
 
-          pdf.create(data, opt).toBuffer((err, buffer) => {
+          // generate pdf buffer
+          pdf.create(data, opt).toBuffer(async (err, buffer) => {
             if (err)
               return res
                 .status(500)
                 .json({ message: "Internal server error." });
 
-            // TODO: upload to wasabi
-            // const uploadResult = await upload(`/certificate_${certificate_id}`, stream);
-            // const certificate_url = uploadResult.Location();
+            const uploadResult = await uploadBase64(
+              `certificate_${certificate_id}`,
+              buffer,
+              "application/pdf"
+            );
+            const certificate_url = uploadResult.Location;
 
-            // TODO: save certificate data on database
-            // await Certificate.create({ certificate_id, course_id, user_id, url: certificate_url });
+            await Certificate.create({
+              id: certificate_id,
+              course_id,
+              user_id,
+              url: certificate_url,
+            });
 
-            return res.status(200).json({ pdf: buffer.toString("base64") });
+            return res.status(200).json({
+              pdf_base64: buffer.toString("base64"),
+              url: certificate_url,
+            });
           });
         }
       );
