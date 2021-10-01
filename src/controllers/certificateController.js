@@ -101,7 +101,7 @@ module.exports = {
         cpf: user.cpf,
         course: course.name,
         company: company.name,
-        workload: company.workload,
+        workload: course.workload,
         signature,
         admin: admin.name,
         occupation: admin.occupation,
