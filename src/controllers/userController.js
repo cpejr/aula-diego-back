@@ -78,7 +78,7 @@ module.exports = {
       let = signature_url = null;
 
       if (user.signature) {
-        const signaturePath = `signatures_${loggedUser.id}.png`;
+        const signaturePath = `signature_${loggedUser.id}.png`;
         const signatureBuffer = Buffer.from(
           user.signature.replace(/^data:image\/\w+;base64,/, ""),
           "base64"

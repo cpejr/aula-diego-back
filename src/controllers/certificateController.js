@@ -64,8 +64,12 @@ module.exports = {
         `${process.env.FRONT_END_URL}/certificate?code=${certificate_id}`
       );
 
-      const { Body } = await download(`signature_${admin.id}.png`);
-      const signature = `data:image/png;base64,${Body.toString("base64")}`;
+      const { Body: signatureBody } = await download(
+        `signature_${admin.id}.png`
+      );
+      const signature = `data:image/png;base64,${signatureBody.toString(
+        "base64"
+      )}`;
 
       const recclass_logo = `data:image/png;base64,${fs
         .readFileSync(
@@ -73,8 +77,10 @@ module.exports = {
         )
         .toString("base64")}`;
 
-      // ? Depends on logo upload implementation
-      const company_logo = await download(`logo_${company_id}.png`);
+      const { Body: logoBody } = await download(`logo_${company.id}.png`);
+      const company_logo = `data:image/png;base64,${logoBody.toString(
+        "base64"
+      )}`;
 
       // get certificate background image
       const background = `data:image/png;base64,${fs
