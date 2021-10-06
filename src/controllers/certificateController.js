@@ -171,13 +171,10 @@ module.exports = {
     }
   },
 
-  async getByUserIdAndCourseId(request, response) {
+  async getByUserId(request, response) {
     try {
-      const { user_id, course_id } = request.params;
-      const certificate = await Certificate.getByUserIdAndCourseId(
-        user_id,
-        course_id
-      );
+      const { user_id } = request.params;
+      const certificate = await Certificate.getByUserId(user_id);
       return response.status(200).json(certificate);
     } catch (error) {
       console.warn(error.message);

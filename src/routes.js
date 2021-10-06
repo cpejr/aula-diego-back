@@ -293,6 +293,6 @@ routes.post(
   certificateController.createCertificate
 );
 routes.get("/cerificate/:id", certificateController.getById);
-routes.get("/certificate/user", certificateController.getByUserIdAndCourseId);
+routes.get("/certificate/user/:user_id", certificateController.getByUserId);
 
 module.exports = routes;

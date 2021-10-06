@@ -30,6 +30,20 @@ module.exports = {
     return response;
   },
 
+  async getByUserId(userId) {
+    const response = await connection("certificate")
+      .where({ "certificate.user_id": userId })
+      .join("user", "user.id", "certificate.user_id")
+      .join("course", "course.id", "certificate.course_id")
+      .select(
+        "certificate.*",
+        "user.name as user_name",
+        "course.name as course_name"
+      )
+      .first();
+    return response;
+  },
+
   async delete(id) {
     const response = await connection("certificate").where({ id }).delete();
     return response;
