@@ -21,6 +21,7 @@
     "express": "^4.17.1",
     "firebase": "^7.23.0",
     "firebase-admin": "^9.4.1",
+    "formidable": "^1.2.2",
     "handlebars": "^4.7.7",
     "joi": "^17.2.1",
     "joi-phone-number": "^5.0.0",

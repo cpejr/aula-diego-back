@@ -34,7 +34,7 @@ module.exports = {
 
       return response.status(200).json({ file_id: file_id });
     } catch (error) {
-      console.warn(error.message);
+      console.warn(error);
       response.status(500).json("Internal server error");
     }
   },

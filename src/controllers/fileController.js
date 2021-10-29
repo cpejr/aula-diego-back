@@ -1,7 +1,8 @@
 const FileModel = require("../models/FileModel");
-const multer = require("../middlewares/multer");
+const formidable = require("formidable");
 const { v4: uuidv4 } = require("uuid");
-const path = require("path")
+const { upload, download } = require("../services/wasabi");
+const fs = require("fs");
 
 module.exports = {
   async create(request, response) {
@@ -12,8 +13,8 @@ module.exports = {
       const file_id = uuidv4();
 
       if (fileType !== "image") {
-        console.warn('Not a image');
-        response.status(500).json("Internal server error");
+        console.warn("Not a image");
+        response.status(500).json({ message: "Internal server error" });
       }
 
       const image = {
@@ -21,20 +22,55 @@ module.exports = {
         name: data.file_name,
         type: fileExtension,
         path: `${file_id}.${fileExtension}`,
-        user_id: data.user_id
-      }
+        user_id: data.user_id,
+      };
 
       await FileModel.create(image);
-      response.status(200).json({file_id: file_id});
+      response.status(200).json({ file_id: file_id });
     } catch (error) {
       console.log(error.message);
       response.status(500).json("Internal server error.");
     }
   },
 
-  async uploadFile(request, response, next) {
-    multer.upload(request, response, next);
-    response.status(200).json("Arquivos enviado com sucesso.");
+  async uploadFile(request, response) {
+    try {
+      const form = new formidable.IncomingForm();
+
+      form.parse(request, (error, fields, files) => {
+        if (error) {
+          response.status(500).json({ message: "Internal server error" });
+        }
+
+        const filenames = Object.keys(files);
+
+        filenames.forEach(async (filename) => {
+          const file_id = uuidv4();
+          const fileExtension = files[filename].name.match(/(?<=\.).+/)[0];
+
+          const filestream = fs.readFileSync(files[filename].path);
+          const result = await upload(
+            `${file_id}.${fileExtension}`,
+            filestream
+          );
+
+          const image = {
+            id: file_id,
+            name: filename,
+            type: fileExtension,
+            path: result.Location,
+            user_id: request.session.user.id,
+          };
+
+          await FileModel.create(image);
+        });
+      });
+
+      response.status(200).json("Arquivo enviado com sucesso.");
+    } catch (error) {
+      console.log(error);
+      response.status(500).json({ message: "Internal server error" });
+    }
   },
 
   async delete(request, response) {
@@ -68,9 +104,13 @@ module.exports = {
   async getFile(request, response) {
     try {
       const { id } = request.params;
+
       const file = await FileModel.getById(id);
-      
-      response.sendFile(path.join(__dirname, ".." , "images", file[0].path));
+      const fileKey = `${file.id}.${file.type}`;
+
+      const { Body } = await download(fileKey);
+
+      response.json({ base64: Body.toString("base64"), url: file.path });
     } catch (error) {
       console.log(error.message);
       response.status(500).json("Internal server error.");
@@ -84,7 +124,7 @@ module.exports = {
 
       newLesson.updated_at = datetime.getTime();
 
-      const res = await lessonModel.updatelesson(lesson_id, newLesson);
+      const res = await lessonModel.updatelesson(id, newLesson);
       if (res !== 1) {
         return response.status(400).json("Aula não encontrada!");
       } else {
