@@ -2,7 +2,6 @@ const connection = require("../database/connection");
 
 module.exports = {
   async create(file) {
-    console.log(file);
     const response = await connection("file").insert(file);
     return response;
   },

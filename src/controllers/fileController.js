@@ -37,36 +37,45 @@ module.exports = {
     try {
       const form = new formidable.IncomingForm();
 
-      form.parse(request, (error, fields, files) => {
-        if (error) {
-          response.status(500).json({ message: "Internal server error" });
-        }
+      const file_ids = await new Promise((resolve, reject) => {
+        form.parse(request, (error, fields, files) => {
+          if (error) {
+            response.status(500).json({ message: "Internal server error" });
+          }
 
-        const filenames = Object.keys(files);
+          const filenames = Object.keys(files);
 
-        filenames.forEach(async (filename) => {
-          const file_id = uuidv4();
-          const fileExtension = files[filename].name.match(/(?<=\.).+/)[0];
+          const ids = [];
+          filenames.forEach(async (filename) => {
+            try {
+              const file_id = uuidv4();
+              ids.push(file_id);
+              const fileExtension = files[filename].name.match(/(?<=\.).+/)[0];
 
-          const filestream = fs.readFileSync(files[filename].path);
-          const result = await upload(
-            `${file_id}.${fileExtension}`,
-            filestream
-          );
+              const filestream = fs.readFileSync(files[filename].path);
+              const result = await upload(
+                `${file_id}.${fileExtension}`,
+                filestream
+              );
 
-          const image = {
-            id: file_id,
-            name: filename,
-            type: fileExtension,
-            path: result.Location,
-            user_id: request.session.user.id,
-          };
+              const fileData = {
+                id: file_id,
+                name: filename,
+                type: fileExtension,
+                path: result.Location,
+                user_id: request.session.user.id,
+              };
 
-          await FileModel.create(image);
+              await FileModel.create(fileData);
+              resolve(ids);
+            } catch (error) {
+              reject(error);
+            }
+          });
         });
       });
 
-      response.status(200).json("Arquivo enviado com sucesso.");
+      response.status(200).json({ file_ids });
     } catch (error) {
       console.log(error);
       response.status(500).json({ message: "Internal server error" });

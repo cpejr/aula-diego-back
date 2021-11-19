@@ -8,16 +8,20 @@ module.exports = {
   async getById(id) {
     const response = await connection("organization")
       .where({ id })
-      .andWhere({ is_deleted: false })
-      .select("*")
+      .andWhere("organization.is_deleted", false)
+      .join("file", "organization.file_id", "file.id")
+      .select("organization.*")
+      .select("file.path as logo")
       .first();
     return response;
   },
   async read(filters) {
     const response = await connection("organization")
       .where(filters)
-      .andWhere({ is_deleted: false })
-      .select("*");
+      .andWhere("organization.is_deleted", false)
+      .join("file", "organization.file_id", "file.id")
+      .select("organization.*")
+      .select("file.path as logo");
     return response;
   },
   async update(organization) {
