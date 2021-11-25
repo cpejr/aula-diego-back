@@ -114,7 +114,11 @@ routes.delete("/class/:id", authenticateToken, classController.delete);
 routes.post("/file", authenticateToken, fileController.create);
 //routes.get("/file/:id", authenticateToken, fileController.getById);
 routes.get("/file_get/:id", authenticateToken, fileController.getFile);
-routes.post("/file_upload", authenticateToken, fileController.uploadFile);
+routes.post(
+  "/file_upload",
+  authenticateToken,
+  fileController.uploadMultipleFiles
+);
 // routes.put("/file/:id", authenticateToken, fileController.update);
 // routes.put("/file/:id", authenticateToken, fileController.delete);
 
@@ -129,6 +133,11 @@ routes.delete("/lesson/:id", authenticateToken, lessonController.delete);
 routes.post("/user", celebrate(userValidator.create), userController.create);
 routes.get("/user", authenticateToken, userController.read);
 routes.get("/user/:id", authenticateToken, userController.getById);
+routes.get(
+  "/me/organization",
+  authenticateToken,
+  userController.getMyOrganization
+);
 routes.put("/user", authenticateToken, userController.update); //UPDATE
 routes.put("/user/:id", authenticateToken, isMaster, userController.delete); //DELETE
 routes.post(

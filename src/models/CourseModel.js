@@ -20,7 +20,8 @@ module.exports = {
   },
   async getByIdAll(id) {
     const response = await connection("lesson")
-      .where("course_id", id).andWhere("is_deleted", false)
+      .where("course_id", id)
+      .andWhere("is_deleted", false)
       .select("id", "name", "created_at as date", knex.raw("'lesson' as type"))
       .union([
         connection("live")
@@ -31,13 +32,23 @@ module.exports = {
           .where("course_id", id)
           .andWhere("is_deleted", false)
           .andWhere("open", true)
-          .select("id", "name", "start_date as date", knex.raw("'exercise-start' as type")),
+          .select(
+            "id",
+            "name",
+            "start_date as date",
+            knex.raw("'exercise-start' as type")
+          ),
         connection("exercise")
           .where("course_id", id)
           .andWhere("is_deleted", false)
           .andWhere("open", true)
-          .select("id", "name", "end_date as date", knex.raw("'exercise-end' as type"))
-    ])
+          .select(
+            "id",
+            "name",
+            "end_date as date",
+            knex.raw("'exercise-end' as type")
+          ),
+      ]);
 
     return response;
   },
@@ -67,10 +78,7 @@ module.exports = {
       .where(filters)
       .andWhereNot("course.is_deleted", "true")
       .join("organization", "organization.id", "course.organization_id")
-      .select(
-        "course.*",
-        "organization.name as organization_name"
-      );
+      .select("course.*", "organization.name as organization_name");
     return response;
   },
   async update(course) {

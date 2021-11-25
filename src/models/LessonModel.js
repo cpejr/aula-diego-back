@@ -11,7 +11,7 @@ module.exports = {
       .where({ id })
       .select("*")
       .first();
-      
+
     return response;
   },
 

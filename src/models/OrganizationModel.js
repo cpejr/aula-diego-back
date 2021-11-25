@@ -7,7 +7,7 @@ module.exports = {
   },
   async getById(id) {
     const response = await connection("organization")
-      .where({ id })
+      .where("organization.id", id)
       .andWhere("organization.is_deleted", false)
       .join("file", "organization.file_id", "file.id")
       .select("organization.*")

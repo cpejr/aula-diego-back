@@ -6,6 +6,7 @@ const { v4: uuidv4 } = require("uuid");
 var datetime = require("node-datetime");
 const connection = require("../database/connection");
 const LessonPresenceModel = require("../models/LessonPresenceModel");
+const OrganizationModel = require("../models/OrganizationModel");
 
 module.exports = {
   async create(request, response) {
@@ -62,6 +63,21 @@ module.exports = {
       const { id } = request.params;
       const user = await UserModel.getById(id);
       return response.status(200).json(user);
+    } catch (error) {
+      console.warn(error.message);
+      response.status(500).json("internal server error");
+    }
+  },
+
+  async getMyOrganization(request, response) {
+    try {
+      const { user } = request.session;
+      console.log(user.organization_id);
+      const organization = await OrganizationModel.getById(
+        user.organization_id
+      );
+      console.log(organization);
+      return response.status(200).json(organization);
     } catch (error) {
       console.warn(error.message);
       response.status(500).json("internal server error");

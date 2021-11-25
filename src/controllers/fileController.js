@@ -4,6 +4,23 @@ const { v4: uuidv4 } = require("uuid");
 const { upload, download } = require("../services/wasabi");
 const fs = require("fs");
 
+async function uploadFile(file, file_id, user_id) {
+  const fileExtension = file.name.match(/(?<=\.).+/)[0];
+
+  const filestream = fs.readFileSync(file.path);
+  const result = await upload(`${file_id}.${fileExtension}`, filestream);
+
+  const fileData = {
+    id: file_id,
+    name: file.name,
+    type: fileExtension,
+    path: result.Location,
+    user_id: user_id,
+  };
+
+  await FileModel.create(fileData);
+}
+
 module.exports = {
   async create(request, response) {
     try {
@@ -33,49 +50,29 @@ module.exports = {
     }
   },
 
-  async uploadFile(request, response) {
+  async uploadMultipleFiles(request, response) {
     try {
       const form = new formidable.IncomingForm();
+      const promises = [];
+      const ids = [];
 
-      const file_ids = await new Promise((resolve, reject) => {
-        form.parse(request, (error, fields, files) => {
-          if (error) {
-            response.status(500).json({ message: "Internal server error" });
-          }
+      form.parse(request, async (error, fields, files) => {
+        if (error) {
+          response.status(500).json({ message: "Internal server error" });
+        }
 
-          const filenames = Object.keys(files);
+        const filenames = Object.keys(files);
 
-          const ids = [];
-          filenames.forEach(async (filename) => {
-            try {
-              const file_id = uuidv4();
-              ids.push(file_id);
-              const fileExtension = files[filename].name.match(/(?<=\.).+/)[0];
-
-              const filestream = fs.readFileSync(files[filename].path);
-              const result = await upload(
-                `${file_id}.${fileExtension}`,
-                filestream
-              );
-
-              const fileData = {
-                id: file_id,
-                name: filename,
-                type: fileExtension,
-                path: result.Location,
-                user_id: request.session.user.id,
-              };
-
-              await FileModel.create(fileData);
-              resolve(ids);
-            } catch (error) {
-              reject(error);
-            }
-          });
+        filenames.forEach(async (filename) => {
+          const file_id = uuidv4();
+          ids.push(file_id);
+          promises.push(
+            uploadFile(files[filename], file_id, request.session.user.id)
+          );
         });
+        await Promise.all(promises);
+        response.status(200).json({ file_ids: ids });
       });
-
-      response.status(200).json({ file_ids });
     } catch (error) {
       console.log(error);
       response.status(500).json({ message: "Internal server error" });
