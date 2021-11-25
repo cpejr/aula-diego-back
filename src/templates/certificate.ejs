@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt">
+  <head>
+    <style>
+      /* normalize css */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      
+      html, body, .document-container{
+        height: 100%;
+        font-size: 16px;
+      }
+
+      .document-container {
+        background-image: url("<%= background %>");
+        background-position: left;
+        background-repeat: no-repeat;
+        background-size: contain;
+
+        padding-left: 25%;
+      }
+
+      .header{
+        display: flex;
+        justify-content: flex-end;
+      }
+
+      .title{
+        text-align: center;
+        font-size: 50px;
+      }
+
+      .logo-container{
+        margin-left: auto;
+        margin-right: 0;
+        
+        width: fit-content;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+      }
+
+
+      .logo{
+        margin-left: 20px;
+        max-width: 150px;
+        max-height: 100px;
+      }
+
+      .text-container {
+        margin: 20px;
+      }
+
+      .info-container {
+      }
+
+      .signature-container {
+        width: fit-content;
+        text-align: center;
+      }
+
+      .signature-img {
+        max-height: 80px;
+        max-width: 200px;
+
+        padding-bottom: 5px;
+        border-bottom: 1px solid black;
+      }
+
+      .signature-name {
+      }
+
+      .signature-job {
+        font-style: italic;
+      }
+
+      .qrcode-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        align-items: flex-end;
+        width: fit-content;
+        padding-right: 15px;
+
+      }
+      
+      .qrcode-inner-container {
+        position: relative;
+
+        height: 100px;
+      }
+
+      .qrcode {
+        position: absolute;
+        right: 0;
+        top: 0;
+
+        width: 100px;
+      }
+
+      .qrcode-hash{
+        color: #494949;
+        font-size: 12px;
+        text-align: right;
+      }
+      .qrcode-text{
+        font-size: 14px;
+        text-align: right;
+        font-style: italic;
+      }
+    </style>
+    <title>Certificado <%= name %></title>
+  </head>
+  <body>
+    <div class="document-container">
+      <section class="header">
+        <div class="logo-container">
+          <img class="logo recclass" alt="Recclass logo" src="<%= recclass %>" />        
+          <img class="logo organization" alt="Recclass logo" src="<%= logo %>" />        
+        </div>
+      </section>
+      <h1 class="title">Certificado</h1>
+      <!-- TEXT -->
+      <section class="text-container">
+        <p>
+          Certificamos que <strong> <%= name %> </strong>, inscrito no CPF nº
+          <strong> <%= cpf %> </strong> participou do curso
+          <it> <%= course %> </it> promovido por
+          <strong> <%= company %> </strong>, com carga horária de:
+          <strong><%= workload %></strong> horas
+        </p>
+      </section>
+      <!-- FOOTER -->
+      <div class="info-container">
+        <!-- SIGNATURE -->
+        <section class="signature-container">
+          <img class="signature-img" src="<%= signature %>" />
+          <p class="signature-name"><strong><%= admin %> </strong></p>
+          <p class="signature-job"><%= occupation %></p>
+        </section>
+        <!-- QRCODE -->
+        <section class="qrcode-container">
+          <div class="qrcode-inner-container">
+            <img class="qrcode" src="<%= qrcode %>" />
+          </div>
+              <p class="qrcode-hash"><%= certificate_id %></p>
+              <p class="qrcode-text">Escaneie o código QR para verificar a autenticidade do certificado</p>
+          </div>
+        </section>
+      </div>
+    </div>
+  </body>
+</html>
