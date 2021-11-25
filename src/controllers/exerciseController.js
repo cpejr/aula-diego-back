@@ -107,7 +107,8 @@ module.exports = {
   async close(request, response) {
     try {
       const { id } = request.params;
-      const extend = { end_date: Date.now() / 1000.0 };
+      const now = new Date();
+      const extend = { end_date: now };
 
       const res = await exerciseModel.update(extend, id);
 

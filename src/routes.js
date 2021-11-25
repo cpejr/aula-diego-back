@@ -163,10 +163,10 @@ routes.delete("/live/:id", authenticateToken, liveController.delete);
 
 routes.post("/exercise", authenticateToken, exerciseController.create);
 routes.get("/exercise", authenticateToken, exerciseController.read);
+routes.put("/exercise/close/:id", authenticateToken, exerciseController.close);
 routes.get("/exercise/:id", authenticateToken, exerciseController.getById);
 routes.get("/exercise/:id", authenticateToken, exerciseController.getById);
 routes.put("/exercise/:id", authenticateToken, exerciseController.update);
-routes.put("/exerciseclose/:id", authenticateToken, exerciseController.close);
 routes.delete("/exercise/:id", authenticateToken, exerciseController.delete);
 
 //SESSION ---------------------------------------------------------------------------------
