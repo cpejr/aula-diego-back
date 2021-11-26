@@ -145,7 +145,11 @@ routes.post(
   celebrate(userValidator.forgottenPassword),
   userController.forgottenPassword
 );
-
+routes.get(
+  "/user/me/certificate",
+  authenticateToken,
+  userController.getMyCertificates
+);
 // LIVE -----------------------------------------------------------------------------------
 
 routes.post(
@@ -299,6 +303,11 @@ routes.post(
   authenticateToken,
   certificateController.createCertificate
 );
-routes.get("/course-cerificate/:id", certificateController.getById);
+routes.get("/cerificate/:id", certificateController.getById);
+routes.get(
+  "/certificate/user/:id",
+  authenticateToken,
+  certificateController.getByUserId
+);
 
 module.exports = routes;
