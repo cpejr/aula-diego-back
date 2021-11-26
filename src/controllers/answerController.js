@@ -5,26 +5,36 @@ module.exports = {
   async create(request, response) {
     try {
       const answer = request.body;
+      const exercise = await exerciseModel.getById(answer.exercise_id);
+
+      if (!exercise.open || exercise.end_date < new Date()) {
+        return response
+          .status(400)
+          .json({
+            message:
+              "Este exercício foi fechado e não pode mais ser respondido",
+          });
+      }
 
       if (answer.evaluate) {
         let correct = 0;
-        const exercise = await exerciseModel.getById(answer.exercise_id);
-  
-        answerSheet = Object.values(exercise.questions).map(question => question.correct);
+
+        answerSheet = Object.values(exercise.questions).map(
+          (question) => question.correct
+        );
         answers = Object.values(answer.answers);
-  
+
         answers.map((answer, index) => {
-          if (answer === answerSheet[index])
-            correct += 1;
-        })
-  
-        answer.grade = Math.round(correct / answers.length * 100);
+          if (answer === answerSheet[index]) correct += 1;
+        });
+
+        answer.grade = Math.round((correct / answers.length) * 100);
       }
 
       delete answer.evaluate;
       const id = await answerModel.create(answer);
 
-      response.status(200).json({id: id[0]});
+      response.status(200).json({ id: id[0] });
     } catch (error) {
       console.log(error.message);
       response.status(500).json("Internal server error.");
@@ -71,7 +81,7 @@ module.exports = {
       response.status(500).json("Internal server error.");
     }
   },
-  
+
   async update(request, response) {
     try {
       const { id } = request.params;
