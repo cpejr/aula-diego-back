@@ -64,13 +64,16 @@ module.exports = {
 
       const questionNumbers = Object.keys(exercise.questions);
 
-      // o front não deve conhecer as respostas dos exercicios
-      for (const questionNumber of questionNumbers) {
-        if (
-          exercise.questions[questionNumber] &&
-          exercise.questions[questionNumber].correct
-        ) {
-          delete exercise.questions[questionNumber].correct;
+      // o estudante não deve conhecer as respostas dos exercicios
+      const { user } = request.session;
+      if (user.type == "student") {
+        for (const questionNumber of questionNumbers) {
+          if (
+            exercise.questions[questionNumber] &&
+            exercise.questions[questionNumber].correct
+          ) {
+            delete exercise.questions[questionNumber].correct;
+          }
         }
       }
 
