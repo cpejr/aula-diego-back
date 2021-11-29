@@ -33,7 +33,10 @@ module.exports = {
   },
 
   async uploadFile(request, response, next) {
-    multer.upload(request, response, next);
+    /* multer.upload(request, response, next); */ 
+    
+    /* SUBSTITUIR PELO WASABI */
+    
     response.status(200).json("Arquivo enviado com sucesso.");
   },
 
