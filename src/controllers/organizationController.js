@@ -1,39 +1,22 @@
 const OrganizationModel = require("../models/OrganizationModel");
 const FileModel = require("../models/FileModel");
-const { v4: uuidv4 } = require("uuid");
 
 module.exports = {
   async create(request, response) {
     try {
-      const data = request.body;
-      const fileType = data.file_type.match(/.+(?=\/)/)[0];
-      const fileExtension = data.file_original.match(/(?<=\.).+/)[0];
-      const file_id = uuidv4();
-
-      if (fileType !== "image") {
-        response.status(400).json({ message: "Avatar is not an image" });
-      }
-
-      const logo = {
-        id: file_id,
-        name: data.file_name,
-        type: fileExtension,
-        path: `${file_id}.${fileExtension}`,
-        user_id: data.user_id,
-      };
+      const { file_id, name, description } = request.body;
 
       const organization = {
-        name: data.name,
-        description: data.description,
-        file_id: file_id,
+        name,
+        description,
+        file_id,
       };
 
-      await FileModel.create(logo);
       await OrganizationModel.create(organization);
 
-      return response.status(200).json({ file_id: file_id });
+      return response.status(200).json({ organization });
     } catch (error) {
-      console.warn(error.message);
+      console.warn(error);
       response.status(500).json("Internal server error");
     }
   },
@@ -41,8 +24,8 @@ module.exports = {
   async read(request, response) {
     try {
       const filters = request.query;
-      const result = await OrganizationModel.read(filters);
-      return response.status(200).json(result);
+      const organizations = await OrganizationModel.read(filters);
+      return response.status(200).json(organizations);
     } catch (error) {
       console.warn(error);
       response.status(500).json("internal server error");
@@ -59,11 +42,11 @@ module.exports = {
       response.status(500).json("internal server error");
     }
   },
+
   async update(request, response) {
     try {
       const organization = request.body;
       const { user } = request.session;
-      console.log(organization);
 
       if (
         !(

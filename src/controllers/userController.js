@@ -1,7 +1,10 @@
 const UserModel = require("../models/UserModel");
 const FirebaseModel = require("../models/FirebaseModel");
 const connection = require("../database/connection");
+const LessonPresenceModel = require("../models/LessonPresenceModel");
+const OrganizationModel = require("../models/OrganizationModel");
 const { upload, uploadBase64 } = require("../services/wasabi");
+const CertificateModel = require("../models/CertificateModel");
 
 module.exports = {
   async create(request, response) {
@@ -58,6 +61,41 @@ module.exports = {
       const { id } = request.params;
       const user = await UserModel.getById(id);
       return response.status(200).json(user);
+    } catch (error) {
+      console.warn(error.message);
+      response.status(500).json("internal server error");
+    }
+  },
+
+  async getMyOrganization(request, response) {
+    try {
+      const { user } = request.session;
+      console.log(user.organization_id);
+      const organization = await OrganizationModel.getById(
+        user.organization_id
+      );
+      console.log(organization);
+      return response.status(200).json(organization);
+    } catch (error) {
+      console.warn(error.message);
+      response.status(500).json("internal server error");
+    }
+  },
+
+  async getMyCertificates(request, response) {
+    try {
+      const { user } = request.session;
+      const { course_id } = request.query;
+      if (course_id) {
+        const certificate = await CertificateModel.getByUserIdAndCourseId(
+          user.id,
+          course_id
+        );
+        return response.status(200).json(certificate);
+      }
+
+      const certificates = await CertificateModel.getByUserId(user.id);
+      return response.status(200).json(certificates);
     } catch (error) {
       console.warn(error.message);
       response.status(500).json("internal server error");

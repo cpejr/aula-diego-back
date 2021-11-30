@@ -3,8 +3,24 @@ const exerciseModel = require("../models/ExerciseModel");
 module.exports = {
   async create(request, response) {
     try {
-      const exercise = request.body;
-      await exerciseModel.create(exercise);
+      const {
+        name,
+        start_date,
+        end_date,
+        questions,
+        course_id,
+        open,
+        evaluate,
+      } = request.body;
+      await exerciseModel.create({
+        name,
+        start_date,
+        end_date,
+        questions,
+        course_id,
+        open,
+        evaluate,
+      });
       response.status(200).json("Atividade criada com sucesso.");
     } catch (error) {
       console.log(error.message);
@@ -46,23 +62,52 @@ module.exports = {
       const { id } = request.params;
       const exercise = await exerciseModel.getById(id);
 
+      const questionNumbers = Object.keys(exercise.questions);
+
+      // o estudante não deve conhecer as respostas dos exercicios
+      const { user } = request.session;
+      if (user.type == "student") {
+        for (const questionNumber of questionNumbers) {
+          if (
+            exercise.questions[questionNumber] &&
+            exercise.questions[questionNumber].correct
+          ) {
+            delete exercise.questions[questionNumber].correct;
+          }
+        }
+      }
+
       return response.status(200).json(exercise);
     } catch (error) {
       console.log(error.message);
       response.status(500).json("Internal server error.");
     }
   },
+
   async update(request, response) {
     try {
       const { id } = request.params;
-      const exercise = request.body;
+      const {
+        name,
+        start_date,
+        end_date,
+        questions,
+        course_id,
+        open,
+        evaluate,
+      } = request.body;
 
       const exerc = await exerciseModel.getById(id);
 
       if (exerc.open === true)
-        return response.status(400).json("Provas abertas não podem ser alteradas!");
+        return response
+          .status(400)
+          .json("Provas abertas não podem ser alteradas!");
 
-      const res = await exerciseModel.update(exercise, id);
+      const res = await exerciseModel.update(
+        { name, start_date, end_date, questions, course_id, open, evaluate },
+        id
+      );
       if (res !== 1) {
         return response.status(400).json("Atividade não encontrada!");
       } else {
@@ -73,10 +118,12 @@ module.exports = {
       response.status(500).json("Internal server error.");
     }
   },
+
   async close(request, response) {
     try {
       const { id } = request.params;
-      const extend = {end_date: Date.now() / 1000.0};
+      const now = new Date();
+      const extend = { end_date: now };
 
       const res = await exerciseModel.update(extend, id);
 

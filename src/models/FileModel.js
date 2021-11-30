@@ -2,11 +2,14 @@ const connection = require("../database/connection");
 
 module.exports = {
   async create(file) {
-    const response = await connection("file").insert(file, "id");
+    const response = await connection("file").insert(file);
     return response;
   },
   async getById(id) {
-    const response = await connection("file").where({ id }).select("*");
+    const response = await connection("file")
+      .where("file.id", id)
+      .select("*")
+      .first();
     return response;
   },
   async read(filters) {

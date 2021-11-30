@@ -1,11 +1,26 @@
-const connection = require("../database/connection");
+const FileLessonModel = require("../models/FileLessonModel");
 const LessonModel = require("../models/LessonModel");
+const videoLessonModel = require("../models/videoLessonModel");
 
 module.exports = {
   async create(request, response) {
     try {
-      const lesson = request.body;
-      const id = await lessonModel.create(lesson);
+      const { name, description, text, course_id, file_ids, videos } =
+        request.body;
+      const id = await LessonModel.create({
+        name,
+        description,
+        text,
+        course_id,
+      });
+
+      videos.forEach(async (video) => {
+        await videoLessonModel.create({ video_url: video, lesson_id: id[0] });
+      });
+
+      file_ids.forEach(async (file_id) => {
+        await FileLessonModel.create({ file_id, lesson_id: id[0] });
+      });
 
       response.status(200).json("Aula criada com sucesso.");
       return id;

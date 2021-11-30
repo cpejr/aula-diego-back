@@ -62,8 +62,6 @@ const {
   isMaster,
 } = require("./middlewares/authentication");
 
-const multer = require("./middlewares/multer");
-
 // TEST ROUTE ---------------------------------------------------------------------------
 routes.get("/", (request, response) => {
   response.send("🔥 server up and running");
@@ -116,7 +114,11 @@ routes.delete("/class/:id", authenticateToken, classController.delete);
 routes.post("/file", authenticateToken, fileController.create);
 //routes.get("/file/:id", authenticateToken, fileController.getById);
 routes.get("/file_get/:id", authenticateToken, fileController.getFile);
-routes.post("/file_upload", authenticateToken, fileController.uploadFile);
+routes.post(
+  "/file_upload",
+  authenticateToken,
+  fileController.uploadMultipleFiles
+);
 // routes.put("/file/:id", authenticateToken, fileController.update);
 // routes.put("/file/:id", authenticateToken, fileController.delete);
 
@@ -131,6 +133,11 @@ routes.delete("/lesson/:id", authenticateToken, lessonController.delete);
 routes.post("/user", celebrate(userValidator.create), userController.create);
 routes.get("/user", authenticateToken, userController.read);
 routes.get("/user/:id", authenticateToken, userController.getById);
+routes.get(
+  "/me/organization",
+  authenticateToken,
+  userController.getMyOrganization
+);
 routes.put("/user", authenticateToken, userController.update); //UPDATE
 routes.put("/user/:id", authenticateToken, isMaster, userController.delete); //DELETE
 routes.post(
@@ -138,7 +145,11 @@ routes.post(
   celebrate(userValidator.forgottenPassword),
   userController.forgottenPassword
 );
-
+routes.get(
+  "/user/me/certificate",
+  authenticateToken,
+  userController.getMyCertificates
+);
 // LIVE -----------------------------------------------------------------------------------
 
 routes.post(
@@ -156,10 +167,10 @@ routes.delete("/live/:id", authenticateToken, liveController.delete);
 
 routes.post("/exercise", authenticateToken, exerciseController.create);
 routes.get("/exercise", authenticateToken, exerciseController.read);
+routes.put("/exercise/close/:id", authenticateToken, exerciseController.close);
 routes.get("/exercise/:id", authenticateToken, exerciseController.getById);
 routes.get("/exercise/:id", authenticateToken, exerciseController.getById);
 routes.put("/exercise/:id", authenticateToken, exerciseController.update);
-routes.put("/exerciseclose/:id", authenticateToken, exerciseController.close);
 routes.delete("/exercise/:id", authenticateToken, exerciseController.delete);
 
 //SESSION ---------------------------------------------------------------------------------
@@ -293,6 +304,10 @@ routes.post(
   certificateController.createCertificate
 );
 routes.get("/cerificate/:id", certificateController.getById);
-routes.get("/certificate/user/:user_id", certificateController.getByUserId);
+routes.get(
+  "/certificate/user/:id",
+  authenticateToken,
+  certificateController.getByUserId
+);
 
 module.exports = routes;

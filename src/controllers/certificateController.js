@@ -11,6 +11,7 @@ const Course = require("../models/CourseModel");
 const Company = require("../models/OrganizationModel");
 const Occupation = require("../models/OccupationModel");
 const Certificate = require("../models/CertificateModel");
+const { getByUserId } = require("./courseController");
 
 async function createQrCode(url) {
   const result = await qr.toDataURL(url);
@@ -173,9 +174,9 @@ module.exports = {
 
   async getByUserId(request, response) {
     try {
-      const { user_id } = request.params;
-      const certificate = await Certificate.getByUserId(user_id);
-      return response.status(200).json(certificate);
+      const { id } = request.params;
+      const certificates = await Certificate.getByUserId(id);
+      return response.status(200).json(certificates);
     } catch (error) {
       console.warn(error.message);
       response.status(500).json("internal server error");
