@@ -32,11 +32,14 @@ module.exports = {
 
   async getByUserId(userId) {
     const response = await connection("certificate")
-      .where({
-        user_id: userId,
-      })
+      .where({ "certificate.user_id": userId })
+      .join("user", "user.id", "certificate.user_id")
       .join("course", "course.id", "certificate.course_id")
-      .select("certificate.*", "course.name as course_name")
+      .select(
+        "certificate.*",
+        "user.name as user_name",
+        "course.name as course_name"
+      )
       .first();
     return response;
   },

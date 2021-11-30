@@ -62,6 +62,21 @@ module.exports = {
       const { id } = request.params;
       const exercise = await exerciseModel.getById(id);
 
+      const questionNumbers = Object.keys(exercise.questions);
+
+      // o estudante não deve conhecer as respostas dos exercicios
+      const { user } = request.session;
+      if (user.type == "student") {
+        for (const questionNumber of questionNumbers) {
+          if (
+            exercise.questions[questionNumber] &&
+            exercise.questions[questionNumber].correct
+          ) {
+            delete exercise.questions[questionNumber].correct;
+          }
+        }
+      }
+
       return response.status(200).json(exercise);
     } catch (error) {
       console.log(error.message);
