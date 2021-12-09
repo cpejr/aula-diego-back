@@ -45,7 +45,7 @@ module.exports = {
 
   async update(request, response) {
     try {
-      const organization = request.body;
+      const { name, description, file_id } = request.body;
       const { user } = request.session;
 
       if (
@@ -59,13 +59,17 @@ module.exports = {
           .json("Você não tem permissão para realizar esta operação");
       }
 
-      const res = await OrganizationModel.update(organization);
+      const res = await OrganizationModel.update({
+        name,
+        description,
+        file_id,
+      });
 
       if (res !== 1) {
         return response.status(404).json("Organização não encontrada!");
-      } else {
-        return response.status(200).json("Organização alterada com sucesso ");
       }
+
+      return response.status(200).json("Organização alterada com sucesso ");
     } catch (error) {
       console.log(error.message);
       return response.status(500).json("internal server error ");
