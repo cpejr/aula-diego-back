@@ -8,12 +8,9 @@ module.exports = {
       const exercise = await exerciseModel.getById(answer.exercise_id);
 
       if (!exercise.open || exercise.end_date < new Date()) {
-        return response
-          .status(400)
-          .json({
-            message:
-              "Este exercício foi fechado e não pode mais ser respondido",
-          });
+        return response.status(400).json({
+          message: "Este exercício foi fechado e não pode mais ser respondido",
+        });
       }
 
       if (answer.evaluate) {
@@ -37,7 +34,7 @@ module.exports = {
       response.status(200).json({ id: id[0] });
     } catch (error) {
       console.log(error.message);
-      response.status(500).json("Internal server error.");
+      response.status(500).json({ message: "Internal server error." });
     }
   },
 
@@ -49,7 +46,7 @@ module.exports = {
       return response.status(200).json(result);
     } catch (error) {
       console.warn(error);
-      response.status(500).json("Internal server error");
+      response.status(500).json({ message: "Internal server error." });
     }
   },
 
@@ -59,14 +56,18 @@ module.exports = {
       const foundExam = await answerModel.getById(id);
 
       if (!foundExam) {
-        throw new Error("Resposta não encontrada.");
+        return response
+          .status(404)
+          .json({ message: "Resposta não encontrada." });
       } else {
         await answerModel.delete(id);
-        response.status(200).json("Resposta deletada com sucesso.");
+        response
+          .status(200)
+          .json({ message: "Resposta deletada com sucesso." });
       }
     } catch (error) {
       console.log(error.message);
-      response.status(500).json("Internal server error.");
+      response.status(500).json({ message: "Internal server error." });
     }
   },
 
@@ -78,7 +79,7 @@ module.exports = {
       return response.status(200).json(answer);
     } catch (error) {
       console.log(error.message);
-      response.status(500).json("Internal server error.");
+      response.status(500).json({ message: "Internal server error." });
     }
   },
 
@@ -89,13 +90,17 @@ module.exports = {
 
       const res = await answerModel.update(answer, id);
       if (res !== 1) {
-        return response.status(400).json("Resposta não encontrada!");
+        return response
+          .status(400)
+          .json({ message: "Resposta não encontrada!" });
       } else {
-        return response.status(200).json("Resposta alterada com sucesso ");
+        return response
+          .status(200)
+          .json({ message: "Resposta alterada com sucesso" });
       }
     } catch (error) {
       console.log(error.message);
-      response.status(500).json("Internal server error.");
+      response.status(500).json({ message: "Internal server error." });
     }
   },
 };
