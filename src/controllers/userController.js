@@ -34,14 +34,14 @@ module.exports = {
 
       user.firebase_id = firebaseUid;
 
-      const res = await UserModel.create(user);
+      await UserModel.create(user);
       return response.status(200).json("Usuário Criado com succeso!");
     } catch (error) {
       if (firebaseUid) {
         FirebaseModel.deleteUser(firebaseUid);
       }
       console.warn(error.message);
-      response.status(500).json("internal server error");
+      response.status(500).json({ message: "Internal server error." });
     }
   },
 
@@ -52,7 +52,7 @@ module.exports = {
       return response.status(200).json(result);
     } catch (error) {
       console.warn(error);
-      response.status(500).json("internal server error");
+      response.status(500).json({ message: "Internal server error." });
     }
   },
 
@@ -63,7 +63,7 @@ module.exports = {
       return response.status(200).json(user);
     } catch (error) {
       console.warn(error.message);
-      response.status(500).json("internal server error");
+      response.status(500).json({ message: "Internal server error." });
     }
   },
 
@@ -78,7 +78,7 @@ module.exports = {
       return response.status(200).json(organization);
     } catch (error) {
       console.warn(error.message);
-      response.status(500).json("internal server error");
+      response.status(500).json({ message: "Internal server error." });
     }
   },
 
@@ -98,7 +98,7 @@ module.exports = {
       return response.status(200).json(certificates);
     } catch (error) {
       console.warn(error.message);
-      response.status(500).json("internal server error");
+      response.status(500).json({ message: "Internal server error." });
     }
   },
 
@@ -109,9 +109,9 @@ module.exports = {
       const { user: loggedUser } = request.session;
 
       if (loggedUser.id != user.id && loggedUser.type == "student")
-        return response
-          .status(403)
-          .json("Você não tem permissão para realizar esta operação");
+        return response.status(403).json({
+          message: "Você não tem permissão para realizar esta operação",
+        });
 
       let = signature_url = null;
 
@@ -147,7 +147,9 @@ module.exports = {
       }
     } catch (error) {
       console.log(error.message);
-      return response.status(500).json({ message: "Internal server error" });
+      return response
+        .status(500)
+        .json({ message: { message: "Internal server error." } });
     }
   },
 
@@ -167,7 +169,7 @@ module.exports = {
       } else {
         return response
           .status(200)
-          .json("Usuário Promovido para administrador");
+          .json({ message: "Usuário Promovido para administrador" });
       }
     } catch (error) {
       console.log(error.message);
