@@ -30,7 +30,6 @@ module.exports = {
       const file_id = uuidv4();
 
       if (fileType !== "image") {
-        console.warn("Not a image");
         response.status(500).json({ message: "Internal server error" });
       }
 
@@ -46,7 +45,7 @@ module.exports = {
       response.status(200).json({ file_id: file_id });
     } catch (error) {
       console.log(error.message);
-      response.status(500).json("Internal server error.");
+      response.status(500).json({ message: "Internal server error." });
     }
   },
 
@@ -88,11 +87,11 @@ module.exports = {
         throw new Error("Aula não encontrada.");
       } else {
         await lessonModel.deletelesson(id);
-        response.status(200).json("Aula deletada com sucesso.");
+        response.status(200).json({ message: "Aula deletada com sucesso." });
       }
     } catch (error) {
       console.log(error.message);
-      response.status(500).json("Internal server error.");
+      response.status(500).json({ message: "Internal server error." });
     }
   },
 
@@ -103,7 +102,7 @@ module.exports = {
       response.status(200).json(result);
     } catch (error) {
       console.log(error.message);
-      response.status(500).json("Internal server error.");
+      response.status(500).json({ message: "Internal server error." });
     }
   },
 
@@ -119,7 +118,7 @@ module.exports = {
       response.json({ base64: Body.toString("base64"), url: file.path });
     } catch (error) {
       console.log(error.message);
-      response.status(500).json("Internal server error.");
+      response.status(500).json({ message: "Internal server error." });
     }
   },
 
@@ -132,9 +131,11 @@ module.exports = {
 
       const res = await lessonModel.updatelesson(id, newLesson);
       if (res !== 1) {
-        return response.status(400).json("Aula não encontrada!");
+        return response.status(404).json({ message: "Aula não encontrada!" });
       } else {
-        return response.status(200).json("Aula alterada com sucesso ");
+        return response
+          .status(200)
+          .json({ message: "Aula alterada com sucesso" });
       }
     } catch (error) {
       console.log(error.message);
