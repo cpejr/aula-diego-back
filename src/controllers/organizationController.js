@@ -66,6 +66,7 @@ module.exports = {
         name,
         description,
         file_id,
+        id,
       });
 
       if (res !== 1) {
