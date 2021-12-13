@@ -63,6 +63,11 @@ module.exports = {
     try {
       const { id } = request.params;
       const lesson = await LessonModel.getById(id);
+      const lesson_videos = await videoLessonModel.read({ lesson_id: id });
+      const lesson_files = await FileLessonModel.read({ lesson_id: id });
+
+      lesson.videos = lesson_videos;
+      lesson.files = lesson_files;
 
       return response.status(200).json(lesson);
     } catch (error) {
@@ -75,6 +80,16 @@ module.exports = {
     try {
       const { id } = request.params;
       const newLesson = request.body;
+
+      const { file_ids } = newLesson;
+
+      if (file_ids) {
+        file_ids.forEach(async (file_id) => {
+          await FileLessonModel.create({ file_id, lesson_id: id });
+        });
+      }
+
+      delete newLesson.file_ids;
 
       const res = await LessonModel.update(newLesson, id);
       if (res !== 1) {

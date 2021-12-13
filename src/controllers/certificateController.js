@@ -11,6 +11,7 @@ const Course = require("../models/CourseModel");
 const Company = require("../models/OrganizationModel");
 const Occupation = require("../models/OccupationModel");
 const Certificate = require("../models/CertificateModel");
+const File = require("../models/FileModel");
 const { getByUserId } = require("./courseController");
 
 async function createQrCode(url) {
@@ -38,6 +39,8 @@ module.exports = {
         });
       }
 
+      console.log(admin);
+
       //admin need a signature to be able to generate certificates
       if (!admin.signature_url)
         return res.status(400).json({
@@ -59,6 +62,11 @@ module.exports = {
       if (!company)
         return res.status(404).json({ message: "Empresa não encontrada" });
 
+      if (!company.file_id)
+        return res
+          .status(400)
+          .json({ message: "Empresa precisa de logo para gerar certificados" });
+
       var certificate_id = uuid.v4();
 
       const qrcode = await createQrCode(
@@ -78,7 +86,11 @@ module.exports = {
         )
         .toString("base64")}`;
 
-      const { Body: logoBody } = await download(`logo_${company.id}.png`);
+      const logo_file = await File.getById(company.file_id);
+
+      const { Body: logoBody } = await download(
+        `${logo_file.id}.${logo_file.type}`
+      );
       const company_logo = `data:image/png;base64,${logoBody.toString(
         "base64"
       )}`;
