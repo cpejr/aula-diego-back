@@ -17,7 +17,7 @@ module.exports = {
       return response.status(200).json({ organization });
     } catch (error) {
       console.warn(error);
-      response.status(500).json("Internal server error");
+      response.status(500).json({ message: "Internal server error." });
     }
   },
 
@@ -28,7 +28,7 @@ module.exports = {
       return response.status(200).json(organizations);
     } catch (error) {
       console.warn(error);
-      response.status(500).json("internal server error");
+      response.status(500).json({ message: "Internal server error." });
     }
   },
 
@@ -39,7 +39,7 @@ module.exports = {
       return response.status(200).json(organization);
     } catch (error) {
       console.warn(error.message);
-      response.status(500).json("internal server error");
+      response.status(500).json({ message: "Internal server error." });
     }
   },
 
@@ -57,9 +57,9 @@ module.exports = {
           user.type == "master"
         )
       ) {
-        return response
-          .status(403)
-          .json("Você não tem permissão para realizar esta operação");
+        return response.status(403).json({
+          message: "Você não tem permissão para realizar esta operação",
+        });
       }
 
       const res = await OrganizationModel.update({
@@ -69,13 +69,17 @@ module.exports = {
       });
 
       if (res !== 1) {
-        return response.status(404).json("Organização não encontrada!");
+        return response
+          .status(404)
+          .json({ message: "Organização não encontrada!" });
       }
 
-      return response.status(200).json("Organização alterada com sucesso ");
+      return response
+        .status(200)
+        .json({ message: "Organização alterada com sucesso" });
     } catch (error) {
       console.log(error.message);
-      return response.status(500).json("internal server error ");
+      return response.status(500).json({ message: "Internal server error." });
     }
   },
 
@@ -84,10 +88,12 @@ module.exports = {
       const { id } = request.params;
 
       const result = await OrganizationModel.delete(id);
-      response.status(200).json("Organização apagada com sucesso!");
+      response
+        .status(200)
+        .json({ message: "Organização apagada com sucesso!" });
     } catch (error) {
       console.warn(error.message);
-      response.status(500).json("internal server error ");
+      response.status(500).json({ message: "Internal server error." });
     }
   },
 };
