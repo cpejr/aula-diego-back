@@ -44,7 +44,7 @@ module.exports = {
       await FileModel.create(image);
       response.status(200).json({ file_id: file_id });
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
       response.status(500).json({ message: "Internal server error." });
     }
   },
@@ -73,7 +73,7 @@ module.exports = {
         response.status(200).json({ file_ids: ids });
       });
     } catch (error) {
-      console.log(error);
+      console.error(error);
       response.status(500).json({ message: "Internal server error" });
     }
   },
@@ -90,7 +90,7 @@ module.exports = {
         response.status(200).json({ message: "Aula deletada com sucesso." });
       }
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
       response.status(500).json({ message: "Internal server error." });
     }
   },
@@ -101,7 +101,7 @@ module.exports = {
       const result = await FileModel.read(filters);
       response.status(200).json(result);
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
       response.status(500).json({ message: "Internal server error." });
     }
   },
@@ -117,7 +117,7 @@ module.exports = {
 
       response.json({ base64: Body.toString("base64"), url: file.path });
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
       response.status(500).json({ message: "Internal server error." });
     }
   },
@@ -138,7 +138,7 @@ module.exports = {
           .json({ message: "Aula alterada com sucesso" });
       }
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
       response.status(500).json("Internal server error.");
     }
   },

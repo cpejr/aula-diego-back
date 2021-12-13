@@ -74,7 +74,7 @@ module.exports = {
           .json({ message: "Ocupação alterada com sucesso" });
       }
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
       return response.status(500).json({ message: "Internal server error." });
     }
   },

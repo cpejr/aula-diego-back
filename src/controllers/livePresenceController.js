@@ -11,11 +11,9 @@ module.exports = {
       const loggedUser = request.session.user;
 
       if (loggedUser.id != livePresence.user_id) {
-        return response
-          .status(403)
-          .json({
-            message: "Você não tem permissão para realizar esta operação",
-          });
+        return response.status(403).json({
+          message: "Você não tem permissão para realizar esta operação",
+        });
       }
 
       const alreadyExists = await LivePresenceModel.read({
@@ -42,7 +40,6 @@ module.exports = {
 
       // gamification related:
       const user = await UserModel.getById(livePresence.user_id);
-      console.log(user);
       await UserModel.update({
         id: livePresence.user_id,
         score: user.score + 1,
@@ -74,7 +71,7 @@ module.exports = {
       const result = await LivePresenceModel.getAudience(filters);
       return response.status(200).json(result);
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
       response.status(500).json({ message: "Internal server error." });
     }
   },

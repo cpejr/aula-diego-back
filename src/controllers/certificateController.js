@@ -39,8 +39,6 @@ module.exports = {
         });
       }
 
-      console.log(admin);
-
       //admin need a signature to be able to generate certificates
       if (!admin.signature_url)
         return res.status(400).json({
@@ -168,7 +166,7 @@ module.exports = {
         }
       );
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
       res.status(500).json({ message: "Internal server error." });
     }
   },

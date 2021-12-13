@@ -11,7 +11,7 @@ module.exports = {
       await LiveModel.create(live);
       response.status(200).json({ message: "Live criada com sucesso." });
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
       response.status(500).json({ message: "Internal server error." });
     }
   },
@@ -40,7 +40,7 @@ module.exports = {
         response.status(200).json({ message: "Live deletada com sucesso." });
       }
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
       response.status(500).json({ message: "Internal server error." });
     }
   },
@@ -52,7 +52,7 @@ module.exports = {
 
       return response.status(200).json(live);
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
       response.status(500).json({ message: "Internal server error." });
     }
   },
@@ -70,7 +70,7 @@ module.exports = {
           .json({ message: "Live alterada com sucesso" });
       }
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
       response.status(500).json({ message: "Internal server error." });
     }
   },

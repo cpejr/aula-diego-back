@@ -23,7 +23,7 @@ module.exports = {
 
       return next();
     } catch (error) {
-      console.log(error);
+      console.error(error);
       return response
         .status(403)
         .json({ error: "Invalid authorization token" });

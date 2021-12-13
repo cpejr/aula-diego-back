@@ -70,11 +70,9 @@ module.exports = {
   async getMyOrganization(request, response) {
     try {
       const { user } = request.session;
-      console.log(user.organization_id);
       const organization = await OrganizationModel.getById(
         user.organization_id
       );
-      console.log(organization);
       return response.status(200).json(organization);
     } catch (error) {
       console.warn(error.message);
@@ -146,7 +144,7 @@ module.exports = {
           .json({ message: "Usuário alterado com sucesso" });
       }
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
       return response
         .status(500)
         .json({ message: { message: "Internal server error." } });
@@ -172,7 +170,7 @@ module.exports = {
           .json({ message: "Usuário Promovido para administrador" });
       }
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
       return response.status(500).json("internal server error ");
     }
   },

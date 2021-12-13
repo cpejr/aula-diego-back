@@ -72,11 +72,9 @@ module.exports = {
           loggedUser.type == "master"
         )
       )
-        return response
-          .status(403)
-          .json({
-            message: "Você não tem permissão para realizar esta operação",
-          });
+        return response.status(403).json({
+          message: "Você não tem permissão para realizar esta operação",
+        });
 
       const res = await ClassModel.update({
         id: request.body.id,
@@ -105,7 +103,7 @@ module.exports = {
           .json({ message: "Turma alterada com sucesso" });
       }
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
       return response.status(500).json({ message: "Internal server error." });
     }
   },

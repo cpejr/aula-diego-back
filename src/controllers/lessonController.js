@@ -25,7 +25,7 @@ module.exports = {
       response.status(200).json({ message: "Aula criada com sucesso." });
       return id;
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
       response.status(500).json({ message: "Internal server error." });
     }
   },
@@ -42,7 +42,7 @@ module.exports = {
         response.status(200).json({ message: "Aula deletada com sucesso." });
       }
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
       response.status(500).json({ message: "Internal server error." });
     }
   },
@@ -54,7 +54,7 @@ module.exports = {
 
       response.status(200).json(result);
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
       response.status(500).json({ message: "Internal server error." });
     }
   },
@@ -100,7 +100,7 @@ module.exports = {
           .json({ messgae: "Aula alterada com sucesso" });
       }
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
       response.status(500).json({ message: "Internal server error." });
     }
   },

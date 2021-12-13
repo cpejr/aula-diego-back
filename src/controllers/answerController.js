@@ -33,7 +33,7 @@ module.exports = {
 
       response.status(200).json({ id: id[0] });
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
       response.status(500).json({ message: "Internal server error." });
     }
   },
@@ -66,7 +66,7 @@ module.exports = {
           .json({ message: "Resposta deletada com sucesso." });
       }
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
       response.status(500).json({ message: "Internal server error." });
     }
   },
@@ -78,7 +78,7 @@ module.exports = {
 
       return response.status(200).json(answer);
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
       response.status(500).json({ message: "Internal server error." });
     }
   },
@@ -99,7 +99,7 @@ module.exports = {
           .json({ message: "Resposta alterada com sucesso" });
       }
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
       response.status(500).json({ message: "Internal server error." });
     }
   },

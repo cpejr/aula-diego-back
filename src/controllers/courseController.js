@@ -77,11 +77,9 @@ module.exports = {
           loggedUser.type == "master"
         )
       )
-        return response
-          .status(403)
-          .json({
-            message: "Você não tem permissão para realizar esta operação",
-          });
+        return response.status(403).json({
+          message: "Você não tem permissão para realizar esta operação",
+        });
 
       const res = await CourseModel.update(course);
 
@@ -93,7 +91,7 @@ module.exports = {
           .json({ message: "Curso alterado com sucesso" });
       }
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
       return response.status(500).json({ message: "Internal server error." });
     }
   },

@@ -44,11 +44,9 @@ module.exports = {
     return numLives;
   },
   async getAudience(filters) {
-    console.log(filters);
     const response = await connection("live_presence")
       .where(filters)
       .count("live_id");
-    console.log(response);
     return response;
   },
   async update(livePresence) {

@@ -23,7 +23,7 @@ module.exports = {
       });
       response.status(200).json({ message: "Atividade criada com sucesso." });
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
       response.status(500).json({ message: "Internal server error." });
     }
   },
@@ -56,7 +56,7 @@ module.exports = {
           .json({ message: "Atividade deletada com sucesso." });
       }
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
       response.status(500).json({ message: "Internal server error." });
     }
   },
@@ -83,7 +83,7 @@ module.exports = {
 
       return response.status(200).json(exercise);
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
       response.status(500).json({ message: "Internal server error." });
     }
   },
@@ -122,7 +122,7 @@ module.exports = {
           .json({ message: "Atividade alterada com sucesso" });
       }
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
       response.status(500).json({ message: "Internal server error." });
     }
   },
@@ -145,7 +145,7 @@ module.exports = {
           .json({ message: "Atividade alterada com sucesso" });
       }
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
       response.status(500).json({ message: "Internal server error." });
     }
   },
