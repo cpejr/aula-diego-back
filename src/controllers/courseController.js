@@ -7,10 +7,12 @@ module.exports = {
       const course = request.body;
 
       const result = await CourseModel.create(course);
-      return response.status(200).json("Curso criado com succeso!");
+      return response
+        .status(200)
+        .json({ message: "Curso criado com succeso!" });
     } catch (error) {
       console.warn(error.message);
-      response.status(500).json("internal server error");
+      response.status(500).json({ message: "Internal server error." });
     }
   },
 
@@ -21,7 +23,7 @@ module.exports = {
       return response.status(200).json(result);
     } catch (error) {
       console.warn(error);
-      response.status(500).json("internal server error");
+      response.status(500).json({ message: "Internal server error." });
     }
   },
 
@@ -32,7 +34,7 @@ module.exports = {
       return response.status(200).json(course);
     } catch (error) {
       console.warn(error.message);
-      response.status(500).json("internal server error");
+      response.status(500).json({ message: "Internal server error." });
     }
   },
   async getByIdAll(request, response) {
@@ -40,14 +42,17 @@ module.exports = {
       const { id } = request.params;
       const course = await CourseModel.getById(id);
       const content = await CourseModel.getByIdAll(id);
-      if(!course.is_deleted){
-        const entries = content.map(item => ({...item, course_name: course.name}))
+      if (!course.is_deleted) {
+        const entries = content.map((item) => ({
+          ...item,
+          course_name: course.name,
+        }));
         return response.status(200).json(entries);
       }
       response.status(200).json([]);
     } catch (error) {
       console.warn(error.message);
-      response.status(500).json("internal server error");
+      response.status(500).json({ message: "Internal server error." });
     }
   },
   async getByUserId(request, response) {
@@ -57,7 +62,7 @@ module.exports = {
       return response.status(200).json(courses);
     } catch (error) {
       console.warn(error.message);
-      response.status(500).json("internal server error");
+      response.status(500).json({ message: "Internal server error." });
     }
   },
   async update(request, response) {
@@ -74,29 +79,33 @@ module.exports = {
       )
         return response
           .status(403)
-          .json("Você não tem permissão para realizar esta operação");
+          .json({
+            message: "Você não tem permissão para realizar esta operação",
+          });
 
       const res = await CourseModel.update(course);
 
       if (res !== 1) {
-        return response.status(404).json("Curso não encontrado!");
+        return response.status(404).json({ message: "Curso não encontrado!" });
       } else {
-        return response.status(200).json("Curso alterado com sucesso ");
+        return response
+          .status(200)
+          .json({ message: "Curso alterado com sucesso" });
       }
     } catch (error) {
       console.log(error.message);
-      return response.status(500).json("internal server error ");
+      return response.status(500).json({ message: "Internal server error." });
     }
   },
 
   async delete(request, response) {
     try {
       const { id } = request.params;
-      const result = await CourseModel.delete(id);
-      response.status(200).json("Curso apagado com sucesso!");
+      await CourseModel.delete(id);
+      response.status(200).json({ message: "Curso apagado com sucesso!" });
     } catch (error) {
       console.warn(error.message);
-      response.status(500).json("internal server error");
+      response.status(500).json({ message: "Internal server error." });
     }
   },
 };
