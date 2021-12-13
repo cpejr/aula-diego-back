@@ -75,8 +75,12 @@ routes.get(
   authenticateToken,
   organizationController.getById
 );
-routes.put("/organization", authenticateToken, organizationController.update); //UPDATE
 routes.put(
+  "/organization/:id",
+  authenticateToken,
+  organizationController.update
+); //UPDATE
+routes.delete(
   "/organization/:id",
   authenticateToken,
   organizationController.delete

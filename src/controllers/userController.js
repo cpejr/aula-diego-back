@@ -134,8 +134,6 @@ module.exports = {
         delete user.signature;
       }
 
-      user.id = loggedUser.id;
-
       const res = await UserModel.update(user);
 
       if (res !== 1) {

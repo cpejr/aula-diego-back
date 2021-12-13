@@ -47,6 +47,9 @@ module.exports = {
     try {
       const { name, description, file_id } = request.body;
       const { user } = request.session;
+      const { id } = request.params;
+
+      const organization = await OrganizationModel.getById(id);
 
       if (
         !(
