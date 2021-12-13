@@ -180,7 +180,7 @@ module.exports = {
       return response.status(200).json(certificate);
     } catch (error) {
       console.warn(error.message);
-      response.status(500).json("internal server error");
+      response.status(500).json({ message: "Internal server error." });
     }
   },
 
@@ -191,7 +191,7 @@ module.exports = {
       return response.status(200).json(certificates);
     } catch (error) {
       console.warn(error.message);
-      response.status(500).json("internal server error");
+      response.status(500).json({ message: "Internal server error." });
     }
   },
 };
