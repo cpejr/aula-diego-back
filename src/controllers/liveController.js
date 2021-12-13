@@ -9,10 +9,10 @@ module.exports = {
       const live = request.body;
 
       await LiveModel.create(live);
-      response.status(200).json("Live criada com sucesso.");
+      response.status(200).json({ message: "Live criada com sucesso." });
     } catch (error) {
       console.log(error.message);
-      response.status(500).json("Internal server error.");
+      response.status(500).json({ message: "Internal server error." });
     }
   },
 
@@ -24,7 +24,7 @@ module.exports = {
       return response.status(200).json(result);
     } catch (error) {
       console.warn(error);
-      response.status(500).json("internal server error");
+      response.status(500).json({ message: "Internal server error." });
     }
   },
 
@@ -34,14 +34,14 @@ module.exports = {
       const foundLive = await LiveModel.getById(id);
 
       if (!foundLive) {
-        throw new Error("Live não encontrada.");
+        return response.status(404).json({ message: "Live não encontrada." });
       } else {
         await LiveModel.delete(id);
-        response.status(200).json("Live deletada com sucesso.");
+        response.status(200).json({ message: "Live deletada com sucesso." });
       }
     } catch (error) {
       console.log(error.message);
-      response.status(500).json("Internal server error.");
+      response.status(500).json({ message: "Internal server error." });
     }
   },
 
@@ -53,7 +53,7 @@ module.exports = {
       return response.status(200).json(live);
     } catch (error) {
       console.log(error.message);
-      response.status(500).json("Internal server error.");
+      response.status(500).json({ message: "Internal server error." });
     }
   },
   async update(request, response) {
@@ -63,13 +63,15 @@ module.exports = {
 
       const res = await LiveModel.update(live, id);
       if (res !== 1) {
-        return response.status(400).json("Live não encontrada!");
+        return response.status(404).json({ message: "Live não encontrada!" });
       } else {
-        return response.status(200).json("Live alterada com sucesso ");
+        return response
+          .status(200)
+          .json({ message: "Live alterada com sucesso" });
       }
     } catch (error) {
       console.log(error.message);
-      response.status(500).json("Internal server error.");
+      response.status(500).json({ message: "Internal server error." });
     }
   },
 };
