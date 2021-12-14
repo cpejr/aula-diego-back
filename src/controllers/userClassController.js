@@ -5,13 +5,13 @@ module.exports = {
     try {
       const userClass = request.body; //user_id + class_id
 
-      const result = await UserClassModel.create(userClass);
+      await UserClassModel.create(userClass);
       return response
         .status(200)
-        .json("Aluno adicionado à turma com succeso!");
+        .json({ message: "Aluno adicionado à turma com succeso!" });
     } catch (error) {
       console.warn(error.message);
-      response.status(500).json("internal server error");
+      response.status(500).json({ message: "Internal server error." });
     }
   },
 
@@ -26,21 +26,22 @@ module.exports = {
       return response.status(200).json(result);
     } catch (error) {
       console.warn(error);
-      response.status(500).json("internal server error");
+      response.status(500).json({ message: "Internal server error." });
     }
   },
 
   async delete(request, response) {
     try {
-      const result = await UserClassModel.delete(
+      await UserClassModel.delete(
         request.params.class_id,
         request.params.user_id
       );
-      console.log("deleting");
-      response.status(200).json("Aluno removido da turma com sucesso!");
+      response
+        .status(200)
+        .json({ message: "Aluno removido da turma com sucesso!" });
     } catch (error) {
       console.warn(error.message);
-      response.status(500).json("internal server error ");
+      response.status(500).json({ message: "Internal server error." });
     }
   },
 };

@@ -36,12 +36,10 @@ module.exports = {
       );
 
       if (organization.is_deleted === true)
-        return response
-          .status(403)
-          .json({
-            message:
-              "Organização não possui mais acesso à plataforma. Entre em contato com o responsável",
-          });
+        return response.status(403).json({
+          message:
+            "Organização não possui mais acesso à plataforma. Entre em contato com o responsável",
+        });
 
       if (user.status === "pending")
         return response
@@ -57,7 +55,7 @@ module.exports = {
         ? response.status(200).json({ accessToken, user })
         : response.status(400).json({ message: "User was not found" });
     } catch (error) {
-      console.log(error);
+      console.error(error);
       return response
         .status(500)
         .json({ message: "Error while trying to validate credentials" });
@@ -78,7 +76,7 @@ module.exports = {
 
     const verify = await new Promise((res) => {
       jwt.verify(token, process.env.AUTH_TOKEN_SECRET, (err, user) => {
-        if (err) console.log(err);
+        if (err) console.error(err);
         if (err) return res({ verified: false, user: {} });
 
         return res({ verified: true, user: user.user });

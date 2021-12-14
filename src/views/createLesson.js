@@ -20,8 +20,6 @@ module.exports = {
 
       const lessonId = (await lessonModel.create(lesson))[0];
 
-      console.log(lessonId);
-
       for await (let video of data.videos) {
         const videoLesson = {
           lesson_id: lessonId,

@@ -11,7 +11,7 @@ module.exports = {
       res.status(200).json(data);
     } catch (error) {
       console.warn(error.message);
-      response.status(500).json("Internal server error");
+      response.status(500).json({ message: "Internal server error." });
     }
   },
   async getById(req, res) {
@@ -23,7 +23,7 @@ module.exports = {
       res.status(200).json(question);
     } catch (error) {
       console.warn(error.message);
-      response.status(500).json("Internal server error");
+      response.status(500).json({ message: "Internal server error." });
     }
   },
   async read(req, res) {
@@ -34,7 +34,7 @@ module.exports = {
       res.status(200).json(questions);
     } catch (error) {
       console.warn(error.message);
-      response.status(500).json("Internal server error");
+      response.status(500).json({ message: "Internal server error." });
     }
   },
   async update(req, res) {
@@ -46,7 +46,7 @@ module.exports = {
       res.status(200).json(result);
     } catch (error) {
       console.warn(error.message);
-      response.status(500).json("Internal server error");
+      response.status(500).json({ message: "Internal server error." });
     }
   },
   async delete(req, res) {
@@ -58,7 +58,7 @@ module.exports = {
       res.status(200).json(result);
     } catch (error) {
       console.warn(error.message);
-      response.status(500).json("Internal server error");
+      response.status(500).json({ message: "Internal server error." });
     }
   },
 };

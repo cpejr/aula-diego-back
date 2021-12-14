@@ -28,8 +28,8 @@ module.exports = {
 
   async getById(id) {
     const response = await connection("lesson")
-      .where({ id })
-      .select("*")
+      .where("lesson.id", id)
+      .join("file_lesson", "file_lesson.lesson_id", "lesson.id")
       .first();
     return response;
   },

@@ -9,7 +9,7 @@ module.exports = {
     const response = await connection("organization")
       .where("organization.id", id)
       .andWhere("organization.is_deleted", false)
-      .join("file", "organization.file_id", "file.id")
+      .fullOuterJoin("file", "organization.file_id", "file.id")
       .select("organization.*")
       .select("file.path as logo")
       .first();
@@ -19,7 +19,7 @@ module.exports = {
     const response = await connection("organization")
       .where(filters)
       .andWhere("organization.is_deleted", false)
-      .join("file", "organization.file_id", "file.id")
+      .fullOuterJoin("file", "organization.file_id", "file.id")
       .select("organization.*")
       .select("file.path as logo");
     return response;

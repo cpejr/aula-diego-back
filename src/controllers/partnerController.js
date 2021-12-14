@@ -7,11 +7,12 @@ module.exports = {
       const partner = request.body;
 
       const result = await PartnerModel.create(partner);
-      return response.status(200).json("Parceiro criada com succeso!");
-    } 
-    catch (error) {
+      return response
+        .status(200)
+        .json({ message: "Parceiro criada com succeso!" });
+    } catch (error) {
       console.warn(error.message);
-      response.status(500).json("Internal server error");
+      response.status(500).json({ message: "Internal server error." });
     }
   },
 
@@ -21,10 +22,9 @@ module.exports = {
 
       const result = await PartnerModel.read({ ...filters });
       return response.status(200).json(result);
-    } 
-    catch (error) {
+    } catch (error) {
       console.warn(error);
-      response.status(500).json("Internal server error");
+      response.status(500).json({ message: "Internal server error." });
     }
   },
 
@@ -34,10 +34,9 @@ module.exports = {
 
       const partner = await PartnerModel.getById(id);
       return response.status(200).json(partner);
-    } 
-    catch (error) {
+    } catch (error) {
       console.warn(error.message);
-      response.status(500).json("Internal server error");
+      response.status(500).json({ message: "Internal server error." });
     }
   },
 
@@ -47,14 +46,17 @@ module.exports = {
       const res = await PartnerModel.update(partner);
 
       if (res !== 1) {
-        return response.status(404).json("Parceiro não encontrado!");
+        return response
+          .status(404)
+          .json({ message: "Parceiro não encontrado!" });
       } else {
-        return response.status(200).json("Parceiro alterado com sucesso ");
+        return response
+          .status(200)
+          .json({ message: "Parceiro alterado com sucesso " });
       }
-    } 
-    catch (error) {
-      console.log(error.message);
-      return response.status(500).json("Internal server error ");
+    } catch (error) {
+      console.error(error.message);
+      return response.status(500).json({ message: "Internal server error." });
     }
   },
 
@@ -64,14 +66,17 @@ module.exports = {
       const result = await PartnerModel.delete(id);
 
       if (response === 0) {
-        return response.status(404).json("Parceiro não encontrada!");
+        return response
+          .status(404)
+          .json({ message: "Parceiro não encontrado!" });
       } else {
-        return response.status(200).json("Parceiro deletado com sucesso ");
+        return response
+          .status(200)
+          .json({ message: "Parceiro deletado com sucesso" });
       }
-    } 
-    catch (error) {
+    } catch (error) {
       console.warn(error.message);
-      response.status(500).json("Internal server error ");
+      response.status(500).json({ message: "Internal server error." });
     }
   },
 };

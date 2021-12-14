@@ -52,7 +52,7 @@ module.exports = {
           resolve(result);
         })
         .catch((error) => {
-          console.log(error);
+          console.error(error);
           const errorMessage = error.message;
           reject(errorMessage);
         });
@@ -70,7 +70,7 @@ module.exports = {
   //         resolve(result);
   //       })
   //       .catch((error) => {
-  //         console.log(error);
+  //         console.error(error);
   //         const errorMessage = error.message;
   //         reject(errorMessage);
   //       });
@@ -78,9 +78,11 @@ module.exports = {
   // },
   async changeUserPassword(uid, newPassword) {
     return new Promise((resolve, reject) => {
-      admin.auth().updateUser(uid, {
-        password: newPassword
-      })
+      admin
+        .auth()
+        .updateUser(uid, {
+          password: newPassword,
+        })
         .then((result) => {
           resolve(result);
         })
@@ -88,21 +90,23 @@ module.exports = {
           console.error(error);
           const errorMessage = error.message;
           reject(errorMessage);
-        })
-    })
+        });
+    });
   },
   async sendPasswordChangeEmail(emailAddress) {
     return new Promise((resolve, reject) => {
-      firebase.auth().sendPasswordResetEmail(emailAddress)
-      .then((result) => {
-        resolve(result);
-      })
-      .catch((error) => {
-        console.error(error);
-        const errorMessage = error;
-        reject(error);
-      });
-    })
+      firebase
+        .auth()
+        .sendPasswordResetEmail(emailAddress)
+        .then((result) => {
+          resolve(result);
+        })
+        .catch((error) => {
+          console.error(error);
+          const errorMessage = error;
+          reject(error);
+        });
+    });
   },
   async forgotPassword(email) {
     const response = await firebase.auth().sendPasswordResetEmail(email);

@@ -21,10 +21,10 @@ module.exports = {
         open,
         evaluate,
       });
-      response.status(200).json("Atividade criada com sucesso.");
+      response.status(200).json({ message: "Atividade criada com sucesso." });
     } catch (error) {
-      console.log(error.message);
-      response.status(500).json("Internal server error.");
+      console.error(error.message);
+      response.status(500).json({ message: "Internal server error." });
     }
   },
 
@@ -36,7 +36,7 @@ module.exports = {
       return response.status(200).json(result);
     } catch (error) {
       console.warn(error);
-      response.status(500).json("internal server error");
+      response.status(500).json({ message: "Internal server error." });
     }
   },
 
@@ -46,14 +46,18 @@ module.exports = {
       const foundExam = await exerciseModel.getById(id);
 
       if (!foundExam) {
-        throw new Error("Atividade não encontrada.");
+        return response
+          .status(404)
+          .json({ message: "Atividade não encontrada." });
       } else {
         await exerciseModel.delete(id);
-        response.status(200).json("Atividade deletada com sucesso.");
+        response
+          .status(200)
+          .json({ message: "Atividade deletada com sucesso." });
       }
     } catch (error) {
-      console.log(error.message);
-      response.status(500).json("Internal server error.");
+      console.error(error.message);
+      response.status(500).json({ message: "Internal server error." });
     }
   },
 
@@ -79,8 +83,8 @@ module.exports = {
 
       return response.status(200).json(exercise);
     } catch (error) {
-      console.log(error.message);
-      response.status(500).json("Internal server error.");
+      console.error(error.message);
+      response.status(500).json({ message: "Internal server error." });
     }
   },
 
@@ -102,20 +106,24 @@ module.exports = {
       if (exerc.open === true)
         return response
           .status(400)
-          .json("Provas abertas não podem ser alteradas!");
+          .json({ message: "Provas abertas não podem ser alteradas!" });
 
       const res = await exerciseModel.update(
         { name, start_date, end_date, questions, course_id, open, evaluate },
         id
       );
       if (res !== 1) {
-        return response.status(400).json("Atividade não encontrada!");
+        return response
+          .status(404)
+          .json({ message: "Atividade não encontrada!" });
       } else {
-        return response.status(200).json("Atividade alterada com sucesso ");
+        return response
+          .status(200)
+          .json({ message: "Atividade alterada com sucesso" });
       }
     } catch (error) {
-      console.log(error.message);
-      response.status(500).json("Internal server error.");
+      console.error(error.message);
+      response.status(500).json({ message: "Internal server error." });
     }
   },
 
@@ -128,13 +136,17 @@ module.exports = {
       const res = await exerciseModel.update(extend, id);
 
       if (res !== 1) {
-        return response.status(400).json("Atividade não encontrada!");
+        return response
+          .status(404)
+          .json({ message: "Atividade não encontrada!" });
       } else {
-        return response.status(200).json("Atividade alterada com sucesso ");
+        return response
+          .status(200)
+          .json({ message: "Atividade alterada com sucesso" });
       }
     } catch (error) {
-      console.log(error.message);
-      response.status(500).json("Internal server error.");
+      console.error(error.message);
+      response.status(500).json({ message: "Internal server error." });
     }
   },
 };

@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const User = require("../models/UserModel");
 
 module.exports = {
   async authenticateToken(request, response, next) {
@@ -16,11 +17,13 @@ module.exports = {
 
       const decoded = jwt.verify(token, process.env.AUTH_TOKEN_SECRET);
 
-      request.session = decoded;
+      const user = await User.getById(decoded.user.id);
+
+      request.session = { user };
 
       return next();
     } catch (error) {
-      console.log(error);
+      console.error(error);
       return response
         .status(403)
         .json({ error: "Invalid authorization token" });

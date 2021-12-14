@@ -11,6 +11,7 @@ const Course = require("../models/CourseModel");
 const Company = require("../models/OrganizationModel");
 const Occupation = require("../models/OccupationModel");
 const Certificate = require("../models/CertificateModel");
+const File = require("../models/FileModel");
 const { getByUserId } = require("./courseController");
 
 async function createQrCode(url) {
@@ -59,6 +60,11 @@ module.exports = {
       if (!company)
         return res.status(404).json({ message: "Empresa não encontrada" });
 
+      if (!company.file_id)
+        return res
+          .status(400)
+          .json({ message: "Empresa precisa de logo para gerar certificados" });
+
       var certificate_id = uuid.v4();
 
       const qrcode = await createQrCode(
@@ -78,7 +84,11 @@ module.exports = {
         )
         .toString("base64")}`;
 
-      const { Body: logoBody } = await download(`logo_${company.id}.png`);
+      const logo_file = await File.getById(company.file_id);
+
+      const { Body: logoBody } = await download(
+        `${logo_file.id}.${logo_file.type}`
+      );
       const company_logo = `data:image/png;base64,${logoBody.toString(
         "base64"
       )}`;
@@ -156,7 +166,7 @@ module.exports = {
         }
       );
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
       res.status(500).json({ message: "Internal server error." });
     }
   },
@@ -168,7 +178,7 @@ module.exports = {
       return response.status(200).json(certificate);
     } catch (error) {
       console.warn(error.message);
-      response.status(500).json("internal server error");
+      response.status(500).json({ message: "Internal server error." });
     }
   },
 
@@ -179,7 +189,7 @@ module.exports = {
       return response.status(200).json(certificates);
     } catch (error) {
       console.warn(error.message);
-      response.status(500).json("internal server error");
+      response.status(500).json({ message: "Internal server error." });
     }
   },
 };

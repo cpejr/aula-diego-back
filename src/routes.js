@@ -75,8 +75,12 @@ routes.get(
   authenticateToken,
   organizationController.getById
 );
-routes.put("/organization", authenticateToken, organizationController.update); //UPDATE
 routes.put(
+  "/organization/:id",
+  authenticateToken,
+  organizationController.update
+); //UPDATE
+routes.delete(
   "/organization/:id",
   authenticateToken,
   organizationController.delete
@@ -288,7 +292,7 @@ routes.put("/question/:id", authenticateToken, questionController.delete);
 
 //QUESTIONS -----------------------------------------------------------------
 routes.post("/answer", authenticateToken, answerController.create);
-routes.get("/answer/:id", authenticateToken, isAdmin, answerController.getById);
+routes.get("/answer/:id", authenticateToken, answerController.getById);
 routes.get("/answer", authenticateToken, isAdmin, answerController.read);
 routes.put("/answer", authenticateToken, answerController.update);
 routes.delete("/answer/:id", authenticateToken, answerController.delete);

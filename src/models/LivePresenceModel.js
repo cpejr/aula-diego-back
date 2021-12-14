@@ -12,7 +12,6 @@ module.exports = {
       .andWhere("live.is_deleted", false)
       .join("user", "live_presence.user_id", "user.id")
       .join("live", "live.id", "live_presence.live_id")
-      .join("class", "live.course_id", "class.course_id")
       .join("course", "live.course_id", "course.id")
       .distinct("live.id")
       .select(
@@ -21,7 +20,6 @@ module.exports = {
         "live.description as live_description",
         "course.id as course_id",
         "course.name as course_name",
-        "class.name as class_name",
         "user.name as user_name",
         "user.registration as user_registration",
         "user.id as user_id"
@@ -46,11 +44,9 @@ module.exports = {
     return numLives;
   },
   async getAudience(filters) {
-    console.log(filters);
     const response = await connection("live_presence")
       .where(filters)
       .count("live_id");
-    console.log(response);
     return response;
   },
   async update(livePresence) {
