@@ -4,17 +4,6 @@ require('dotenv').config();
 
 module.exports = {
 
-  // development: {
-  //   client: 'sqlite3',
-  //   connection: {
-  //     filename: path.resolve(__dirname, 'src', 'database', 'database.sqlite')
-  //   },
-  //   migrations: {
-  //     directory: path.resolve(__dirname, 'src', 'database', 'migrations')
-  //   },
-  //   useNullAsDefault: true
-  // },
-
   development: {
     client: 'pg',
     dialect: "postgres",
@@ -24,12 +13,9 @@ module.exports = {
       database: process.env.DB_NAME,
       user:     process.env.DB_USER,
       password: process.env.DB_PASS,
-      ssl: {
-        rejectUnauthorized: false
-      }
     },
     dialectOptions: {
-      ssl: true,
+      ssl: false,
     },
     pool: {
       min: 2,

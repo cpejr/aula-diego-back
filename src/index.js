@@ -7,6 +7,11 @@ const { errors } = require("celebrate");
 const port = process.env.PORT || 6969;
 
 const app = express();
+
+const corsOptions = {
+	origin: ["http://localhost:3000"]
+}
+
 app.use(cors());
 app.use(express.json());
 
