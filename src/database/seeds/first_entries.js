@@ -1,7 +1,7 @@
 exports.seed = function(knex) {
   return createOrganization(knex)
     .then(function () {
-      return createOccupation
+      return createOccupation(knex);
     })
     .then(function () {
       return createMaster(knex);
