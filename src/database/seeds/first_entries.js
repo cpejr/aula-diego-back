@@ -40,9 +40,9 @@ function createOccupation(knex) {
 }
 
 function createMaster(knex) {
-  return knex('organization').del()
+  return knex('user').del()
     .then(function () {
-      return knex('organization').insert([
+      return knex('user').insert([
         {
           id: nullId,
           type: 'master',
