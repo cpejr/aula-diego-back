@@ -56,6 +56,7 @@ function createMaster(knex) {
           occupation_id: nullId,
           score: 0,
           status: 'approved',
+          cpf: '000.000.000-00',
           is_deleted: false
         },
       ]);
